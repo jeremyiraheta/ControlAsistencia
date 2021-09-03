@@ -3,14 +3,9 @@
 /* Created on:     8/12/2021 9:51:19 PM                         */
 /*==============================================================*/
 
-
-drop table if exists DEPARTAMENTOS;
-
-drop table if exists EMPLEADOS;
-
-drop table if exists PERMISOS;
-
-drop table if exists REGISTROS;
+drop database if exists Control;
+create database Control;
+use Control;
 
 /*==============================================================*/
 /* Table: DEPARTAMENTOS                                         */
