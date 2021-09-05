@@ -258,7 +258,7 @@ app.post("/login", (req, res) => {
     })
 });
 
-//Sirve middeware para subir archivos adjuntos
+//Sirve middleware para subir archivos adjuntos
 app.post("/upload/:id", async (req, res) => {
     try {
         if(!req.files) {
