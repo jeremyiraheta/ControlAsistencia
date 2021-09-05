@@ -8,14 +8,18 @@ namespace WSControl.modelos
 {
     class Permisos
     {
-        public int CODPER { get; set; }
-        public int CODEMP { get; set; }
-        public string FECHA { get; set; }
-        public char TIPO { get; set; }
-        public string DESCRIPCION { get; set; }
-        public string HORAINICIAL { get; set; }
-        public string HORAFINAL { get; set; }
-        public char ESTADO { get; set; }
+        public int codper { get; set; }
+        public int codemp { get; set; }
+        public string fecha { get; set; }
+        public char tipo { get; set; }
+        public string descripcion { get; set; }
+        public string horainicial { get; set; }
+        public string horafinal { get; set; }
+        public char estado { get; set; }
+        public bool attch { get; set; }
+        public Permisos()
+        {
 
+        }
     }
 }

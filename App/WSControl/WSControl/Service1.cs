@@ -5,16 +5,17 @@ using System.Data;
 using System.Diagnostics;
 using System.Linq;
 using System.ServiceProcess;
-using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Net.Http;
+using WSControl.modelos;
 
 namespace WSControl
 {
     public partial class ControlService : ServiceBase
     {
-        const string api = "http://localhost:8000/";
-        HttpClient client = null;
+        const int TICK_MIN = 1;
+        private static int codemp = 0;
         public ControlService()
         {
             InitializeComponent();
@@ -22,29 +23,37 @@ namespace WSControl
         internal void TestStartupAndStop(string[] args)
         {
             this.OnStart(args);
-            Console.ReadLine();
-            this.OnStop();
         }
         protected override void OnStart(string[] args)
         {
-            client = new HttpClient();
-            client.BaseAddress = new Uri(api);
-            while (true)
-            {
-                Console.WriteLine("Guardando hora salida....");
-                System.Threading.Thread.Sleep(60000);
-            }
+            API registros= new API();
+            c_systray.Visible = true;
+            codemp = Login.codemp;
+            var task = Task.Run(() => registros.post($"registros/{codemp}"));
+            task.Wait();
+            Thread thread = new Thread(mon);
+            thread.Start();
         }
 
         protected override void OnStop()
         {
+            API api = new API();
+            var task = Task.Run(() => api.put($"registros/{codemp}"));
+            task.Wait();
         }       
 
         private void c_systray_MouseClick(object sender, System.Windows.Forms.MouseEventArgs e)
-        {
-            new ListadoPermisos().Show();
+        {            
+            ListadoPermisos.Instance.Show();
         }
-
-        
+        public static async void mon()
+        {
+            API api = new API();
+            while(true)
+            {
+                await api.put($"registros/{codemp}");
+                Thread.Sleep(TICK_MIN * 1000 * 60);
+            }
+        }
     }
 }

@@ -36,7 +36,6 @@
             // 
             this.c_systray.Icon = ((System.Drawing.Icon)(resources.GetObject("c_systray.Icon")));
             this.c_systray.Text = "Control Asistencia DIGESTYC";
-            this.c_systray.Visible = true;
             this.c_systray.MouseClick += new System.Windows.Forms.MouseEventHandler(this.c_systray_MouseClick);
             // 
             // ControlService

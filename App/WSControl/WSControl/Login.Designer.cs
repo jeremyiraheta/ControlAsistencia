@@ -94,6 +94,7 @@
             // 
             // c_btnSalir
             // 
+            this.c_btnSalir.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.c_btnSalir.Location = new System.Drawing.Point(228, 314);
             this.c_btnSalir.Name = "c_btnSalir";
             this.c_btnSalir.Size = new System.Drawing.Size(83, 36);
@@ -104,8 +105,10 @@
             // 
             // Login
             // 
+            this.AcceptButton = this.c_btnLogin;
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.CancelButton = this.c_btnSalir;
             this.ClientSize = new System.Drawing.Size(354, 362);
             this.Controls.Add(this.c_btnSalir);
             this.Controls.Add(this.c_btnLogin);

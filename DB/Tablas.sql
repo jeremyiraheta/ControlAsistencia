@@ -34,7 +34,7 @@ create table EMPLEADOS
    DUI                  varchar(10) not null,
    NIT                  varchar(10),
    AFP                  varchar(10),
-   USUARIO              varchar(50) not null,
+   USUARIO              varchar(50) not null unique,
    PASSWORD             varchar(64) not null,
    ESTADO               char(1) not null,
    primary key (CODEMP)

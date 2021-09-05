@@ -19,10 +19,14 @@ namespace WSControl
         {            
             if (Environment.UserInteractive)
             {
-                ControlService test = new ControlService();
-                Application.EnableVisualStyles();
-                Application.Run();
-                test.TestStartupAndStop(args);
+                ControlService test = new ControlService();                
+                Login login = new Login();
+                if(login.ShowDialog() == DialogResult.OK)
+                {
+                    test.TestStartupAndStop(args);
+                    Application.EnableVisualStyles();
+                    Application.Run();
+                }               
             }
             else
             {
@@ -31,7 +35,13 @@ namespace WSControl
                 {
                 new ControlService()
                 };
-                ServiceBase.Run(ServicesToRun);
+                Login login = new Login();
+                if (login.ShowDialog() == DialogResult.OK)
+                {
+                    ServiceBase.Run(ServicesToRun);
+                    Application.EnableVisualStyles();
+                    Application.Run();
+                }                
             }
             
         }
