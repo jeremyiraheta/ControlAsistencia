@@ -22,6 +22,7 @@ const fs = require('fs');
 const path = require('path');
 var app = express();
 app.use(express.json());
+app.use('/app', express.static(path.join(__dirname, '../Instalador/')))
 app.use(fileUpload({
     createParentPath: true,
     limits: { 

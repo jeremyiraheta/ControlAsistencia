@@ -26,7 +26,17 @@ namespace WSControl
 
         private void c_btnLogin_Click(object sender, EventArgs e)
         {
-            if(login(c_txtUsuario.Text, c_txtPass.Text))
+            if(c_txtUsuario.Text.Trim().Length == 0)
+            {
+                MessageBox.Show("Ingrese usuario!!!", "Login", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            if (c_txtPass.Text.Trim().Length == 0)
+            {
+                MessageBox.Show("Ingrese password!!!", "Login", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            if (login(c_txtUsuario.Text, c_txtPass.Text))
             {
                 if(estado.ToString().ToUpper() == "A")
                 {
@@ -48,7 +58,15 @@ namespace WSControl
             List<Empleado> valid = null;
             Credenciales c = new Credenciales(user,pass);
             var task = Task.Run(() => api.post("login", c));
-            task.Wait();
+            try
+            {
+                task.Wait();
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Error al accesar datos!!!", "Login", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Environment.Exit(1);
+            }
             valid = task.Result;
             if (valid != null && valid.Count > 0)
             {

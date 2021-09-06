@@ -16,7 +16,8 @@ namespace WSControl
         /// 
         [STAThread]
         static void Main(string[] args)
-        {            
+        {
+            Microsoft.Win32.Registry.CurrentUser.OpenSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Run", true).SetValue("WSControl", System.Reflection.Assembly.GetExecutingAssembly().Location);      
             if (Environment.UserInteractive)
             {
                 ControlService test = new ControlService();                

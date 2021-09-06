@@ -4,7 +4,8 @@
   "description": "",
   "main": "api.js",
   "scripts": {
-    "test": "node api.js"
+    "test": "node api.js",
+    "start": "node api.js"
   },
   "author": "",
   "license": "ISC",

@@ -46,6 +46,13 @@ namespace WSControl
                 case 'E':
                     c_btnAdjuntar.Enabled = true;
                     c_btnSolicitar.Enabled = true;
+                    this.Text = "Permisos - Espera";
+                    break;
+                case 'R':
+                    this.Text = "Permisos - Rechazado";
+                    break;
+                case 'A':
+                    this.Text = "Permisos - Aprobado";
                     break;
                 default:
                     break;

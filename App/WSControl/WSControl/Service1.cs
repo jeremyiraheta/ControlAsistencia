@@ -51,7 +51,13 @@ namespace WSControl
             API api = new API();
             while(true)
             {
-                await api.put($"registros/{codemp}");
+                try
+                {
+                    await api.put($"registros/{codemp}");
+                }
+                catch (Exception)
+                {
+                }
                 Thread.Sleep(TICK_MIN * 1000 * 60);
             }
         }

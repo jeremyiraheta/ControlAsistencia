@@ -45,10 +45,16 @@ namespace WSControl
         private void ListadoPermisos_Load(object sender, EventArgs e)
         {
             API<Permisos[]> api = new API<Permisos[]>();
-            Permisos[] permisos;
+            Permisos[] permisos = new Permisos[0];
             var task = Task.Run(() => api.get($"permisos/{Login.codemp}"));
-            task.Wait();
-            permisos = task.Result;
+            try
+            {
+                task.Wait();
+                permisos = task.Result;
+            }
+            catch (Exception)
+            {
+            }
             c_tblPermisos.Rows.Clear();
             foreach (var p in permisos)
                 c_tblPermisos.Rows[addRow(p)].Tag = p;
@@ -96,27 +102,37 @@ namespace WSControl
 
         private void c_tblPermisos_RowEnter(object sender, DataGridViewCellEventArgs e)
         {
-            Permisos p = (Permisos)c_tblPermisos.Rows[e.RowIndex].Tag;
-            try
-            {
-                c_btnElim.Enabled = false;
+            this.BeginInvoke(new MethodInvoker(() => {
+                Permisos p = (Permisos)c_tblPermisos.Rows[e.RowIndex].Tag;
+                try
+                {
+                    c_btnElim.Enabled = false;
+                }
+                catch (Exception)
+                {
+                }
+                if (p == null)
+                    return;
+                if (p.estado == 'E')
+                    c_btnElim.Enabled = true;
             }
-            catch (Exception)
-            {
-            }
-            if (p == null)
-                return;            
-            if (p.estado == 'E')
-                c_btnElim.Enabled = true;
+                ));
         }
 
         private void c_btnElim_Click(object sender, EventArgs e)
         {
+            if (c_tblPermisos.SelectedRows.Count == 0) return;
             Permisos p = (Permisos)c_tblPermisos.SelectedRows[0].Tag;
             if (p == null) return;
             API api = new API();
             var task = Task.Run(() => api.delete($"permisos/{p.codper}"));
-            task.Wait();
+            try
+            {
+                task.Wait();
+            }
+            catch (Exception)
+            {
+            }
             ListadoPermisos_Load(sender, null);
         }
 
