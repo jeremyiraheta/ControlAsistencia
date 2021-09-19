@@ -28,7 +28,7 @@ namespace WSControl
         private ListadoPermisos()
         {
             InitializeComponent();
-            
+            this.Text = "Listado de Permisos - " + Login.usuario.nombres + " " + Login.usuario.apellidos + " - " + Login.usuario.departamento;
         }  
         
         private void c_btnSalir_Click(object sender, EventArgs e)
@@ -89,7 +89,7 @@ namespace WSControl
                     tipo = "Particular";
                     break;
             }
-            return c_tblPermisos.Rows.Add(p.codper,p.fecha, img, tipo, p.descripcion, p.horainicial.Remove(p.horainicial.LastIndexOf(":")), p.horafinal.Remove(p.horafinal.LastIndexOf(":")));
+            return c_tblPermisos.Rows.Add(p.codper,p.fecha, img, tipo, Uri.UnescapeDataString(p.descripcion), p.horainicial.Remove(p.horainicial.LastIndexOf(":")), p.horafinal.Remove(p.horafinal.LastIndexOf(":")));
         }
 
         private void c_tblPermisos_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
@@ -140,6 +140,14 @@ namespace WSControl
         {
             e.Cancel = true;
             this.Hide();
+        }        
+
+        private void ListadoPermisos_VisibleChanged(object sender, EventArgs e)
+        {
+            if(this.Visible)
+            {
+                ListadoPermisos_Load(sender, null);
+            }
         }
     }
 }

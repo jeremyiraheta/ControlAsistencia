@@ -14,6 +14,7 @@ namespace WSControl
     {
         public static int codemp = 0;
         private char estado;
+        public static Empleado usuario { get; set; }
         public Login()
         {
             InitializeComponent();
@@ -72,6 +73,7 @@ namespace WSControl
             {
                 codemp = valid[0].codemp;
                 estado = valid[0].estado;
+                usuario = valid[0];
                 return true;
             }
             else
@@ -91,10 +93,13 @@ namespace WSControl
 
             }
         }
-        class Empleado
+        public class Empleado
         {
             public int codemp { get; set; }
             public char estado { get; set; }
+            public string nombres { get; set; }
+            public string apellidos { get; set; }
+            public string departamento { get; set; }
             public Empleado()
             {
 

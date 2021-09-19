@@ -119,6 +119,7 @@
             // c_txtDescripcion
             // 
             this.c_txtDescripcion.Location = new System.Drawing.Point(15, 111);
+            this.c_txtDescripcion.MaxLength = 500;
             this.c_txtDescripcion.Multiline = true;
             this.c_txtDescripcion.Name = "c_txtDescripcion";
             this.c_txtDescripcion.Size = new System.Drawing.Size(659, 163);

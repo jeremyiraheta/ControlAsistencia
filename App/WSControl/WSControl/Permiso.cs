@@ -60,7 +60,7 @@ namespace WSControl
             c_cmbTipo.Refresh();
             c_tpHoraInicial.Value = DateTime.Parse(horainicial);
             c_tpHoraFinal.Value = DateTime.Parse(horafinal);
-            c_txtDescripcion.Text = descripcion;
+            c_txtDescripcion.Text = Uri.UnescapeDataString(descripcion);
             if (attch)
                 c_linkDescargar.Visible = true;
         }
@@ -80,7 +80,7 @@ namespace WSControl
             API<LastID> api = new API<LastID>();
             Permisos permiso = new Permisos();
             permiso.codemp = Login.codemp;
-            permiso.descripcion = c_txtDescripcion.Text;
+            permiso.descripcion = Uri.EscapeDataString(c_txtDescripcion.Text);
             permiso.fecha = c_tpFecha.Value.ToString("dd-MM-yyyy");
             permiso.horainicial = c_tpHoraInicial.Value.ToString("HH:mm");
             permiso.horafinal = c_tpHoraFinal.Value.ToString("HH:mm");

@@ -30,7 +30,7 @@ create table EMPLEADOS
    CORREO               varchar(50),
    GENERO               char(1) not null,
    NACIMIENTO           datetime not null,
-   DIRECCION            varchar(500) not null,
+   DIRECCION            varchar(1000) not null,
    DUI                  varchar(10) not null,
    NIT                  varchar(10),
    AFP                  varchar(10),
@@ -49,7 +49,7 @@ create table PERMISOS
    CODEMP               int,
    FECHA                date not null,
    TIPO                 char(1) not null,
-   DESCRIPCION          varchar(500) not null,
+   DESCRIPCION          VARCHAR(1000) not null,
    HORAINICIAL          time,
    HORAFINAL            time,
    ESTADO               char(1),
@@ -77,3 +77,5 @@ alter table PERMISOS add constraint FK_REFERENCE_3 foreign key (CODEMP)
 alter table REGISTROS add constraint FK_REFERENCE_1 foreign key (CODEMP)
       references EMPLEADOS (CODEMP);
 
+INSERT INTO departamentos(NOMBRE) VALUES(UPPER('Sistemas'));
+INSERT INTO empleados(CODDPTO,NOMBRES,APELLIDOS,GENERO,NACIMIENTO,DIRECCION,DUI,USUARIO,PASSWORD,ESTADO) VALUES(1,'admin','','','S','','','admin',MD5('admin'),'A');

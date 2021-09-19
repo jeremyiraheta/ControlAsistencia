@@ -172,6 +172,7 @@
             this.Text = "Listado de Permisos";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ListadoPermisos_FormClosing);
             this.Load += new System.EventHandler(this.ListadoPermisos_Load);
+            this.VisibleChanged += new System.EventHandler(this.ListadoPermisos_VisibleChanged);
             ((System.ComponentModel.ISupportInitialize)(this.c_tblPermisos)).EndInit();
             this.ResumeLayout(false);
 

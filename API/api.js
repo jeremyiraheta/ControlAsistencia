@@ -252,7 +252,7 @@ app.delete("/permisos/:id", (req, res) => {
 
 //Comprueba si un usuario es valido
 app.post("/login", (req, res) => {
-    var query = connection.query(`select codemp,estado from empleados where usuario='${req.body.user}' and password=MD5('${req.body.password}')`, function(error, result){
+    var query = connection.query(`select codemp,UPPER(nombres) nombres, UPPER(apellidos) apellidos,estado,(select UPPER(nombre) from departamentos d where e.CODDPTO = d.CODDPTO) departamento  from empleados e where usuario='${req.body.user}' and password=MD5('${req.body.password}')`, function(error, result){
         if(error) console.log('[mysql error] : ', error)
         if(DEBUG)console.log(`login user=${req.body.user}`)
         res.send(result)
