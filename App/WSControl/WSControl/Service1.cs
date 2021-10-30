@@ -20,10 +20,18 @@ namespace WSControl
         {
             InitializeComponent();
         }
+        /// <summary>
+        /// Carga el servicio si no esta instalado como si fuerea una aplicacion normal
+        /// </summary>
+        /// <param name="args"></param>
         internal void TestStartupAndStop(string[] args)
         {
             this.OnStart(args);
         }
+        /// <summary>
+        /// Punto de montaje del servicio
+        /// </summary>
+        /// <param name="args"></param>
         protected override void OnStart(string[] args)
         {
             API registros= new API();
@@ -34,18 +42,27 @@ namespace WSControl
             Thread thread = new Thread(mon);
             thread.Start();
         }
-
+        /// <summary>
+        /// Punto de terminacion del servicio
+        /// </summary>
         protected override void OnStop()
         {
             API api = new API();
             var task = Task.Run(() => api.put($"registros/{codemp}"));
             task.Wait();
         }       
-
+        /// <summary>
+        /// Evento que se activa al clicar en el icono de la barra de notificacion de windows
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void c_systray_MouseClick(object sender, System.Windows.Forms.MouseEventArgs e)
         {            
             ListadoPermisos.Instance.Show();
         }
+        /// <summary>
+        /// Demonio principal para registrar las horas de salida cada minuto
+        /// </summary>
         public static async void mon()
         {
             API api = new API();

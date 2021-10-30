@@ -200,7 +200,7 @@ app.get("/permisos/:id", (req, res) => {
         if(DEBUG)console.log(`get a permisos id = ${req.params.id}`)
         try {
             for (let i = 0; i < result.length; i++) {
-                if (fs.existsSync(`./public/${result[i].codper}.zip`)) {
+                if (fs.existsSync( path.join(__dirname, "public") + path.sep + result[i].codper + ".zip")) {
                     result[i].attch = true;
                 }
             }
@@ -270,7 +270,7 @@ app.post("/upload/:id", async (req, res) => {
         } else {
             let file = req.files.attch;
             let ext = file.name.substring(file.name.lastIndexOf("."));            
-            let dir = './public/' + req.params.id + ext;
+            let dir = path.join(__dirname, "public") + path.sep + req.params.id + ext;
             if(ext.toLowerCase() == ".zip")
             {
                 file.mv(dir);            

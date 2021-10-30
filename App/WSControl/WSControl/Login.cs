@@ -15,16 +15,27 @@ namespace WSControl
         public static int codemp = 0;
         private char estado;
         public static Empleado usuario { get; set; }
+        /// <summary>
+        /// Inicializador de la ventana de login
+        /// </summary>
         public Login()
         {
             InitializeComponent();
         }
-
+        /// <summary>
+        /// Evento vinculado al boton salir, permite cerrar la ventana
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void c_btnSalir_Click(object sender, EventArgs e)
         {
             this.Close();
         }
-
+        /// <summary>
+        /// Evento vinculado al boton login, permite verificar si las credenciales son correctas
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void c_btnLogin_Click(object sender, EventArgs e)
         {
             if(c_txtUsuario.Text.Trim().Length == 0)
@@ -52,7 +63,12 @@ namespace WSControl
                 MessageBox.Show("Usuario o Password incorrectos!!!", "Login", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }                         
         }
-
+        /// <summary>
+        /// Determina si un usuario es valido
+        /// </summary>
+        /// <param name="user">Usuario</param>
+        /// <param name="pass">Password</param>
+        /// <returns>True si es un usuario valido</returns>
         private bool login(string user, string pass)
         {
             API<List< Empleado >> api = new API<List<Empleado>>();
@@ -79,6 +95,9 @@ namespace WSControl
             else
                 return false;
         }
+        /// <summary>
+        /// Entidad de usuarios
+        /// </summary>
         class Credenciales
         {
             public string user { get; set; }
@@ -93,6 +112,9 @@ namespace WSControl
 
             }
         }
+        /// <summary>
+        /// Entidad de Empleados
+        /// </summary>
         public class Empleado
         {
             public int codemp { get; set; }

@@ -13,14 +13,31 @@ using WSControl.modelos;
 
 namespace WSControl
 {
+    /// <summary>
+    /// Ventana que permite crear o editar permisos
+    /// </summary>
     public partial class Permiso : Form
     {
         private int codper = 0;
         private string file;
+        /// <summary>
+        /// Inicializa ventana de permisos vacia
+        /// </summary>
         public Permiso()
         {
             InitializeComponent();
         }
+        /// <summary>
+        /// Inicializa la ventana de permisos con valores para editar
+        /// </summary>
+        /// <param name="codper">codigo de permido</param>
+        /// <param name="fecha">fecha</param>
+        /// <param name="tipo">tipo</param>
+        /// <param name="horainicial">hora inicial</param>
+        /// <param name="horafinal">hora final</param>
+        /// <param name="descripcion">descripcion</param>
+        /// <param name="estado">estado</param>
+        /// <param name="attch">si tiene archivo adjunto</param>
         public Permiso(int codper,string fecha, char tipo, string horainicial, string horafinal, string descripcion, char estado, bool attch)
         {
             InitializeComponent();
@@ -64,22 +81,40 @@ namespace WSControl
             if (attch)
                 c_linkDescargar.Visible = true;
         }
+        /// <summary>
+        /// Evento vinculado al boton salir, permite cerrar la ventana
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void c_btnSalir_Click(object sender, EventArgs e)
         {
             this.Close();
         }
-
+        /// <summary>
+        /// Evento disparado al cargar el formulario
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Permiso_Load(object sender, EventArgs e)
         {
             if(c_cmbTipo.SelectedIndex == -1)
                 c_cmbTipo.SelectedIndex = 0;
         }
-
+        /// <summary>
+        /// Evento vinculado al boton solicitar, permite enviar a la api los datos del permiso
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void c_btnSolicitar_Click(object sender, EventArgs e)
         {
             API<LastID> api = new API<LastID>();
             Permisos permiso = new Permisos();
             permiso.codemp = Login.codemp;
+            if(c_txtDescripcion.Text.Trim().Length < 10)
+            {
+                MessageBox.Show(this, "Debe justificar su permiso!", "Descripcion no valida", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
             permiso.descripcion = Uri.EscapeDataString(c_txtDescripcion.Text);
             permiso.fecha = c_tpFecha.Value.ToString("dd-MM-yyyy");
             permiso.horainicial = c_tpHoraInicial.Value.ToString("HH:mm");
@@ -112,7 +147,11 @@ namespace WSControl
             this.DialogResult = DialogResult.OK;
             this.Close();
         }
-
+        /// <summary>
+        /// Evento vinculado al boton de adjuntar, permite adjuntar archivo zip al permiso
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void c_btnAdjuntar_Click(object sender, EventArgs e)
         {
             if(c_dlgAdj.ShowDialog(this) == DialogResult.OK)
@@ -133,15 +172,28 @@ namespace WSControl
                 }                
             }
         }
-        private void c_linkDescargar_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        /// <summary>
+        /// Evento vinculado al link descarga, permite descargar archivo adjunto si existe uno
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void c_linkDescargar_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             API api = new API();
             if(c_dlgSave.ShowDialog() == DialogResult.OK)
             {
-                var task = Task.Run(() => api.download($"download/{codper}"));
-                task.Wait();
+                byte[] bytes;
+                try
+                {
+                    bytes = await Task.Run(() => api.download($"download/{codper}"));
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show(this, "Ocurrio un error al intentar descargar el archivo...", "Descargar", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
                 BinaryWriter writer = new BinaryWriter(c_dlgSave.OpenFile());
-                writer.Write(task.Result);
+                writer.Write(bytes);
                 writer.Flush();
                 writer.Close();
                 System.Diagnostics.Process.Start("explorer.exe", c_dlgSave.FileName);
@@ -151,11 +203,19 @@ namespace WSControl
         {
             Byte, KB, MB, GB, TB, PB, EB, ZB, YB
         }
-
+        /// <summary>
+        /// Convierte bites a un valor en base a su unidad
+        /// </summary>
+        /// <param name="value">valor en bites</param>
+        /// <param name="unit">unidad a la que se dea convertir</param>
+        /// <returns></returns>
         public double ToSize(Int64 value, SizeUnits unit)
         {
             return (value / (double)Math.Pow(1024, (Int64)unit));
         }
+        /// <summary>
+        /// Entidad de archivos adjuntos
+        /// </summary>
         class UploadState
         {
             public bool status { get; set; }
@@ -165,6 +225,9 @@ namespace WSControl
 
             }
         }
+        /// <summary>
+        /// Entidad respuesta de la api para determinar el ultimo id ingresado de una peticion
+        /// </summary>
         class LastID
         {
             public int insertId { get; set; }

@@ -13,10 +13,16 @@ using WSControl.modelos;
 
 namespace WSControl
 {
+    /// <summary>
+    /// Ventana que permite gestionar los permisos del empleado logueado
+    /// </summary>
     public partial class ListadoPermisos : Form
     {
         private static readonly ListadoPermisos singleton = new ListadoPermisos();
 
+        /// <summary>
+        /// La ventana solo tendra una instancia activa, clase singleton
+        /// </summary>
         public static ListadoPermisos Instance
         {
             get
@@ -24,24 +30,38 @@ namespace WSControl
                 return singleton;
             }
         }
-
+        /// <summary>
+        /// Inicializa la ventana de permisos
+        /// </summary>
         private ListadoPermisos()
         {
             InitializeComponent();
             this.Text = "Listado de Permisos - " + Login.usuario.nombres + " " + Login.usuario.apellidos + " - " + Login.usuario.departamento;
         }  
-        
+        /// <summary>
+        /// Evento vinculado al boton salir, permite cerrar la ventana
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void c_btnSalir_Click(object sender, EventArgs e)
         {
             this.Close();
         }
-
+        /// <summary>
+        /// Evento vinculado al boton crear, permite crear un permiso nuevo
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void c_btnCrear_Click(object sender, EventArgs e)
         {
             new Permiso().ShowDialog(this);
             ListadoPermisos_Load(sender, e);
         }
-
+        /// <summary>
+        /// Evento disparado cuando se carga la ventana
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ListadoPermisos_Load(object sender, EventArgs e)
         {
             API<Permisos[]> api = new API<Permisos[]>();
@@ -61,6 +81,11 @@ namespace WSControl
             c_tblPermisos.CurrentCell = null;
             
         }   
+        /// <summary>
+        /// Agrega permisos a la tabla
+        /// </summary>
+        /// <param name="p"></param>
+        /// <returns></returns>
         private int addRow(Permisos p)
         {
             Bitmap img;
@@ -91,7 +116,11 @@ namespace WSControl
             }
             return c_tblPermisos.Rows.Add(p.codper,p.fecha, img, tipo, Uri.UnescapeDataString(p.descripcion), p.horainicial.Remove(p.horainicial.LastIndexOf(":")), p.horafinal.Remove(p.horafinal.LastIndexOf(":")));
         }
-
+        /// <summary>
+        /// Evento vinculado a la tabla, permite editar un permiso al darle doble click
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void c_tblPermisos_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             Permisos p = (Permisos)c_tblPermisos.Rows.SharedRow(e.RowIndex).Tag;
@@ -99,7 +128,11 @@ namespace WSControl
             if(frmperm.ShowDialog(this) == DialogResult.OK)
                 ListadoPermisos_Load(sender, null);
         }
-
+        /// <summary>
+        /// Evento vinculado a la tabla, permite seleccionar elementos de la tabla para su eliminacion
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void c_tblPermisos_RowEnter(object sender, DataGridViewCellEventArgs e)
         {
             this.BeginInvoke(new MethodInvoker(() => {
@@ -118,7 +151,11 @@ namespace WSControl
             }
                 ));
         }
-
+        /// <summary>
+        /// Evento vinculado a boton eliminar, permite eliminar el permiso seleccionado si esta en estado pendiente
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void c_btnElim_Click(object sender, EventArgs e)
         {
             if (c_tblPermisos.SelectedRows.Count == 0) return;
@@ -135,13 +172,21 @@ namespace WSControl
             }
             ListadoPermisos_Load(sender, null);
         }
-
+        /// <summary>
+        /// Evento disparado al cerrar ventana, oculta la ventana en lugar de destruir el objecto
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ListadoPermisos_FormClosing(object sender, FormClosingEventArgs e)
         {
             e.Cancel = true;
             this.Hide();
         }        
-
+        /// <summary>
+        /// Evento disparado al cambiar la visibilidad de la ventana, permite recargar el contenido de la tabla
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ListadoPermisos_VisibleChanged(object sender, EventArgs e)
         {
             if(this.Visible)
