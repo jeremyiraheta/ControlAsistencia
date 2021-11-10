@@ -12,6 +12,7 @@ Control asistencia laboral via remota
 **Instalar base de datos**
 
 Definir root sin password
+Correr script de carpeta DB para crear tablas
 
 **Instalar las dependencias**
 
