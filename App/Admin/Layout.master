@@ -1,0 +1,38 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="Layout.master.cs" Inherits="Layout" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title><% Response.Write(ViewBag.Get("title")); %></title>
+    <link rel="stylesheet" type="text/css" href="style/style.css" />
+    <asp:ContentPlaceHolder id="head" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+    <nav class="menu" tabindex="0">
+	<div class="smartphone-menu-trigger"></div>
+  <header class="avatar">
+		<img src="img/logo new.jpg" />
+    <h2><% Response.Write(ViewBag.Get("name")); %></h2>
+  </header>
+	<ul>
+    <li tabindex="0" class="icon-departamentos"><a href="Departamentos.aspx" class="menulink">Departamentos</a></li>
+    <li tabindex="0" class="icon-empleados"><a href="Empleados.aspx" class="menulink">Empleados</a></li>
+    <li tabindex="0" class="icon-permisos"><a href="Permisos.aspx" class="menulink">Permisos</a></li>
+    <li tabindex="0" class="icon-registros"><a href="Registros.aspx" class="menulink">Registros</a></li>
+  </ul>
+</nav>
+
+<main>
+  <form id="form1" runat="server">
+    <div>
+        <asp:ContentPlaceHolder id="Content" runat="server">
+        
+        </asp:ContentPlaceHolder>
+    </div>
+    </form>
+</main>    
+</body>
+</html>

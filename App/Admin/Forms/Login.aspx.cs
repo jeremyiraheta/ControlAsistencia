@@ -19,34 +19,12 @@ public partial class Forms_Login : System.Web.UI.Page
         RESTAPI.Usuario emp = RESTAPI.Login(user, pass);
         if (emp != null)
         {            
-            fillTable();
-            response.Text += "Logeado codigo empleado: " + emp.codemp + ", departamento: " + emp.departamento;
-            Session["logged"] = true;
+            Session["user"] = emp;
+            Response.Redirect("..");
         }
         else
         {
-            response.Text = "Usuario no valido";
-            Session.Clear();
-        }
-    }
-
-    private void fillTable()
-    {
-        
-        response.Text = "\n<div><table border=1><tr><th>id</th><th>nombre</th></tr>";
-        List<Departamentos> departamentos = RESTAPI.listDepartamentos();
-        foreach (var d in departamentos)
-        {
-            response.Text += string.Format("\n<tr><td>{0}</td><td>{1}</td></tr>", d.coddpto, d.nombre);
-        }
-        response.Text += "\n</table></div>";
-    }
-    protected void btnAdd_Click(object sender, EventArgs e)
-    {
-        if(txtnombre.Text != "")
-        {            
-            RESTAPI.insertDepartamento(txtnombre.Text);
-            fillTable();
+            msg.Text = "Usuario o password incorrecto!";
         }
     }
 }
