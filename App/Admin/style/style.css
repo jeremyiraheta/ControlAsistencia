@@ -1,8 +1,7 @@
 ﻿body {
-  background: #ffea92;
+  background: #1c3855;
   margin: 0;
   font-family: "Open Sans", Helvetica Neue, Helvetica, Arial, sans-serif;
-  color: #fff;
   padding-left: 240px;
 }
 main {
@@ -21,6 +20,16 @@ main .helper {
   border-radius: 20px;
   font-size: 2em;
   font-weight: bold;
+}
+main .content {
+  background: rgba(0, 0, 0, 0.2);
+  color: #6c757d;
+  width:80%;
+  padding: 1.2em 2em;
+  text-align: center;
+  border-radius: 20px;  
+  margin-top:10%;
+  margin-left:10%;
 }
 main .helper span {
   color: rgba(0, 0, 0, 0.2);
@@ -80,6 +89,9 @@ main .helper span {
 .menu ul li.icon-registros {
   background-image: url("../img/database.svg");
 }
+.menu ul li.icon-salir {
+  background-image: url("../img/logout.svg");
+}
 .menu ul li:hover {
   background-color: rgba(0, 0, 0, 0.1);
 }
@@ -92,6 +104,10 @@ main .helper span {
 }
 .menulink:hover{
     color:white;
+}
+.username{
+    color:white;
+    padding-top:20px;
 }
 @media screen and (max-width: 900px) and (min-width: 400px) {
   body {
@@ -156,6 +172,9 @@ main .helper span {
     opacity: 1;
     transform: translate3d(0px, -50%, 0);
   }
+  .menulink span{
+      display: none;
+  }
 }
 @media screen and (max-width: 400px) {
   body {
@@ -166,6 +185,9 @@ main .helper span {
     box-shadow: 0 0 0 100em rgba(0, 0, 0, 0);
     transform: translate3d(-230px, 0, 0);
     transition: all 0.3s ease-in-out;
+  }
+  .menulink span{
+      display: none;
   }
   .menu .smartphone-menu-trigger {
     width: 40px;

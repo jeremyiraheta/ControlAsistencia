@@ -29,10 +29,10 @@ create table EMPLEADOS
    TELEFONOS            varchar(20),
    CORREO               varchar(50),
    GENERO               char(1) not null,
-   NACIMIENTO           datetime not null,
+   NACIMIENTO           date not null,
    DIRECCION            varchar(1000) not null,
    DUI                  varchar(10) not null,
-   NIT                  varchar(14),
+   NIT                  varchar(18),
    AFP                  varchar(12),
    USUARIO              varchar(50) not null unique,
    PASSWORD             varchar(64) not null,
@@ -77,5 +77,5 @@ alter table PERMISOS add constraint FK_REFERENCE_3 foreign key (CODEMP)
 alter table REGISTROS add constraint FK_REFERENCE_1 foreign key (CODEMP)
       references EMPLEADOS (CODEMP);
 
-INSERT INTO departamentos(NOMBRE) VALUES(UPPER('Sistemas'));
-INSERT INTO empleados(CODDPTO,NOMBRES,APELLIDOS,GENERO,NACIMIENTO,DIRECCION,DUI,USUARIO,PASSWORD,ESTADO) VALUES(1,'admin','','','S','','','admin',MD5('admin'),'A');
+INSERT INTO departamentos(NOMBRE) VALUES(UPPER('admin'));
+INSERT INTO empleados(CODDPTO,NOMBRES,APELLIDOS,GENERO,NACIMIENTO,DIRECCION,DUI,USUARIO,PASSWORD,ESTADO) VALUES(1,'admin','istrador','M',NOW(),'','','admin',MD5('admin'),'A');

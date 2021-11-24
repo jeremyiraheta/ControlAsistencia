@@ -73,6 +73,21 @@ public class RESTAPI
         return t.Result;
     }
     /// <summary>
+    /// Filtra una tabla en relacion a una condicion
+    /// </summary>
+    /// <param name="table">nombre de la tabla</param>
+    /// <param name="cond">condicion</param>
+    /// <returns></returns>
+    public static List<object> filter(string table, string cond)
+    {
+        API<List<object>> api = new API<List<object>>();
+        Filter f = new Filter();
+        f.query = cond;
+        var t = Task.Run(() => api.post("query", f));
+        t.Wait();
+        return t.Result;
+    }
+    /// <summary>
     /// Inserta un nuevo empleado
     /// </summary>
     /// <param name="empleado">nuevo empleado</param>
@@ -100,10 +115,10 @@ public class RESTAPI
     /// <returns></returns>
     public static Empleados getEmpleado(int codemp)
     {
-        API<Empleados> api = new API<Empleados>();
+        API<List<Empleados>> api = new API<List<Empleados>>();
         var t = Task.Run(() => api.get("empleados/" + codemp));
         t.Wait();
-        return t.Result;
+        return t.Result[0];
     }
     /// <summary>
     /// Actualiza un empleado especifico
@@ -349,9 +364,14 @@ public class RESTAPI
         public string nombres { get; set; }
         public string apellidos { get; set; }
         public string departamento { get; set; }
+        public bool admin { get; set; }
         public Usuario()
         {
 
         }
+    }
+    private class Filter
+    {
+        public string query { get; set; }
     }
 }

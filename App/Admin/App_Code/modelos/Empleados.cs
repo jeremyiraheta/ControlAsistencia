@@ -14,7 +14,8 @@ public class Empleados
     public string apellidos { get; set; }
     public string telefonos { get; set; }
     public string correo { get; set; }
-    public DateTime nacimiento { get; set; }
+    public string nacimiento {get; set;}
+    public string genero { get; set; }
     public string direccion { get; set; }
     public string dui { get; set; }
     public string nit { get; set; }
@@ -25,5 +26,19 @@ public class Empleados
     public Empleados()
     {
         
+    }
+    public string formatdate
+    {
+        get
+        {
+            try
+            {
+                return nacimiento.Split(new char[] { '-', 'T' })[2] + "/" + nacimiento.Split(new char[] { '-' })[1] + "/" + nacimiento.Split(new char[] { '-' })[0];
+            }
+            catch (Exception)
+            {
+                return nacimiento;                
+            }
+        }
     }
 }

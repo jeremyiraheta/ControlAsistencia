@@ -17,10 +17,13 @@ public partial class Forms_Login : System.Web.UI.Page
         string user = txtuser.Text;
         string pass = txtpass.Text;
         RESTAPI.Usuario emp = RESTAPI.Login(user, pass);
-        if (emp != null)
+        if (emp != null && emp.estado == 'A' && emp.admin)
         {            
             Session["user"] = emp;
             Response.Redirect("..");
+        }else if(emp != null)
+        {
+            msg.Text = "Su usuario no tiene acceso!";
         }
         else
         {

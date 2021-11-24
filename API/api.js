@@ -70,7 +70,7 @@ app.put("/empleados/:id", (req, res) => {
     })
 });
 
-//Desabilita empleado por codigo de empleado
+//Deshabilita empleado por codigo de empleado
 app.delete("/empleados/:id", (req, res) => {
     var query = connection.query(`UPDATE empleados SET estado='D' where codemp = ${req.params.id}`
         , function(error, result){
@@ -82,7 +82,7 @@ app.delete("/empleados/:id", (req, res) => {
 
 //Activa empleado por codigo de empleado
 app.get("/empleados/:id/enable", (req, res) => {
-    var query = connection.query(`UPDATE empleados SET estado='A' where codemp = ${req.params.id}`
+    var query = connection.query(`UPDATE empleados SET estado='E' where codemp = ${req.params.id}`
         , function(error, result){
         if(error) console.log('[mysql error] : ', error)
         if(DEBUG)console.log(`enable a empleados id = ${req.params.id}`)
@@ -252,7 +252,7 @@ app.delete("/permisos/:id", (req, res) => {
 
 //Comprueba si un usuario es valido
 app.post("/login", (req, res) => {
-    var query = connection.query(`select codemp,UPPER(nombres) nombres, UPPER(apellidos) apellidos,estado,(select UPPER(nombre) from departamentos d where e.CODDPTO = d.CODDPTO) departamento  from empleados e where usuario='${req.body.user}' and password=MD5('${req.body.password}')`, function(error, result){
+    var query = connection.query(`select codemp,UPPER(nombres) nombres, UPPER(apellidos) apellidos,estado,(select UPPER(nombre) from departamentos d where e.CODDPTO = d.CODDPTO) departamento,if(e.CODDPTO = 1,TRUE,FALSE) admin  from empleados e where usuario='${req.body.user}' and password=MD5('${req.body.password}')`, function(error, result){
         if(error) console.log('[mysql error] : ', error)
         if(DEBUG)console.log(`login user=${req.body.user}`)
         res.send(result)
@@ -304,6 +304,14 @@ app.get("/download/:id", async (req, res) => {
         res.status(500).send(error);
     }
 });
+//Permite realizar un filtro a una tabla especifica
+app.post("/query/:table", (req,res) => {
+    var query = connection.query(`SELECT * FROM ${req.params.table} WHERE ${req.body.query}`, function(error, result){
+        if(error) console.log('[mysql error] : ', error)
+        if(DEBUG)console.log(`filtro tabla=${req.params.table}, query=${req.body.query}`)
+        res.send(result)
+    })
+})
 
 //Inicia el servidor
 var server = app.listen(process.env.PORT || 8000, function () {

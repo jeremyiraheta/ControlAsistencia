@@ -3,6 +3,9 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="Content" Runat="Server">
-    Default
+    <div class="helper">
+        <img src="img/logo.png" class="brand-logo" />
+        <h3>Sistema Control de Asistencia Remota</h3>
+    </div>    
 </asp:Content>
 

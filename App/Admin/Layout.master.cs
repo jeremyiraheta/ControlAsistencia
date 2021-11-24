@@ -12,6 +12,6 @@ public partial class Layout : System.Web.UI.MasterPage
         if (Session.Count > 0 && Session["user"] != null)
             ViewBag.Set("name", ((RESTAPI.Usuario)Session["user"]).nombres);
         else
-            Response.Redirect("Forms/Login.aspx");
+            Response.Redirect("/Login");
     }
 }
