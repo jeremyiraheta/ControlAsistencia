@@ -224,3 +224,19 @@ main .helper span {
     pointer-events: none;
   }
 }
+.control-hide{
+    background:transparent;
+    border:none;
+    color:white;
+}
+.control-hide-gray{
+    background:transparent;
+    border:none;
+    color:gray;
+}
+.control-hide:focus{
+    border:none;
+}
+.control-hide-gray:focus{
+    border:none;
+}

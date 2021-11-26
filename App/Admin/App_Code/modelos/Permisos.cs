@@ -15,4 +15,14 @@ public class Permisos
     {
 
     }
+    public string formatTipo()
+    {
+        switch(tipo)
+        {
+            case 'P': return "PARTICULAR";
+            case 'S': return "SALUD";
+            case 'O': return "OFICIAL";
+        }
+        return "";
+    }
 }

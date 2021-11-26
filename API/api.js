@@ -139,16 +139,25 @@ app.delete("/departamentos/:id", (req, res) => {
 
 //Obtiene listado de registros del control de asistencia
 app.get("/registros/:id", (req, res) => {
-    var query = connection.query("SELECT * FROM registros WHERE codemp = " + req.params.id, function(error, result){
+    var query = connection.query("SELECT codemp,DATE_FORMAT(fecha,'%d/%m/%Y'), horaentrada,horasalida FROM registros WHERE codemp = " + req.params.id, function(error, result){
         if(error) console.log('[mysql error] : ', error)
         if(DEBUG)console.log(`get a registros id = ${req.params.id}`)
         res.send(result)
     })
 });
 
+//Obtiene listado de registros del control de asistencia de un mes especifico
+app.get("/registros/:m/:y", (req, res) => {
+    var query = connection.query(`SELECT e.CODEMP,DATE_FORMAT(r.FECHA,'%d/%m/%Y'), r.HORAENTRADA, r.HORASALIDA FROM empleados e LEFT JOIN registros r ON r.CODEMP = e.CODEMP AND YEAR(r.FECHA) = ${req.params.y} AND MONTH(r.FECHA) = ${req.params.m} WHERE e.ESTADO = 'A';`, function(error, result){
+        if(error) console.log('[mysql error] : ', error)
+        if(DEBUG)console.log(`get a registros mes = ${req.params.m}, anyo= ${req.params.y}`)
+        res.send(result)
+    })
+});
+
 //Obtiene un registro del control de asistencia por codigo de empleado y fecha
-app.get("/registros/:id/:date", (req, res) => {
-    var query = connection.query(`SELECT * FROM registros WHERE fecha = STR_TO_DATE('${req.params.date}', '%d-%m-%Y') and codemp = ${req.params.id}`, function(error, result){
+app.get("/registros/:id/:m/:y", (req, res) => {
+    var query = connection.query(`SELECT codemp,DATE_FORMAT(fecha,'%d/%m/%Y') fecha,horaentrada,horasalida FROM registros WHERE YEAR(fecha) = ${req.params.y} and MONTH(fecha) = ${req.params.m} and codemp = ${req.params.id}`, function(error, result){
         if(error) console.log('[mysql error] : ', error)
         if(DEBUG)console.log(`get a registros id = ${req.params.id}`)
         res.send(result)
@@ -184,18 +193,27 @@ app.delete("/registros/:id/:date", (req, res) => {
     })
 });
 
-//Obtiene todo el listado de permisos
-app.get("/permisos", (req, res) => {
-    var query = connection.query("SELECT codper,codemp,DATE_FORMAT(fecha,'%d/%m/%Y') fecha,estado,tipo,descripcion,horainicial,horafinal FROM permisos", function(error, result){
+//Obtiene todo el listado de permisos de un empleado
+app.get("/permisos/emp/:id", (req, res) => {
+    var query = connection.query(`SELECT codper,codemp,DATE_FORMAT(fecha,'%d/%m/%Y') fecha,estado,tipo,descripcion,horainicial,horafinal FROM permisos where codemp= ${req.params.id}`, function(error, result){
         if(error) console.log('[mysql error] : ', error)
         if(DEBUG)console.log(`get a permisos`)
         res.send(result)
     })
 });
 
-//Obtiene los permisos de un empleado particular
+//Obtiene listado de permisos de un mes especifico
+app.get("/permisos/:m/:y", (req, res) => {
+    var query = connection.query(`SELECT codper,codemp,DATE_FORMAT(fecha,'%d/%m/%Y') fecha,estado,tipo,descripcion,horainicial,horafinal FROM permisos where DATE_FORMAT(fecha,'%Y/%m') = '${req.params.y}/${req.params.m}'`, function(error, result){
+        if(error) console.log('[mysql error] : ', error)
+        if(DEBUG)console.log(`get a permisos mes=${req.params.m}, anyo=${req.params.y}`)
+        res.send(result)
+    })
+});
+
+//Obtiene los datos de un permiso particular
 app.get("/permisos/:id", (req, res) => {
-    var query = connection.query(`SELECT codper,codemp,DATE_FORMAT(fecha,'%d/%m/%Y') fecha,estado,tipo,descripcion,horainicial,horafinal FROM permisos WHERE codemp = ${req.params.id} order by codper desc`, function(error, result){
+    var query = connection.query(`SELECT codper,codemp,DATE_FORMAT(fecha,'%d/%m/%Y') fecha,estado,tipo,descripcion,horainicial,horafinal FROM permisos WHERE codper = ${req.params.id}`, function(error, result){
         if(error) console.log('[mysql error] : ', error)
         if(DEBUG)console.log(`get a permisos id = ${req.params.id}`)
         try {

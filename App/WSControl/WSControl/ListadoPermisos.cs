@@ -66,7 +66,7 @@ namespace WSControl
         {
             API<Permisos[]> api = new API<Permisos[]>();
             Permisos[] permisos = new Permisos[0];
-            var task = Task.Run(() => api.get($"permisos/{Login.codemp}"));
+            var task = Task.Run(() => api.get($"permisos/emp/{Login.codemp}"));
             try
             {
                 task.Wait();

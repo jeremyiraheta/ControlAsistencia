@@ -7,14 +7,24 @@ using System.Net.Http;
 using Newtonsoft.Json;
 
 namespace WSControl
-{
+{    
     /// <summary>
     /// Interfaz para acceder a la api
     /// </summary>
     /// <typeparam name="T"></typeparam>
     class API<T>
     {
-        const string api = "http://localhost:8000/";
+        
+        private string api = "http://localhost:8000/";
+        /// <summary>
+        /// URL de la API
+        /// </summary>
+        public string URLBASE {
+            get
+            {
+                return api;
+            }
+        }
         HttpClient client = null;
         /// <summary>
         /// Crea instancia del acceso a la api se puede redifinir el valor predeterminado usando el registro del usuario local Sofware\Digestyc valor api
@@ -31,7 +41,10 @@ namespace WSControl
             {
             }
             if (apirelocate != null && !apirelocate.Equals(""))
+            {
                 client.BaseAddress = new Uri(apirelocate);
+                api = apirelocate;
+            }
             else
                 client.BaseAddress = new Uri(api);
         }

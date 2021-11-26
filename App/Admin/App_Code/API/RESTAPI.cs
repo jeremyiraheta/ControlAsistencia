@@ -10,7 +10,15 @@ using System.IO;
 /// Implementacion de api
 /// </summary>
 public class RESTAPI
-{        
+{    
+    
+    public static string APIURL
+    {
+        get
+        {
+            return new API().URLBASE;
+        }
+    }    
     private RESTAPI()
     {
         
@@ -183,18 +191,25 @@ public class RESTAPI
         t.Wait();
         return t.Result;
     }
+
+    public static List<Registros> listRegistrosMes(int mes, int anio)
+    {
+        API<List<Registros>> api = new API<List<Registros>>();
+        var t = Task.Run(() => api.get(string.Format("registros/{0}/{1}", mes, anio)));
+        t.Wait();
+        return t.Result;
+    }
     /// <summary>
-    /// Obtiene los registros de un empleado en una fecha especifica
+    /// Ontiene un listado de registros de un empleado un mes especifico
     /// </summary>
-    /// <param name="codemp">codigo empleado</param>
-    /// <param name="dia"></param>
+    /// <param name="codemp"></param>
     /// <param name="mes"></param>
     /// <param name="anio"></param>
     /// <returns></returns>
-    public static List<Registros> listRegistrosPorFecha(int codemp, int dia, int mes, int anio)
+    public static List<Registros> listRegistrosEmpleado(int codemp, int mes, int anio)
     {
         API<List<Registros>> api = new API<List<Registros>>();
-        var t = Task.Run(() => api.get("registros/" + codemp + "/" + string.Format("{0}-{1}-{2}", dia,mes, anio)));
+        var t = Task.Run(() => api.get(string.Format("registros/{0}/{1}/{2}", codemp,mes, anio)));
         t.Wait();
         return t.Result;
     }
@@ -202,24 +217,24 @@ public class RESTAPI
     /// Obtiene todos los permisos
     /// </summary>
     /// <returns>Listado de permisos</returns>
-    public static List<Permisos> listPermisos()
+    public static List<Permisos> listPermisos(int month, int year)
     {
         API<List<Permisos>> api = new API<List<Permisos>>();
-        var t = Task.Run(() => api.get("permisos"));
+        var t = Task.Run(() => api.get("permisos/" + month + "/" + year));
         t.Wait();
         return t.Result;
     }
     /// <summary>
-    /// Obtiene todos los permisos de un empleado
+    /// Obtiene un permiso particular
     /// </summary>
-    /// <param name="codemp">codigo empleado</param>
+    /// <param name="codper">codigo permiso</param>
     /// <returns></returns>
-    public static List<Permisos> listPermisosDeEmpleado(int codemp)
+    public static Permisos getPermiso(int codper)
     {
         API<List<Permisos>> api = new API<List<Permisos>>();
-        var t = Task.Run(() => api.get("permisos/" + codemp));
+        var t = Task.Run(() => api.get("permisos/" + codper));
         t.Wait();
-        return t.Result;
+        return t.Result[0];
     }
     /// <summary>
     /// Inserta un permiso nuevo
