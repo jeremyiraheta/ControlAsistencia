@@ -9,6 +9,7 @@ public partial class Registros : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
+        ViewBag.Set("title", "Sistema Administrativo Control Asistencia Remota - Registros - DIGESTYC");
         if (!IsPostBack) txtfilter.Text = DateTime.Today.Year + "-" + DateTime.Today.Month;
         fillTable();
     }
@@ -27,9 +28,9 @@ public partial class Registros : System.Web.UI.Page
             var emp = empleados.Where(e => e.codemp == item.codemp).First();
             var dpto = departamentos.Where(d => d.coddpto == emp.coddpto).First();                                             
             if (!horas.Keys.Contains(item.codemp))
-                horas.Add(emp.codemp, new Reg() { codemp = emp.codemp, departamento = dpto.nombre, empleado = emp.nombres + " " + emp.apellidos, horas = calcHours(item.horaentrada,item.horasalida) });
+                horas.Add(emp.codemp, new Reg() { codemp = emp.codemp, departamento = dpto.nombre, empleado = emp.nombres + " " + emp.apellidos, horas = Convert.ToDecimal(calcHours(item.horaentrada, item.horasalida)) });
             else
-                horas[item.codemp].horas += calcHours(item.horaentrada, item.horasalida);
+                horas[item.codemp].horas += Convert.ToDecimal(calcHours(item.horaentrada, item.horasalida));
         }
         var sort = from e in horas orderby e.Value.horas ascending select e;
         var head = tblreg.Rows[0];
@@ -73,13 +74,13 @@ public partial class Registros : System.Web.UI.Page
             TableCell tchf = new TableCell();
             tchf.Controls.Add(new TextBox() { TextMode = TextBoxMode.Time, Text = item.horasalida.Substring(0,5), ReadOnly = true, CssClass = "control-hide-gray" });
             row.Cells.Add(tchf);
-            row.Cells.Add(new TableCell() { Text = calcHours(item.horaentrada, item.horasalida).ToString() });
+            row.Cells.Add(new TableCell() { Text = calcHours(item.horaentrada, item.horasalida) });
             tbldet.Rows.Add(row);            
         }        
         ScriptManager.RegisterStartupScript(Page, Page.GetType(), "detReg", "new bootstrap.Modal(document.getElementById('detReg'), { keyboard:false}).show()", true);
     }
 
-    private int calcHours(string horaentrada, string horasalida)
+    private string calcHours(string horaentrada, string horasalida)
     {        
         try
         {
@@ -90,11 +91,11 @@ public partial class Registros : System.Web.UI.Page
             var dti = new DateTime(2000, 1, 1, hi, mi, 0);
             var dtf = new DateTime(2000, 1, 1, hf, mf, 0);
             var diff = dtf.Subtract(dti);
-            return diff.Hours;
+            return String.Format("{0:0.00}", diff.TotalHours);
         }
         catch (Exception)
         {
-            return 0;
+            return "0";
         }
     }
 
@@ -103,7 +104,7 @@ public partial class Registros : System.Web.UI.Page
         public int codemp { get; set; }
         public string empleado { get; set; }
         public string departamento { get; set; }
-        public int horas { get; set; }
+        public decimal horas { get; set; }
     }
 
     protected void txtfilter_TextChanged(object sender, EventArgs e)

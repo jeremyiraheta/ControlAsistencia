@@ -1,6 +1,6 @@
 ﻿
 
-public class Permisos
+public class Permiso
 {
     public int codper { get; set; }
     public int codemp { get; set; }
@@ -11,7 +11,7 @@ public class Permisos
     public string horafinal { get; set; }
     public char estado { get; set; }
     public bool attch { get; set; }
-    public Permisos()
+    public Permiso()
     {
 
     }

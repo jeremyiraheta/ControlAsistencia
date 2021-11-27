@@ -43,7 +43,7 @@ public partial class Control_emp : System.Web.UI.UserControl
         string user = txtuser.Text;
         string password = txtpass.Text;
         int cod = Convert.ToInt32(codemp.Value);     
-        Empleados emp = new Empleados();
+        Empleado emp = new Empleado();
         emp.nombres = nombres;
         emp.apellidos = apellidos;
         emp.coddpto = dpto;       
@@ -69,7 +69,7 @@ public partial class Control_emp : System.Web.UI.UserControl
         RESTAPI.disableEmpleado(cod);
         Response.Redirect(Request.RawUrl);
     }
-    public void editForm(Empleados emp)
+    public void editForm(Empleado emp)
     {
         txtnom.Text = emp.nombres;
         txtape.Text = emp.apellidos;

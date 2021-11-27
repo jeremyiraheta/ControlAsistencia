@@ -9,6 +9,7 @@ public partial class Permisos : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
+        ViewBag.Set("title", "Sistema Administrativo Control Asistencia Remota - Permisos - DIGESTYC");
         if (!IsPostBack) txtfilter.Text = DateTime.Today.Year + "-" + DateTime.Today.Month;
         switch(curstate.Value)
         {

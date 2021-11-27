@@ -29,8 +29,8 @@ public class RESTAPI
     /// <param name="nombre">nombre departamento</param>
     public static void insertDepartamento(string nombre)
     {
-        API<Departamentos> api = new API<Departamentos>();
-        Departamentos dep = new Departamentos();
+        API<Departamento> api = new API<Departamento>();
+        Departamento dep = new Departamento();
         dep.nombre = nombre;
         Task t = Task.Run(() => api.post("departamentos", dep));
         t.Wait();
@@ -39,9 +39,9 @@ public class RESTAPI
     /// Obtiene todos los departamentos
     /// </summary>
     /// <returns>Listado de departamentos</returns>
-    public static List<Departamentos> listDepartamentos()
+    public static List<Departamento> listDepartamentos()
     {
-        API<List<Departamentos>> api = new API<List<Departamentos>>();
+        API<List<Departamento>> api = new API<List<Departamento>>();
         var t = Task.Run(() => api.get("departamentos"));
         return t.Result;
     }
@@ -53,7 +53,7 @@ public class RESTAPI
     public static void updateDepartamento(int coddpto, string nombre)
     {
         API api = new API();
-        Departamentos dep = new Departamentos();
+        Departamento dep = new Departamento();
         dep.nombre = nombre;
         Task t = Task.Run(() => api.put("departamentos/" + coddpto, dep));
         t.Wait();
@@ -73,9 +73,9 @@ public class RESTAPI
     /// </summary>
     /// <param name="coddpto">codigo departamento</param>
     /// <returns></returns>
-    public static Departamentos getDepartamento(int coddpto)
+    public static Departamento getDepartamento(int coddpto)
     {
-        API<Departamentos> api = new API<Departamentos>();
+        API<Departamento> api = new API<Departamento>();
         var t = Task.Run(() => api.get("departamentos/" + coddpto));
         t.Wait();
         return t.Result;
@@ -86,12 +86,12 @@ public class RESTAPI
     /// <param name="table">nombre de la tabla</param>
     /// <param name="cond">condicion</param>
     /// <returns></returns>
-    public static List<object> filter(string table, string cond)
+    public static List<T> filter<T>(string table, string cond)
     {
-        API<List<object>> api = new API<List<object>>();
+        API<List<T>> api = new API<List<T>>();
         Filter f = new Filter();
         f.query = cond;
-        var t = Task.Run(() => api.post("query", f));
+        var t = Task.Run(() => api.post("query/" + table, f));
         t.Wait();
         return t.Result;
     }
@@ -99,7 +99,7 @@ public class RESTAPI
     /// Inserta un nuevo empleado
     /// </summary>
     /// <param name="empleado">nuevo empleado</param>
-    public static void insertEmpleado(Empleados empleado)
+    public static void insertEmpleado(Empleado empleado)
     {
         API api = new API();
         var t = Task.Run(() => api.post("empleados", empleado));
@@ -109,9 +109,9 @@ public class RESTAPI
     /// Obtiene todos los empleados
     /// </summary>
     /// <returns>Listado de empleados</returns>
-    public static List<Empleados> listEmpleados()
+    public static List<Empleado> listEmpleados()
     {
-        API<List<Empleados>> api = new API<List<Empleados>>();
+        API<List<Empleado>> api = new API<List<Empleado>>();
         var t = Task.Run(() => api.get("empleados"));
         t.Wait();
         return t.Result;
@@ -121,9 +121,9 @@ public class RESTAPI
     /// </summary>
     /// <param name="codemp">codigo empleado</param>
     /// <returns></returns>
-    public static Empleados getEmpleado(int codemp)
+    public static Empleado getEmpleado(int codemp)
     {
-        API<List<Empleados>> api = new API<List<Empleados>>();
+        API<List<Empleado>> api = new API<List<Empleado>>();
         var t = Task.Run(() => api.get("empleados/" + codemp));
         t.Wait();
         return t.Result[0];
@@ -133,7 +133,7 @@ public class RESTAPI
     /// </summary>
     /// <param name="codemp">codigo empleado</param>
     /// <param name="empleado">objeto editado del empleado</param>
-    public static void updateEmpleado(int codemp, Empleados empleado)
+    public static void updateEmpleado(int codemp, Empleado empleado)
     {
         API api = new API();
         var t = Task.Run(() => api.put("empleados/" + codemp, empleado));
@@ -184,17 +184,17 @@ public class RESTAPI
     /// </summary>
     /// <param name="codemp">codigo de empleado</param>
     /// <returns></returns>
-    public static List<Registros> listRegistros(int codemp)
+    public static List<Registro> listRegistros(int codemp)
     {
-        API<List<Registros>> api = new API<List<Registros>>();
+        API<List<Registro>> api = new API<List<Registro>>();
         var t = Task.Run(() => api.get("registros/" + codemp));
         t.Wait();
         return t.Result;
     }
 
-    public static List<Registros> listRegistrosMes(int mes, int anio)
+    public static List<Registro> listRegistrosMes(int mes, int anio)
     {
-        API<List<Registros>> api = new API<List<Registros>>();
+        API<List<Registro>> api = new API<List<Registro>>();
         var t = Task.Run(() => api.get(string.Format("registros/{0}/{1}", mes, anio)));
         t.Wait();
         return t.Result;
@@ -206,9 +206,9 @@ public class RESTAPI
     /// <param name="mes"></param>
     /// <param name="anio"></param>
     /// <returns></returns>
-    public static List<Registros> listRegistrosEmpleado(int codemp, int mes, int anio)
+    public static List<Registro> listRegistrosEmpleado(int codemp, int mes, int anio)
     {
-        API<List<Registros>> api = new API<List<Registros>>();
+        API<List<Registro>> api = new API<List<Registro>>();
         var t = Task.Run(() => api.get(string.Format("registros/{0}/{1}/{2}", codemp,mes, anio)));
         t.Wait();
         return t.Result;
@@ -217,9 +217,9 @@ public class RESTAPI
     /// Obtiene todos los permisos
     /// </summary>
     /// <returns>Listado de permisos</returns>
-    public static List<Permisos> listPermisos(int month, int year)
+    public static List<Permiso> listPermisos(int month, int year)
     {
-        API<List<Permisos>> api = new API<List<Permisos>>();
+        API<List<Permiso>> api = new API<List<Permiso>>();
         var t = Task.Run(() => api.get("permisos/" + month + "/" + year));
         t.Wait();
         return t.Result;
@@ -229,9 +229,9 @@ public class RESTAPI
     /// </summary>
     /// <param name="codper">codigo permiso</param>
     /// <returns></returns>
-    public static Permisos getPermiso(int codper)
+    public static Permiso getPermiso(int codper)
     {
-        API<List<Permisos>> api = new API<List<Permisos>>();
+        API<List<Permiso>> api = new API<List<Permiso>>();
         var t = Task.Run(() => api.get("permisos/" + codper));
         t.Wait();
         return t.Result[0];
@@ -240,7 +240,7 @@ public class RESTAPI
     /// Inserta un permiso nuevo
     /// </summary>
     /// <param name="permiso">nuevo permiso</param>
-    public static void insertPermiso(Permisos permiso)
+    public static void insertPermiso(Permiso permiso)
     {
         API api = new API();
         var t = Task.Run(() => api.post("permisos", permiso));
@@ -251,7 +251,7 @@ public class RESTAPI
     /// </summary>
     /// <param name="codper">codigo del permiso</param>
     /// <param name="permiso">permiso editado</param>
-    public static void updatePermiso(int codper, Permisos permiso)
+    public static void updatePermiso(int codper, Permiso permiso)
     {
         API api = new API();
         var t = Task.Run(() => api.put("permisos/" + codper, permiso));

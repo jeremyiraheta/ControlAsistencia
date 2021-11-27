@@ -6,7 +6,7 @@ using System.Web;
 /// <summary>
 /// Descripción breve de Empleados
 /// </summary>
-public class Empleados
+public class Empleado
 {
     public int codemp { get; set; }
     public int coddpto { get; set; }
@@ -23,7 +23,7 @@ public class Empleados
     public string usuario { get; set; }
     public string password { get; set; }
     public char estado { get; set; }
-    public Empleados()
+    public Empleado()
     {
         
     }
