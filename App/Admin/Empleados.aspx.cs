@@ -36,6 +36,7 @@ public partial class Empleados : System.Web.UI.Page
         foreach (var item in emps.Where(v => v.coddpto != 1))
         {
             TableRow row = new TableRow();
+            row.Cells.Add(new TableCell() { Text = item.codemp.ToString() });
             row.Cells.Add(new TableCell() { Text = dpts.Where(v => v.coddpto == item.coddpto).First().nombre.ToUpper() });
             row.Cells.Add(new TableCell() { Text = item.nombres });
             row.Cells.Add(new TableCell() { Text = item.apellidos });

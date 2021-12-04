@@ -22,14 +22,17 @@ const fs = require('fs');
 const path = require('path');
 var app = express();
 app.use(express.json());
-app.use('/app', express.static(path.join(__dirname, '../Instalador/')))
+app.use('/app', express.static(path.join(__dirname, '../Instalador/')));
 app.use(fileUpload({
     createParentPath: true,
     limits: { 
         fileSize: 20 * 1024 * 1024 //20MB max
     }
 }));
-
+//Acceso al instalador de la aplicacion de escritorio
+app.get("/", (req, res) => {
+    res.redirect("/app")
+});
 //Obtiene listado de empleados activos
 app.get("/empleados", (req, res) => {
     var query = connection.query("SELECT * FROM empleados where estado = 'A'", function(error, result){
@@ -197,7 +200,16 @@ app.delete("/registros/:id/:date", (req, res) => {
 app.get("/permisos/emp/:id", (req, res) => {
     var query = connection.query(`SELECT codper,codemp,DATE_FORMAT(fecha,'%d/%m/%Y') fecha,estado,tipo,descripcion,horainicial,horafinal FROM permisos where codemp= ${req.params.id}`, function(error, result){
         if(error) console.log('[mysql error] : ', error)
-        if(DEBUG)console.log(`get a permisos`)
+        if(DEBUG)console.log(`get a permisos codemp = ${req.params.id}`)
+        try {
+            for (let i = 0; i < result.length; i++) {
+                if (fs.existsSync( path.join(__dirname, "public") + path.sep + result[i].codper + ".zip")) {
+                    result[i].attch = true;
+                }
+            }
+        } catch(err) {
+            console.error(err)
+        }
         res.send(result)
     })
 });
@@ -207,6 +219,15 @@ app.get("/permisos/:m/:y", (req, res) => {
     var query = connection.query(`SELECT codper,codemp,DATE_FORMAT(fecha,'%d/%m/%Y') fecha,estado,tipo,descripcion,horainicial,horafinal FROM permisos where DATE_FORMAT(fecha,'%Y/%m') = '${req.params.y}/${req.params.m}'`, function(error, result){
         if(error) console.log('[mysql error] : ', error)
         if(DEBUG)console.log(`get a permisos mes=${req.params.m}, anyo=${req.params.y}`)
+        try {
+            for (let i = 0; i < result.length; i++) {
+                if (fs.existsSync( path.join(__dirname, "public") + path.sep + result[i].codper + ".zip")) {
+                    result[i].attch = true;
+                }
+            }
+        } catch(err) {
+            console.error(err)
+        }
         res.send(result)
     })
 });

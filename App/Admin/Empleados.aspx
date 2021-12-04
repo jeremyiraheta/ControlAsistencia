@@ -14,6 +14,7 @@
         <div class="row">
             <asp:Table ID="tblemp" CssClass="table table-dark table-hover" runat="server" >
                 <asp:TableHeaderRow runat="server">
+                    <asp:TableHeaderCell>ID</asp:TableHeaderCell>
                     <asp:TableHeaderCell>DEPARTAMENTO</asp:TableHeaderCell>
                     <asp:TableHeaderCell>NOMBRES</asp:TableHeaderCell>
                     <asp:TableHeaderCell>APELLIDOS</asp:TableHeaderCell>
