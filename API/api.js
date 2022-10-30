@@ -22,7 +22,7 @@ const fs = require('fs');
 const path = require('path');
 var app = express();
 app.use(express.json());
-app.use('/app', express.static(path.join(__dirname, '../Instalador/')));
+app.use('/app', express.static(path.join(__dirname,  'Instalador')));
 app.use(fileUpload({
     createParentPath: true,
     limits: { 
@@ -356,6 +356,8 @@ app.post("/query/:table", (req,res) => {
 var server = app.listen(process.env.PORT || 8081, function () {
     var host = server.address().address
     var port = server.address().port
-    
+    setInterval(() => {
+	    connection.query("select 1")
+    },10000)
     console.log("Servidor Escuchando en http://%s:%s", host, port)
  });
