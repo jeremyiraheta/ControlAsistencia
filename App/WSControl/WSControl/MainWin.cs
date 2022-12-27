@@ -16,14 +16,14 @@ namespace WSControl
     /// <summary>
     /// Ventana que permite gestionar los permisos del empleado logueado
     /// </summary>
-    public partial class ListadoPermisos : Form
+    public partial class MainWin : Form
     {
-        private static readonly ListadoPermisos singleton = new ListadoPermisos();
+        private static readonly MainWin singleton = new MainWin();
 
         /// <summary>
         /// La ventana solo tendra una instancia activa, clase singleton
         /// </summary>
-        public static ListadoPermisos Instance
+        public static MainWin Instance
         {
             get
             {
@@ -33,10 +33,10 @@ namespace WSControl
         /// <summary>
         /// Inicializa la ventana de permisos
         /// </summary>
-        private ListadoPermisos()
+        private MainWin()
         {
             InitializeComponent();
-            this.Text = "Listado de Permisos - " + Login.usuario.nombres + " " + Login.usuario.apellidos + " - " + Login.usuario.departamento;
+            this.Text = "Shuseki - Control de Asistencia Remota - " + Login.usuario.nombres + " " + Login.usuario.apellidos + " - " + Login.usuario.departamento;
         }  
         /// <summary>
         /// Evento vinculado al boton salir, permite cerrar la ventana
@@ -64,22 +64,9 @@ namespace WSControl
         /// <param name="e"></param>
         private void ListadoPermisos_Load(object sender, EventArgs e)
         {
-            API<Permisos[]> api = new API<Permisos[]>();
-            Permisos[] permisos = new Permisos[0];
-            var task = Task.Run(() => api.get($"permisos/emp/{Login.codemp}"));
-            try
-            {
-                task.Wait();
-                permisos = task.Result;
-            }
-            catch (Exception)
-            {
-            }
-            c_tblPermisos.Rows.Clear();
-            foreach (var p in permisos)
-                c_tblPermisos.Rows[addRow(p)].Tag = p;
-            c_tblPermisos.CurrentCell = null;
-            
+            loadPermit();
+            loadHistory(DateTime.Now.Month, DateTime.Now.Year);
+            c_lstMeses.SelectedIndex = DateTime.Now.Month - 1;
         }   
         /// <summary>
         /// Agrega permisos a la tabla
@@ -193,6 +180,52 @@ namespace WSControl
             {
                 ListadoPermisos_Load(sender, null);
             }
+        }
+        /// <summary>
+        /// Carga el historial de registros
+        /// </summary>
+        private void loadHistory(int m, int year)
+        {
+            try
+            {
+                API<Registros[]> api = new API<Registros[]>();
+                Registros[] registros;
+                var task = Task.Run(() => api.get($"registros/{Login.codemp}/{m}/{year}"));
+                task.Wait();
+                registros = task.Result;
+                c_lstHist.Items.Clear();
+                foreach (var item in registros)
+                {
+                    c_lstHist.Items.Add($"{item.fecha} - Entrada: {item.horaentrada} || Salida: {item.horasalida}");
+                }
+            }
+            catch (Exception)
+            {
+            }
+        }
+        
+        private void loadPermit()
+        {
+            API<Permisos[]> api = new API<Permisos[]>();
+            Permisos[] permisos = new Permisos[0];
+            var task = Task.Run(() => api.get($"permisos/emp/{Login.codemp}"));
+            try
+            {
+                task.Wait();
+                permisos = task.Result;
+            }
+            catch (Exception)
+            {
+            }
+            c_tblPermisos.Rows.Clear();
+            foreach (var p in permisos)
+                c_tblPermisos.Rows[addRow(p)].Tag = p;
+            c_tblPermisos.CurrentCell = null;
+        }
+
+        private void c_lstMeses_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            loadHistory(c_lstMeses.SelectedIndex + 1, DateTime.Now.Year);
         }
     }
 }

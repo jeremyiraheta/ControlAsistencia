@@ -1,13 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32929.385
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WSControl", "WSControl\WSControl.csproj", "{7A3EB7C0-EED5-4FE3-82CC-F8805F85EC5C}"
 EndProject
 Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Admin", "..\Admin\", "{560AA028-67D8-42CF-963B-B016CA9D683A}"
 	ProjectSection(WebsiteProperties) = preProject
-		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.5.2"
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.8"
 		Debug.AspNetCompiler.VirtualPath = "/localhost_50556"
 		Debug.AspNetCompiler.PhysicalPath = "..\Admin\"
 		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_50556\"
@@ -44,5 +44,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1FCC126E-1767-4F11-B14D-88123FF6BF16}
 	EndGlobalSection
 EndGlobal

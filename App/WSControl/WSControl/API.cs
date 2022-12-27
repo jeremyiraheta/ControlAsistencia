@@ -22,18 +22,7 @@ namespace WSControl
         public API()
         {
             client = new HttpClient();
-            string apirelocate = null;
-            try
-            {
-                apirelocate = (string)Microsoft.Win32.Registry.CurrentUser.OpenSubKey("Software\\Digestyc", false).GetValue("api");
-            }
-            catch (Exception)
-            {
-            }
-            if (apirelocate != null && !apirelocate.Equals(""))
-                client.BaseAddress = new Uri(apirelocate);
-            else
-                client.BaseAddress = new Uri(api);
+            client.BaseAddress = new Uri(api);
         }
         /// <summary>
         /// Peticion get asincrona

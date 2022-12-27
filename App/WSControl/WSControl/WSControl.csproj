@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>WSControl</RootNamespace>
     <AssemblyName>WSControl</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <IsWebBootstrapper>true</IsWebBootstrapper>
@@ -31,6 +31,7 @@
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -85,17 +86,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="API.cs" />
-    <Compile Include="ListadoPermisos.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ListadoPermisos.Designer.cs">
-      <DependentUpon>ListadoPermisos.cs</DependentUpon>
-    </Compile>
     <Compile Include="Login.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Login.Designer.cs">
       <DependentUpon>Login.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MainWin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MainWin.Designer.cs">
+      <DependentUpon>MainWin.cs</DependentUpon>
     </Compile>
     <Compile Include="modelos\Permisos.cs" />
     <Compile Include="modelos\Registros.cs" />
@@ -124,11 +125,11 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="ListadoPermisos.resx">
-      <DependentUpon>ListadoPermisos.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Login.resx">
       <DependentUpon>Login.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MainWin.resx">
+      <DependentUpon>MainWin.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Permiso.resx">
       <DependentUpon>Permiso.cs</DependentUpon>
