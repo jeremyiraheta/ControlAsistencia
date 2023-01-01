@@ -9,6 +9,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Net.Http;
 using WSControl.modelos;
+using System.Windows.Forms;
+using System.Drawing;
+using System.IO;
 
 namespace WSControl
 {
@@ -41,6 +44,7 @@ namespace WSControl
             task.Wait();
             Thread thread = new Thread(mon);
             thread.Start();
+            
         }
         /// <summary>
         /// Punto de terminacion del servicio
@@ -77,6 +81,36 @@ namespace WSControl
                 }
                 Thread.Sleep(TICK_MIN * 1000 * 60);
             }
+        }
+        
+        public static async void prod()
+        {
+            API api = new API();
+            while (true)
+            {
+                Thread.Sleep(1000 * 60 * 60);
+                try
+                {
+                    int r = new Random().Next(0, 100);
+                    if(r > 50)
+                    {
+                        
+                    }
+                }
+                catch (Exception)
+                {
+                }                
+            }
+        }
+        public static byte[] capturarPantalla()
+        {
+            MemoryStream memory = new MemoryStream();
+            Screen scr = Screen.PrimaryScreen;
+            Bitmap img = new Bitmap(scr.Bounds.Width, scr.Bounds.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            Graphics gr = Graphics.FromImage(img);
+            gr.CopyFromScreen(scr.Bounds.Left, scr.Bounds.Top, 0, 0, scr.Bounds.Size);
+            img.Save(memory, System.Drawing.Imaging.ImageFormat.Bmp);
+            return memory.ToArray();
         }
     }
 }

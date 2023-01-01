@@ -204,6 +204,9 @@ namespace WSControl
             }
         }
         
+        /// <summary>
+        /// Carga los permisos
+        /// </summary>
         private void loadPermit()
         {
             API<Permisos[]> api = new API<Permisos[]>();

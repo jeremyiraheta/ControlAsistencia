@@ -14,7 +14,7 @@ namespace WSControl
     /// <typeparam name="T"></typeparam>
     class API<T>
     {
-        const string api = "http://localhost:8000/";
+        const string api = "http://40.114.33.100:8081";
         HttpClient client = null;
         /// <summary>
         /// Crea instancia del acceso a la api se puede redifinir el valor predeterminado usando el registro del usuario local Sofware\Digestyc valor api

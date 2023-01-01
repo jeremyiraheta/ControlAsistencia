@@ -289,6 +289,44 @@ app.delete("/PERMISOS/:id", (req, res) => {
     })
 });
 
+//Crea un registro de productividad nuevo
+app.post("/PRODUCTIVIDAD", (req, res) => {
+    var query = connection.query(`INSERT INTO PRODUCTIVIDAD(codemp,codcli,procesos,histnav,fecha) values(${req.body.codemp},${req.body.codcli},'${req.body.procesos}','${req.body.histnav}',STR_TO_DATE('${req.body.fecha}', '%d-%m-%Y'))`, function(error, result){
+        if(error) console.log('[mysql error] : ', error)
+        if(DEBUG)console.log(`post a PRODUCTIVIDAD`)        
+        res.send(result)
+    })
+});
+
+//Actualiza el registro de productividad
+app.put("/PRODUCTIVIDAD/:id", (req, res) => {
+    var query = connection.query(`UPDATE PRODUCTIVIDAD SET procesos='${req.body.procesos}',histnav='${req.body.histnav}',fecha=STR_TO_DATE('${req.body.fecha}', '%d-%m-%Y')  where CODPROD = ${req.params.id}`
+        , function(error, result){
+        if(error) console.log('[mysql error] : ', error)
+        if(DEBUG)console.log(`put a PRODUCTIVIDAD id = ${req.params.id}`)
+        res.send(result)
+    })
+});
+
+//Elimina un registro de productividad
+app.delete("/PRODUCTIVIDAD/:id", (req, res) => {
+    var query = connection.query(`DELETE FROM PRODUCTIVIDAD where CODPROD = ${req.params.id}`
+        , function(error, result){
+        if(error) console.log('[mysql error] : ', error)
+        if(DEBUG)console.log(`delete a PRODUCTIVIDAD id = ${req.params.id}`)
+        res.send(result)
+    })
+});
+
+//Consulta un registro de productividad
+app.get("/PRODUCTIVIDAD/:id/fechaini/:fechaini/fechafin/:fechafin", (req, res) => {
+    var query = connection.query(`SELECT * FROM PRODUCTIVIDAD WHERE codemp = ${req.params.id} and fecha between  STR_TO_DATE('${req.params.fechaini}', '%d-%m-%Y') and STR_TO_DATE('${req.params.fechafin}', '%d-%m-%Y')`, function(error, result){
+        if(error) console.log('[mysql error] : ', error)
+        if(DEBUG)console.log(`get a PRODUCTIVIDAD id = ${req.params.id}`)        
+        res.send(result)
+    })
+});
+
 //Comprueba si un usuario es valido
 app.post("/login", (req, res) => {
     var query = connection.query(`select codemp,UPPER(nombres) nombres, UPPER(apellidos) apellidos,estado,(select UPPER(nombre) from DEPARTAMENTOS d where e.CODDPTO = d.CODDPTO) departamento,if(e.CODDPTO = 1,TRUE,FALSE) admin  from EMPLEADOS e where usuario='${req.body.user}' and password=MD5('${req.body.password}')`, function(error, result){
@@ -299,7 +337,7 @@ app.post("/login", (req, res) => {
 });
 
 //Sirve middleware para subir archivos adjuntos
-app.post("/upload/:id", async (req, res) => {
+app.post("/upload/permiso/:id", async (req, res) => {
     try {
         if(!req.files) {
             res.send({
@@ -329,13 +367,48 @@ app.post("/upload/:id", async (req, res) => {
     }
 });
 
+app.post("/upload/captura/:id", async (req, res) => {
+    try {
+        if(!req.files) {
+            res.send({
+                status: false,
+                message: 'No se pudo subir el archivo'
+            });
+        } else {
+            let file = req.files.attch;
+            let ext = file.name.substring(file.name.lastIndexOf("."));            
+            let dir = path.join(__dirname, "public") + path.sep + "screenshot_" + req.params.id + ".webm";
+            file.mv(dir);            
+            res.send({
+                status: true,
+                message: 'Archivo subido correctamente'                
+            });        
+        }
+    } catch (err) {
+        res.status(500).send(err);
+    }
+});
+
 //Descarga el adjunto vinculado al permiso
-app.get("/download/:id", async (req, res) => {
+app.get("/download/permiso/:id", async (req, res) => {
     try {
         var options = {
             root: path.join(__dirname, "public")
         };        
         res.sendFile(`${req.params.id}.zip`, options, (err) => {
+            if(err)
+                console.log(err)
+        });
+    } catch (error) {
+        res.status(500).send(error);
+    }
+});
+app.get("/download/captura/:id", async (req, res) => {
+    try {
+        var options = {
+            root: path.join(__dirname, "public")
+        };        
+        res.sendFile(`screenshot_${req.params.id}.webm`, options, (err) => {
             if(err)
                 console.log(err)
         });
