@@ -15,7 +15,7 @@ namespace WSControl
     class API<T>
     {
         
-        private string api = "http://localhost:8000/";
+        private string api = "http://40.114.33.100:8081";
         /// <summary>
         /// URL de la API
         /// </summary>
@@ -35,7 +35,7 @@ namespace WSControl
             string apirelocate = null;
             try
             {
-                apirelocate = (string)Microsoft.Win32.Registry.CurrentUser.OpenSubKey("Software\\Digestyc", false).GetValue("api");
+                apirelocate = (string)Microsoft.Win32.Registry.CurrentUser.OpenSubKey("Software\\Shiseki", false).GetValue("api");
             }
             catch (Exception)
             {

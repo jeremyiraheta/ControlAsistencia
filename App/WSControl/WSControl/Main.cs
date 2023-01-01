@@ -16,14 +16,14 @@ namespace WSControl
     /// <summary>
     /// Ventana que permite gestionar los permisos del empleado logueado
     /// </summary>
-    public partial class ListadoPermisos : Form
+    public partial class Main : Form
     {
-        private static readonly ListadoPermisos singleton = new ListadoPermisos();
+        private static readonly Main singleton = new Main();
 
         /// <summary>
         /// La ventana solo tendra una instancia activa, clase singleton
         /// </summary>
-        public static ListadoPermisos Instance
+        public static Main Instance
         {
             get
             {
@@ -33,7 +33,7 @@ namespace WSControl
         /// <summary>
         /// Inicializa la ventana de permisos
         /// </summary>
-        private ListadoPermisos()
+        private Main()
         {
             InitializeComponent();
             this.Text = "Listado de Permisos - " + Login.usuario.nombres + " " + Login.usuario.apellidos + " - " + Login.usuario.departamento;
@@ -193,6 +193,11 @@ namespace WSControl
             {
                 ListadoPermisos_Load(sender, null);
             }
+        }
+
+        private void c_btnsalirm_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

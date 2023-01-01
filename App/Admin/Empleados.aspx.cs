@@ -15,13 +15,13 @@ public partial class Empleados : System.Web.UI.Page
     }
     protected void editCommand(object sender, CommandEventArgs e)
     {
-        ASP.control_emp_ascx emp=null;
+        ASP.control_emp_ascx emp = null;
         foreach (var ctrl in modalContainer.Controls)
         {
             if (ctrl is ASP.control_emp_ascx)
-                    emp = (ASP.control_emp_ascx)ctrl;
+                emp = (ASP.control_emp_ascx)ctrl;
         }
-        
+
         emp.EDITID = Convert.ToInt32(e.CommandArgument);
         var o = RESTAPI.getEmpleado(emp.EDITID);
         emp.editForm(o);

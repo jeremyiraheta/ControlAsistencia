@@ -24,6 +24,9 @@ public partial class Forms_Login : System.Web.UI.Page
         }else if(emp != null)
         {
             msg.Text = "Su usuario no tiene acceso!";
+        }else if(emp == null)
+        {
+            msg.Text = "No hay conexion a los datos";
         }
         else
         {
