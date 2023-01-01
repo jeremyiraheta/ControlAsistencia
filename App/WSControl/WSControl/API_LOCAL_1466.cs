@@ -14,7 +14,7 @@ namespace WSControl
     /// <typeparam name="T"></typeparam>
     class API<T>
     {
-        const string api = "http://localhost:8000/";
+        const string api = "http://40.114.33.100:8081";
         HttpClient client = null;
         /// <summary>
         /// Crea instancia del acceso a la api se puede redifinir el valor predeterminado usando el registro del usuario local Sofware\Digestyc valor api
@@ -22,7 +22,18 @@ namespace WSControl
         public API()
         {
             client = new HttpClient();
-            client.BaseAddress = new Uri(api);
+            string apirelocate = null;
+            try
+            {
+                apirelocate = (string)Microsoft.Win32.Registry.CurrentUser.OpenSubKey("Software\\Shuseki", false).GetValue("api");
+            }
+            catch (Exception)
+            {
+            }
+            if (apirelocate != null && !apirelocate.Equals(""))
+                client.BaseAddress = new Uri(apirelocate);
+            else
+                client.BaseAddress = new Uri(api);
         }
         /// <summary>
         /// Peticion get asincrona

@@ -62,7 +62,11 @@ namespace WSControl
         /// <param name="e"></param>
         private void c_systray_MouseClick(object sender, System.Windows.Forms.MouseEventArgs e)
         {            
+<<<<<<< HEAD
+            Main.Instance.Show();
+=======
             MainWin.Instance.Show();
+>>>>>>> 2d583b6e9ca23c55042b92d8ac341b8ad1d2ffee
         }
         /// <summary>
         /// Demonio principal para registrar las horas de salida cada minuto

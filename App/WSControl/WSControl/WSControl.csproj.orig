@@ -86,17 +86,26 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="API.cs" />
-    <Compile Include="ListadoPermisos.cs">
+<<<<<<< HEAD
+    <Compile Include="Main.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ListadoPermisos.Designer.cs">
-      <DependentUpon>ListadoPermisos.cs</DependentUpon>
+    <Compile Include="Main.Designer.cs">
+      <DependentUpon>Main.cs</DependentUpon>
     </Compile>
+=======
+>>>>>>> 2d583b6e9ca23c55042b92d8ac341b8ad1d2ffee
     <Compile Include="Login.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Login.Designer.cs">
       <DependentUpon>Login.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MainWin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MainWin.Designer.cs">
+      <DependentUpon>MainWin.cs</DependentUpon>
     </Compile>
     <Compile Include="modelos\Permisos.cs" />
     <Compile Include="modelos\Registros.cs" />
@@ -125,11 +134,17 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="ListadoPermisos.resx">
-      <DependentUpon>ListadoPermisos.cs</DependentUpon>
+<<<<<<< HEAD
+    <EmbeddedResource Include="Main.resx">
+      <DependentUpon>Main.cs</DependentUpon>
     </EmbeddedResource>
+=======
+>>>>>>> 2d583b6e9ca23c55042b92d8ac341b8ad1d2ffee
     <EmbeddedResource Include="Login.resx">
       <DependentUpon>Login.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MainWin.resx">
+      <DependentUpon>MainWin.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Permiso.resx">
       <DependentUpon>Permiso.cs</DependentUpon>
