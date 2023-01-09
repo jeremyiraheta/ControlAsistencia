@@ -4,7 +4,6 @@
   "description": "",
   "main": "api.js",
   "scripts": {
-    "test": "node api.js",
     "start": "node api.js"
   },
   "author": "",
@@ -12,6 +11,7 @@
   "dependencies": {
     "express": "^4.17.1",
     "express-fileupload": "^1.2.1",
-    "mysql": "^2.18.1"
+    "mysql": "^2.18.1",
+    "nodemon": "^2.0.20"
   }
 }
