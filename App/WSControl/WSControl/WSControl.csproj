@@ -85,21 +85,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="API.cs" />
-    <Compile Include="ListadoPermisos.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ListadoPermisos.Designer.cs">
-      <DependentUpon>ListadoPermisos.cs</DependentUpon>
-    </Compile>
     <Compile Include="Login.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Login.Designer.cs">
       <DependentUpon>Login.cs</DependentUpon>
     </Compile>
-    <Compile Include="modelos\Permisos.cs" />
-    <Compile Include="modelos\Registros.cs" />
     <Compile Include="Permiso.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -125,9 +116,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="ListadoPermisos.resx">
-      <DependentUpon>ListadoPermisos.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Login.resx">
       <DependentUpon>Login.cs</DependentUpon>
     </EmbeddedResource>
@@ -162,6 +150,12 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Interfaz\Interfaz.csproj">
+      <Project>{7224b4bb-fd9f-467c-bdf6-c7be00649e37}</Project>
+      <Name>Interfaz</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

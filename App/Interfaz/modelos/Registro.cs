@@ -1,25 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace WSControl.modelos
+﻿namespace Interfaz.modelos
 {
-    class Registros
+    public class Registro
     {
         public int codemp { get; set; }
+        public int codcli { get; set; }
         public string fecha { get; set; }
         public string horaentrada { get; set; }
         public string horasalida { get; set; }
-        public Registros()
+        public Registro()
         {
 
         }
-        public Registros(string horaentrada, string horasalida)
+        public Registro(string horaentrada, string horasalida)
         {
             this.horaentrada = horaentrada;
             this.horasalida = horasalida;
         }
-    }
+    } 
 }

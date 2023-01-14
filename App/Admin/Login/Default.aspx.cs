@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using Interfaz.modelos;
 
 public partial class Forms_Login : System.Web.UI.Page
 {
@@ -16,7 +17,7 @@ public partial class Forms_Login : System.Web.UI.Page
     {
         string user = txtuser.Text;
         string pass = txtpass.Text;
-        RESTAPI.Usuario emp = RESTAPI.Login(user, pass);
+        Usuario emp = Datos.Login(user, pass);
         if (emp != null && emp.estado == 'A' && emp.admin)
         {            
             Session["user"] = emp;

@@ -3,6 +3,7 @@
 using System;
 using System.Web;
 using System.Linq;
+using Interfaz;
 
 public class ajaxDepartamentos : IHttpHandler {
 
@@ -16,7 +17,7 @@ public class ajaxDepartamentos : IHttpHandler {
             case "delete":
                 try
                 {
-                    RESTAPI.deleteDepartamento(Convert.ToInt32(id));
+                    Datos.deleteDepartamento(Convert.ToInt32(id), );
                 }
                 catch (Exception)
                 {

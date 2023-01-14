@@ -21,7 +21,7 @@ const fileUpload = require('express-fileupload');
 const fs = require('fs');
 const path = require('path');
 var app = express();
-//Seguridad
+//Middleware Seguridad
 function authentication(req, res, next) {
     var authheader = req.headers.authorization; 
     
@@ -67,9 +67,17 @@ app.use(fileUpload({
 app.get("/", (req, res) => {
     res.redirect("/app")
 });
-//Obtiene listado de EMPLEADOS activos
-app.get("/EMPLEADOS/codcli/:codcli", (req, res) => {    
-    var query = connection.query(`SELECT * FROM EMPLEADOS where activo = '${req.params.activo === undefined ? 'true' : req.params.activo}' and codcli = ${req.params.codcli}`, function(error, result){
+//Obtiene listado de EMPLEADOS
+app.get("/EMPLEADOS/codcli/:codcli/p/:page", (req, res) => {    
+    var query = connection.query(`SELECT * FROM EMPLEADOS where activo = '${req.query.activo === undefined ? 'true' : req.query.activo}' and codcli = ${req.params.codcli} limit ${req.params.page},10`, function(error, result){
+        if(error) console.log('[mysql error] : ', error)
+        if(DEBUG)console.log(`get a EMPLEADOS`)
+        res.send(result)
+    })
+});
+//Obtiene listado de EMPLEADOS activos de un departamento
+app.get("/EMPLEADOS/codcli/:codcli/coddpto/:coddpto/p/:page", (req, res) => {    
+    var query = connection.query(`SELECT * FROM EMPLEADOS where activo = '${req.query.activo === undefined ? 'true' : req.query.activo}' and codcli = ${req.params.codcli} and coddpto = ${req.params.coddpto} limit ${req.params.page},10`, function(error, result){
         if(error) console.log('[mysql error] : ', error)
         if(DEBUG)console.log(`get a EMPLEADOS`)
         res.send(result)
@@ -78,7 +86,7 @@ app.get("/EMPLEADOS/codcli/:codcli", (req, res) => {
 
 //Obtiene datos de un empleado por codigo de empleado
 app.get("/EMPLEADOS/codemp/:codemp/codcli/:codcli", (req, res) => {
-    var query = connection.query(`SELECT * FROM EMPLEADOS where activo = '${req.params.activo === undefined ? 'true' : req.params.activo}' AND codemp = ${req.params.codemp} and codcli = ${req.params.codcli}` , function(error, result){
+    var query = connection.query(`SELECT * FROM EMPLEADOS where activo = '${req.query.activo === undefined ? 'true' : req.query.activo}' AND codemp = ${req.params.codemp} and codcli = ${req.params.codcli}` , function(error, result){
         if(error) console.log('[mysql error] : ', error)
         if(DEBUG)console.log(`get a EMPLEADOS id = ${req.params.codemp}`)
         res.send(result)
@@ -136,9 +144,9 @@ app.get("/DEPARTAMENTOS/codcli/:codcli", (req, res) => {
     })
 });
 
-//Obtiene departamento por id
+//Obtiene los empleados de un departamento por id
 app.get("/DEPARTAMENTOS/coddpto/:coddpto/codcli/:codcli", (req, res) => {
-    var query = connection.query(`SELECT * FROM DEPARTAMENTOS WHERE CodDpto = ${req.params.coddpto} and codcli = ${req.params.codcli}`, function(error, result){
+    var query = connection.query(`SELECT * FROM EMPLEADOS WHERE CodDpto = ${req.params.coddpto} and codcli = ${req.params.codcli}`, function(error, result){
         if(error) console.log('[mysql error] : ', error)
         if(DEBUG)console.log(`get a DEPARTAMENTOS id = ${req.params.coddpto}`)
         res.send(result)
@@ -292,6 +300,15 @@ app.put("/PERMISOS", (req, res) => {
         res.send(result)
     })
 });
+//Actualiza el estado de un permiso
+app.put("/PERMISOS/codper/:codper/codcli/:codcli/estado/:estado", (req, res) => {
+    var query = connection.query(`UPDATE PERMISOS SET estado='${req.params.estado}' where CODPER = ${req.params.codper} and codcli = ${req.params.codcli}`
+    , function(error, result){
+        if(error) console.log('[mysql error] : ', error)
+        if(DEBUG)console.log(`put a PERMISOS id = ${req.body.codper}`)
+        res.send(result)
+    })
+});
 
 //Elimina un permiso por su id
 app.delete("/PERMISOS/codper/:codper/codcli/:codcli", (req, res) => {
@@ -392,18 +409,37 @@ app.delete("/CLIENTES/codcli/:codcli", (req, res) => {
 
 //Consulta un registro de cliente
 app.get("/CLIENTES/codcli/:codcli", (req, res) => {
-    var query = connection.query(`SELECT * FROM CLIENTES WHERE codcli = ${req.params.codcli} `, function(error, result){
+    var query = connection.query(`SELECT * FROM CLIENTES WHERE activo = '${req.query.activo === undefined ? 'true' : req.query.activo}' and codcli = ${req.params.codcli} `, function(error, result){
         if(error) console.log('[mysql error] : ', error)
-        if(DEBUG)console.log(`get a CLIENTES id = ${req.params.codcli}`)        
+        if(DEBUG)console.log(`get a CLIENTES id = ${req.params.codcli}`)    
+        try {
+            for (let i = 0; i < result.length; i++) {
+                if (fs.existsSync( path.join(__dirname, "public") + path.sep + "logo_" + result[i].codcli + ".webm")) {
+                    result[i].attch = true;
+                }
+            }
+        } catch(err) {
+            console.error(err)
+        }     
         res.send(result)
     })
 });
 
 //Consulta un registro de cliente
-app.get("/CLIENTES", (req, res) => {
-    var query = connection.query(`SELECT * FROM CLIENTES WHERE activo = 'true' `, function(error, result){
+app.get("/CLIENTES/p/:page", (req, res) => {
+    var query = connection.query(`SELECT * FROM CLIENTES WHERE activo = '${req.query.activo === undefined ? 'true' : req.query.activo}' limit ${req.params.page},10`, function(error, result){
         if(error) console.log('[mysql error] : ', error)
-        if(DEBUG)console.log(`get a CLIENTES`)        
+        if(DEBUG)console.log(`get a CLIENTES`)  
+        if(DEBUG)console.log(`get a CLIENTES id = ${req.params.codcli}`)    
+        try {
+            for (let i = 0; i < result.length; i++) {
+                if (fs.existsSync( path.join(__dirname, "public") + path.sep + "logo_" + result[i].codcli + ".webm")) {
+                    result[i].attch = true;
+                }
+            }
+        } catch(err) {
+            console.error(err)
+        }       
         res.send(result)
     })
 });
@@ -418,7 +454,7 @@ app.post("/login", (req, res) => {
 });
 
 //Sirve middleware para subir archivos adjuntos
-app.post("/upload/permiso/codper/:codper", async (req, res) => {
+app.post("/upload/permiso/codper/:codper/codcli/:codcli", async (req, res) => {
     try {
         if(!req.files) {
             res.send({
@@ -428,7 +464,7 @@ app.post("/upload/permiso/codper/:codper", async (req, res) => {
         } else {
             let file = req.files.attch;
             let ext = file.name.substring(file.name.lastIndexOf("."));            
-            let dir = path.join(__dirname, "public") + path.sep + req.params.codemp + ext;
+            let dir = path.join(__dirname, "public") + path.sep + req.params.codcli + req.params.codper + ext;
             if(ext.toLowerCase() == ".zip")
             {
                 file.mv(dir);            
@@ -448,13 +484,13 @@ app.post("/upload/permiso/codper/:codper", async (req, res) => {
     }
 });
 
-app.post("/upload/captura/codprod/:codprod", async (req, res) => {
+app.post("/upload/captura/codprod/:codprod/codcli/:codcli", async (req, res) => {
     try {
         if(req.body.file === undefined){
             res.status(500).send("No se envio nada que procesar")
         }else{
             let file = req.body.file                       
-            let dir = path.join(__dirname, "public") + path.sep + "screenshot_" + req.params.codprod + ".webm";
+            let dir = path.join(__dirname, "public") + path.sep + "screenshot_" + req.params.codcli + req.params.codprod + ".webp";
             fs.writeFile(dir, Buffer.from(file), 'binary', (err) => {
                 res.status(500).send("Ocurrio un error al escribir el archivo:" + err.message)
             })
@@ -470,7 +506,7 @@ app.post("/upload/logo/codcli/:codcli", async (req, res) => {
             res.status(500).send("No se envio nada que procesar")
         }else{
             let file = req.body.file                       
-            let dir = path.join(__dirname, "public") + path.sep + "logo_" + req.params.codcli + ".webm";
+            let dir = path.join(__dirname, "public") + path.sep + "logo_" + req.params.codcli + ".webp";
             fs.writeFile(dir, Buffer.from(file), 'binary', (err) => {
                 res.status(500).send("Ocurrio un error al escribir el archivo")
             })
@@ -481,12 +517,12 @@ app.post("/upload/logo/codcli/:codcli", async (req, res) => {
 });
 
 //Descarga el adjunto vinculado al permiso
-app.get("/download/permiso/codper/:codper", async (req, res) => {
+app.get("/download/permiso/codper/:codper/codcli/:codcli", async (req, res) => {
     try {
         var options = {
             root: path.join(__dirname, "public")
         };        
-        res.sendFile(`${req.params.codper}.zip`, options, (err) => {
+        res.sendFile(`${req.params.codcli}${req.params.codper}.zip`, options, (err) => {
             if(err)
                 console.log(err)
         });
@@ -495,12 +531,12 @@ app.get("/download/permiso/codper/:codper", async (req, res) => {
     }
 });
 
-app.get("/img/captura/codprod/:codprod", async (req, res) => {
+app.get("/img/captura/codprod/:codprod/codcli/:codcli", async (req, res) => {
     try {
         var options = {
             root: path.join(__dirname, "public")
         };        
-        res.sendFile(`screenshot_${req.params.codprod}.webm`, options, (err) => {
+        res.sendFile(`screenshot_${req.params.codcli}${req.params.codprod}.webp`, options, (err) => {
             if(err)
                 console.log(err)
         });
@@ -514,7 +550,7 @@ app.get("/img/logo/codcli/:codcli", async (req, res) => {
         var options = {
             root: path.join(__dirname, "public")
         };        
-        res.sendFile(`logo_${req.params.codcli}.webm`, options, (err) => {
+        res.sendFile(`logo_${req.params.codcli}.webp`, options, (err) => {
             if(err)
                 console.log(err)
         });

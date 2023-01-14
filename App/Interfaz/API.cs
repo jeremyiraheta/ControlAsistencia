@@ -1,28 +1,41 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using System.Net.Http;
-using Newtonsoft.Json;
 
-namespace WSControl
+namespace Interfaz
 {
-    /// <summary>
-    /// Interfaz para acceder a la api
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
     class API<T>
     {
-        const string api = "http://localhost:8000/";
+        const string api_local = "http://localhost:8081/";
+        const string api_remote = "http://40.114.33.100:8081";
+        const string token = "YWRtaW46YWRtaW4=";
         HttpClient client = null;
         /// <summary>
-        /// Crea instancia del acceso a la api se puede redifinir el valor predeterminado usando el registro del usuario local Sofware\Digestyc valor api
+        /// Crea instancia del acceso a la api 
         /// </summary>
-        public API()
+        public API(Boolean local)
         {
             client = new HttpClient();
-            client.BaseAddress = new Uri(api);
+            if (local)
+                client.BaseAddress = new Uri(api_local);
+            else
+                client.BaseAddress = new Uri(api_remote);
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", token);
+        }
+
+        /// <summary>
+        /// URL de la API
+        /// </summary>
+        public string URLBASE
+        {
+            get
+            {
+                return client.BaseAddress.AbsolutePath;
+            }
         }
         /// <summary>
         /// Peticion get asincrona
@@ -81,11 +94,11 @@ namespace WSControl
         /// <param name="file">locacion del archivo</param>
         /// <param name="name">nombre del parametro</param>
         /// <returns></returns>
-        public async Task<T> post(string endpoint, string file, string name)
+        public async Task<T> post(string endpoint, string file, string mime, string name)
         {
             MultipartFormDataContent obj = new MultipartFormDataContent();
             HttpContent content = new ByteArrayContent(System.IO.File.ReadAllBytes(file));
-            content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/zip");
+            content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(mime);
             obj.Add(content, name, new System.IO.FileInfo(file).Name);
             var response = await client.PostAsync(endpoint, obj);
             string json = "";
@@ -104,7 +117,7 @@ namespace WSControl
         /// <returns></returns>
         public async Task<T> post(string endpoint)
         {
-            var response = await client.PostAsync(endpoint,null);
+            var response = await client.PostAsync(endpoint, null);
             string json = "";
             if (response.IsSuccessStatusCode)
             {
@@ -171,6 +184,8 @@ namespace WSControl
     /// </summary>
     class API : API<object>
     {
-
+        public API(bool local) : base(local)
+        {            
+        }
     }
 }

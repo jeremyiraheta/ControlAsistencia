@@ -12,33 +12,23 @@ create table CLIENTES
 (
    CODCLI               int not null auto_increment,
    NOMBRE               varchar(200) not null,
+   URL						VARCHAR(200),
+   URLNOM					VARCHAR(200) NOT NULL,
    CORREO_CONTACTO      varchar(200) not null,
    TELEFONO_CONTACTO    varchar(100) not null,
    FECHA_REGISTRO       date not null,
    FECHA_FIN_SERVICIO   date not null,
-   PLAN                 int not null,
-   CAPTURARPANTALLA     enum('true','false'),
-   CAPTURARPROCESOS     enum('true','false'),
-   CAPTURARHISTORIALNAV enum('true','false'),
+   PLAN                 int not NULL,
+   CAPTURARPANTALLA     enum('true','false') DEFAULT 'false',
+   CAPTURARPROCESOS     enum('true','false') DEFAULT 'false',
+   CAPTURARHISTORIALNAV enum('true','false') DEFAULT 'false',
+   LOGINBACKGROUND		VARCHAR(10),		
    ZONAHORARIA          int not null,
    PAIS                 varchar(50) not null,
    INVERVALO            INT DEFAULT 60,
    PORCTCAPT            FLOAT DEFAULT 0.5,
-   ACTIVO               enum('true','false'),
+   ACTIVO               enum('true','false') DEFAULT 'true',
    primary key(CODCLI)
-);
-/*==============================================================*/
-/* Table: PRODUCTIVIDAD                                             */
-/*==============================================================*/
-create table PRODUCTIVIDAD
-(
-   CODPROD              int not null auto_increment,
-   CODCLI               int not null,
-   PROCESOS             mediumtext,
-   HISTNAV              mediumtext,
-   FECHA                time not null,
-   primary key(CODPROD, CODCLI),
-   foreign key(CODCLI) references CLIENTES(CODCLI)
 );
 
 /*==============================================================*/
@@ -65,17 +55,19 @@ create table EMPLEADOS
    APELLIDOS            varchar(200) not null,
    TELEFONOS            varchar(20),
    CORREO               varchar(50),
-   GENERO               char(1) not null,
+   GENERO               ENUM('M','F') not null,
    NACIMIENTO           date not null,
    DIRECCION            varchar(1000) not null,
    DUI                  varchar(10) not null,
    NIT                  varchar(20),
    AFP                  varchar(12),
-   USUARIO              varchar(50) not null unique,
+   USUARIO              varchar(50) not null,
    PASSWORD             varchar(64) not null,
-   ESTADO               char(1) not null,
+   ACTIVO               enum('true','false') DEFAULT('true'),
    primary key (CODEMP, CODCLI),
-   foreign key(CODCLI) references CLIENTES(CODCLI)
+   UNIQUE(codcli,usuario),
+   foreign key(CODCLI) references CLIENTES(CODCLI),
+   FOREIGN KEY(CODCLI,CODDPTO) REFERENCES departamentos(CODCLI,CODDPTO)
 );
 
 /*==============================================================*/
@@ -91,7 +83,7 @@ create table PERMISOS
    DESCRIPCION          VARCHAR(1000) not null,
    HORAINICIAL          time not null,
    HORAFINAL            time not null,
-   ESTADO               char(1) not null,
+   ESTADO               ENUM('E','A','R'),
    primary key (CODPER),
    foreign key(CODEMP, CODCLI) references EMPLEADOS(CODEMP, CODCLI)
 );
@@ -110,24 +102,41 @@ create table REGISTROS
    foreign key(CODEMP, CODCLI) references EMPLEADOS(CODEMP, CODCLI)
 );
 
+/*==============================================================*/
+/* Table: PRODUCTIVIDAD                                             */
+/*==============================================================*/
+create table PRODUCTIVIDAD
+(
+   CODPROD              int not null auto_increment,
+   CODEMP					INT NOT NULL,
+   CODCLI               int not null,
+   PROCESOS             mediumtext,
+   HISTNAV              mediumtext,
+   FECHA                date not null,
+   primary key(CODPROD),
+   foreign key(CODEMP, CODCLI) references EMPLEADOS(CODEMP, CODCLI)
+);
+
 /*CLIENTES dummy data*/
-INSERT INTO CLIENTES (`NOMBRE`, `CORREO_CONTACTO`, `TELEFONO_CONTACTO`, `FECHA_REGISTRO`, `FECHA_FIN_SERVICIO`, `PLAN`, `CAPTURARPANTALLA`, `CAPTURARPROCESOS`, `CAPTURARHISTORIALNAV`, `ZONAHORARIA`, `PAIS`, `INVERVALO`, `PORCTCAPT`, `ACTIVO`) VALUES ('DIGESTYC', 'digestyc.gob.sv', '25255555', '2023-01-01', '2023-12-01', 1, 'true', 'true', 'true', -6, 'El Salvador', 60, 0.5, 'true');
-SET @codcli = LAST_INSERT_ID();
+INSERT INTO CLIENTES (`NOMBRE`, `URL`, `URLNOM`,`CORREO_CONTACTO`, `TELEFONO_CONTACTO`, `FECHA_REGISTRO`, `FECHA_FIN_SERVICIO`, `PLAN`, `CAPTURARPANTALLA`, `CAPTURARPROCESOS`, `CAPTURARHISTORIALNAV`, `ZONAHORARIA`, `PAIS`, `INVERVALO`, `PORCTCAPT`, `ACTIVO`) VALUES ('SHUSEKI', 'shuseki.azurewebsites.net', 'shuseki', 'jeremy.iraheta@hotmail.com','+50325249228', NOW(), DATE_ADD(NOW(), INTERVAL 31 day), 1, 'true', 'true', 'true', -6, 'El Salvador', 60, 0.5, 'true');
+INSERT INTO CLIENTES (`NOMBRE`, `URL`, `URLNOM`,`CORREO_CONTACTO`, `TELEFONO_CONTACTO`, `FECHA_REGISTRO`, `FECHA_FIN_SERVICIO`, `PLAN`, `CAPTURARPANTALLA`, `CAPTURARPROCESOS`, `CAPTURARHISTORIALNAV`, `ZONAHORARIA`, `PAIS`, `INVERVALO`, `PORCTCAPT`, `ACTIVO`) VALUES ('DIGESTYC', 'digestyc.gob.sv', 'digestyc','info@digestyc.gob.sv','+50325255555', NOW(), DATE_ADD(NOW(), INTERVAL 31 day), 1, 'true', 'true', 'true', -6, 'El Salvador', 60, 0.5, 'true');
+SET @codcli = 2;
 /*DEPARTAMENTOS dummy data*/
+INSERT INTO DEPARTAMENTOS(NOMBRE,CODCLI) VALUES(UPPER('admin'),1);
 INSERT INTO DEPARTAMENTOS(NOMBRE,CODCLI) VALUES(UPPER('admin'),@codcli);
 INSERT INTO DEPARTAMENTOS(NOMBRE,CODCLI) VALUES(UPPER('sistemas'),@codcli);
 /*EMPLEADOS dummy data*/
-INSERT INTO EMPLEADOS(CODDPTO,CODCLI,NOMBRES,APELLIDOS,GENERO,NACIMIENTO,DIRECCION,DUI,USUARIO,PASSWORD,ESTADO) VALUES(1,@codcli,'admin','istrador','M',NOW(),'','','admin',MD5('admin'),'A');
-INSERT INTO EMPLEADOS(CODDPTO,CODCLI,NOMBRES,APELLIDOS,GENERO,NACIMIENTO,DIRECCION,DUI,USUARIO,PASSWORD,ESTADO,TELEFONOS,CORREO,NIT,AFP) values(2,@codcli,'Jamison','Stack','M','1964-06-22','60566 Roth Center','79934309-7','jamison.stack',MD5('12345'),'A','7824-3110','jstack0@gnu.org','4367-073090-448-3','691109318032');
-INSERT INTO EMPLEADOS(CODDPTO,CODCLI,NOMBRES,APELLIDOS,GENERO,NACIMIENTO,DIRECCION,DUI,USUARIO,PASSWORD,ESTADO,TELEFONOS,CORREO,NIT,AFP) values(2,@codcli,'Angy','Lewington','F','1924-07-12','9936 Pearson Lane','80527954-9','angy.lewington',MD5('12345'),'A','8558-8909','alewington1@marketwatch.com','0554-406598-358-0','850761609402');
-INSERT INTO EMPLEADOS(CODDPTO,CODCLI,NOMBRES,APELLIDOS,GENERO,NACIMIENTO,DIRECCION,DUI,USUARIO,PASSWORD,ESTADO,TELEFONOS,CORREO,NIT,AFP) values(2,@codcli,'Curtis','Mangenot','M','1918-12-19','7 Clemons Terrace','92049413-8','curtis.mangenot',MD5('12345'),'A','6838-3050','cmangenot2@xing.com','6058-372363-516-5','62517176055');
-INSERT INTO EMPLEADOS(CODDPTO,CODCLI,NOMBRES,APELLIDOS,GENERO,NACIMIENTO,DIRECCION,DUI,USUARIO,PASSWORD,ESTADO,TELEFONOS,CORREO,NIT,AFP) values(2,@codcli,'Jacky','Banat','F','1956-10-28','8363 Farmco Park','50127276-4','jacky.banat',MD5('12345'),'A','2971-3450','jbanat3@bluehost.com','3}2907-149559-546-4','596673043881');
-INSERT INTO EMPLEADOS(CODDPTO,CODCLI,NOMBRES,APELLIDOS,GENERO,NACIMIENTO,DIRECCION,DUI,USUARIO,PASSWORD,ESTADO,TELEFONOS,CORREO,NIT,AFP) values(2,@codcli,'Ryon','Colston','M','1952-07-23','0843 Schmedeman Drive','02130317-8','ryon.colston',MD5('12345'),'A','2214-5780','rcolston4@soundcloud.com','2821-007401-916-1','77442962880');
-INSERT INTO EMPLEADOS(CODDPTO,CODCLI,NOMBRES,APELLIDOS,GENERO,NACIMIENTO,DIRECCION,DUI,USUARIO,PASSWORD,ESTADO,TELEFONOS,CORREO,NIT,AFP) values(2,@codcli,'Nappy','Jovasevic','M','1937-01-14','75 Ridgeview Hill','39624328-3','nappy.jovasevic',MD5('12345'),'A','2492-7607','njovasevic5@washington.edu','6586-123405-712-7','727673068650');
-INSERT INTO EMPLEADOS(CODDPTO,CODCLI,NOMBRES,APELLIDOS,GENERO,NACIMIENTO,DIRECCION,DUI,USUARIO,PASSWORD,ESTADO,TELEFONOS,CORREO,NIT,AFP) values(2,@codcli,'Danyelle','Geany','F','1927-05-03','54718 Golden Leaf Point','22333557-0','danyelle.geany',MD5('12345'),'A','2680-1401','dgeany6@csmonitor.com','2612-436847-188-2','812043343154');
-INSERT INTO EMPLEADOS(CODDPTO,CODCLI,NOMBRES,APELLIDOS,GENERO,NACIMIENTO,DIRECCION,DUI,USUARIO,PASSWORD,ESTADO,TELEFONOS,CORREO,NIT,AFP) values(2,@codcli,'Poul','McConnel','M','1960-04-20','2564 Moland Street','52769643-5','poul.mcconnel',MD5('12345'),'A','2032-9227','pmcconnel7@privacy.gov.au','0115-827542-439-5','569999566665');
-INSERT INTO EMPLEADOS(CODDPTO,CODCLI,NOMBRES,APELLIDOS,GENERO,NACIMIENTO,DIRECCION,DUI,USUARIO,PASSWORD,ESTADO,TELEFONOS,CORREO,NIT,AFP) values(2,@codcli,'Radcliffe','Thorouggood','M','1986-09-12','7 Evergreen Junction','86366848-8','radcliffe.thorouggood',MD5('12345'),'A','2419-7999','rthorouggood8@printfriendly.com','8362-876683-175-7','686068663791');
-INSERT INTO EMPLEADOS(CODDPTO,CODCLI,NOMBRES,APELLIDOS,GENERO,NACIMIENTO,DIRECCION,DUI,USUARIO,PASSWORD,ESTADO,TELEFONOS,CORREO,NIT,AFP) values(2,@codcli,'Grover','De Malchar','M','1953-05-26','1153 Myrtle Pass','40588322-5','grover.demalchar',MD5('12345'),'A','7137-1117','gdemalchar9@posterous.com','4342-927502-320-6','189857958125');
+INSERT INTO EMPLEADOS(CODDPTO,CODCLI,NOMBRES,APELLIDOS,GENERO,NACIMIENTO,DIRECCION,DUI,USUARIO,PASSWORD,ACTIVO) VALUES(1,1,'admin','istrador','M',NOW(),'','','admin',MD5('admin'),'true');
+INSERT INTO EMPLEADOS(CODDPTO,CODCLI,NOMBRES,APELLIDOS,GENERO,NACIMIENTO,DIRECCION,DUI,USUARIO,PASSWORD,ACTIVO,TELEFONOS,CORREO,NIT,AFP) values(2,@codcli,'Jamison','Stack','M','1964-06-22','60566 Roth Center','79934309-7','jamison.stack',MD5('12345'),'true','7824-3110','jstack0@gnu.org','4367-073090-448-3','691109318032');
+INSERT INTO EMPLEADOS(CODDPTO,CODCLI,NOMBRES,APELLIDOS,GENERO,NACIMIENTO,DIRECCION,DUI,USUARIO,PASSWORD,ACTIVO,TELEFONOS,CORREO,NIT,AFP) values(2,@codcli,'Angy','Lewington','F','1924-07-12','9936 Pearson Lane','80527954-9','angy.lewington',MD5('12345'),'true','8558-8909','alewington1@marketwatch.com','0554-406598-358-0','850761609402');
+INSERT INTO EMPLEADOS(CODDPTO,CODCLI,NOMBRES,APELLIDOS,GENERO,NACIMIENTO,DIRECCION,DUI,USUARIO,PASSWORD,ACTIVO,TELEFONOS,CORREO,NIT,AFP) values(2,@codcli,'Curtis','Mangenot','M','1918-12-19','7 Clemons Terrace','92049413-8','curtis.mangenot',MD5('12345'),'true','6838-3050','cmangenot2@xing.com','6058-372363-516-5','62517176055');
+INSERT INTO EMPLEADOS(CODDPTO,CODCLI,NOMBRES,APELLIDOS,GENERO,NACIMIENTO,DIRECCION,DUI,USUARIO,PASSWORD,ACTIVO,TELEFONOS,CORREO,NIT,AFP) values(2,@codcli,'Jacky','Banat','F','1956-10-28','8363 Farmco Park','50127276-4','jacky.banat',MD5('12345'),'true','2971-3450','jbanat3@bluehost.com','3}2907-149559-546-4','596673043881');
+INSERT INTO EMPLEADOS(CODDPTO,CODCLI,NOMBRES,APELLIDOS,GENERO,NACIMIENTO,DIRECCION,DUI,USUARIO,PASSWORD,ACTIVO,TELEFONOS,CORREO,NIT,AFP) values(2,@codcli,'Ryon','Colston','M','1952-07-23','0843 Schmedeman Drive','02130317-8','ryon.colston',MD5('12345'),'true','2214-5780','rcolston4@soundcloud.com','2821-007401-916-1','77442962880');
+INSERT INTO EMPLEADOS(CODDPTO,CODCLI,NOMBRES,APELLIDOS,GENERO,NACIMIENTO,DIRECCION,DUI,USUARIO,PASSWORD,ACTIVO,TELEFONOS,CORREO,NIT,AFP) values(2,@codcli,'Nappy','Jovasevic','M','1937-01-14','75 Ridgeview Hill','39624328-3','nappy.jovasevic',MD5('12345'),'true','2492-7607','njovasevic5@washington.edu','6586-123405-712-7','727673068650');
+INSERT INTO EMPLEADOS(CODDPTO,CODCLI,NOMBRES,APELLIDOS,GENERO,NACIMIENTO,DIRECCION,DUI,USUARIO,PASSWORD,ACTIVO,TELEFONOS,CORREO,NIT,AFP) values(2,@codcli,'Danyelle','Geany','F','1927-05-03','54718 Golden Leaf Point','22333557-0','danyelle.geany',MD5('12345'),'true','2680-1401','dgeany6@csmonitor.com','2612-436847-188-2','812043343154');
+INSERT INTO EMPLEADOS(CODDPTO,CODCLI,NOMBRES,APELLIDOS,GENERO,NACIMIENTO,DIRECCION,DUI,USUARIO,PASSWORD,ACTIVO,TELEFONOS,CORREO,NIT,AFP) values(2,@codcli,'Poul','McConnel','M','1960-04-20','2564 Moland Street','52769643-5','poul.mcconnel',MD5('12345'),'true','2032-9227','pmcconnel7@privacy.gov.au','0115-827542-439-5','569999566665');
+INSERT INTO EMPLEADOS(CODDPTO,CODCLI,NOMBRES,APELLIDOS,GENERO,NACIMIENTO,DIRECCION,DUI,USUARIO,PASSWORD,ACTIVO,TELEFONOS,CORREO,NIT,AFP) values(2,@codcli,'Radcliffe','Thorouggood','M','1986-09-12','7 Evergreen Junction','86366848-8','radcliffe.thorouggood',MD5('12345'),'true','2419-7999','rthorouggood8@printfriendly.com','8362-876683-175-7','686068663791');
+INSERT INTO EMPLEADOS(CODDPTO,CODCLI,NOMBRES,APELLIDOS,GENERO,NACIMIENTO,DIRECCION,DUI,USUARIO,PASSWORD,ACTIVO,TELEFONOS,CORREO,NIT,AFP) values(2,@codcli,'Grover','De Malchar','M','1953-05-26','1153 Myrtle Pass','40588322-5','grover.demalchar',MD5('12345'),'true','7137-1117','gdemalchar9@posterous.com','4342-927502-320-6','189857958125');
 
 /*Permisos dummy data*/
 INSERT INTO REGISTROS VALUES(2,@codcli,'2022-01-21','07:42','15:01');
