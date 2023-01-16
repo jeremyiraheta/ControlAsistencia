@@ -1,4 +1,4 @@
-﻿<%@ Control Language="C#" AutoEventWireup="true" CodeFile="emp.ascx.cs" Inherits="Control_emp" %>
+﻿<%@ Control Language="C#" AutoEventWireup="true" CodeFile="emp.ascx.cs"  Inherits="Control_emp" %>
 <div class="modal fade" id="addEmp" tabindex="-1" aria-labelledby="addEmp" aria-hidden="true">
     <div class="modal-dialog">
     <div class="modal-content">

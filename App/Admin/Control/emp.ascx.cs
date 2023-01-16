@@ -4,15 +4,18 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using Interfaz;
+using Interfaz.modelos;
 
-public partial class Control_emp : System.Web.UI.UserControl
+public partial class Control_emp : UserControl
 {
     public EventHandler refmain;
     public int EDITID { get; set; }
-    public bool editing;
+    public bool editing;        
     protected void Page_Load(object sender, EventArgs e)
     {
-        var dptos = RESTAPI.listDepartamentos();
+        
+        var dptos = Datos.listDepartamentos(1);
         if(!IsPostBack || cmbDptos.Items.Count == 0)
         {
             cmbDptos.Items.Clear();
@@ -44,6 +47,7 @@ public partial class Control_emp : System.Web.UI.UserControl
         string password = txtpass.Text;
         int cod = Convert.ToInt32(codemp.Value);     
         Empleado emp = new Empleado();
+        emp.codemp = cod;
         emp.nombres = nombres;
         emp.apellidos = apellidos;
         emp.coddpto = dpto;       
@@ -58,15 +62,15 @@ public partial class Control_emp : System.Web.UI.UserControl
         emp.usuario = user;
         emp.password = password;
         if (cod > 0)
-            RESTAPI.updateEmpleado(cod, emp);
+            Datos.updateEmpleado(emp);
         else
-            RESTAPI.insertEmpleado(emp);
+            Datos.insertEmpleado(emp);
         Response.Redirect(Request.RawUrl);        
     }
     protected void desactivar(object sender, EventArgs e)
     {
         int cod = Convert.ToInt32(codemp.Value);
-        RESTAPI.disableEmpleado(cod);
+        Datos.disableEmpleado(cod,1);
         Response.Redirect(Request.RawUrl);
     }
     public void editForm(Empleado emp)

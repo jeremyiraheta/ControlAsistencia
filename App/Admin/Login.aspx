@@ -1,11 +1,11 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="Default.aspx.cs" Inherits="Forms_Login" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="Login.aspx.cs" Inherits="Forms_Login" %>
 
 <!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>Login Sistema Administrativo - Control Asistencia Remota - DIGESTYC</title>
+    <title>Login Sistema Administrativo - Control Asistencia Remota</title>
 <style>
     @import url(https://fonts.googleapis.com/css?family=Open+Sans:100,300,400,700);
 body, html {
@@ -161,7 +161,15 @@ input:focus :-ms-input-placeholder {
 </head>
 <body>
    <form class="login-form" runat="server">
-  <img src="../img/logo new.jpg" class="logo" />
+  <%       
+      if (cliente != null && cliente.attch)
+      {
+          Response.Write("<img src='" + GlobalV.URLBASE + "img/logo/codcli/" + cliente.codcli + ".webp' class='logo' />");
+      }
+      else
+      {
+          Response.Write("<img src='/images/footer-logo.png' class='logo' />");
+      }  %>
   <asp:TextBox  CssClass="login-username" ID="txtuser" autofocus="true" required="true" placeholder="Usuario" runat="server" />
   <asp:TextBox  TextMode="Password" CssClass="login-password" ID="txtpass" required="true" placeholder="Password" runat="server" />
   <asp:Button name="Login" Text="Login" CssClass="login-submit" runat="server" OnClick="btnLogin_Click" />

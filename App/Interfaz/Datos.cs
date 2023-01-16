@@ -188,28 +188,7 @@ namespace Interfaz
             var t = Task.Run(() => api.put($"empleados/codemp/{codemp}/codcli/{codcli}/enable"));
             t.Wait();
         }
-        /// <summary>
-        /// Permite validar un usuario
-        /// </summary>
-        /// <param name="user">usuario</param>
-        /// <param name="pass">password</param>
-        /// <param name="codcli">codcli</param>
-        /// <returns></returns>
-        public static Usuario Login(string user, string pass, int codcli)
-        {
-            Credenciales cred = new Credenciales(user, pass, codcli);
-            API<List<Usuario>> api = new API<List<Usuario>>(local);
-            var t = Task.Run(() => api.post("login", cred));
-            try
-            {
-                t.Wait();
-                return t.Result[0];
-            }
-            catch (Exception e)
-            {
-                return null;
-            }
-        }
+        
         /// <summary>
         /// Obtiene los registros de un empleado
         /// </summary>
@@ -404,10 +383,21 @@ namespace Interfaz
         /// <returns></returns>
         public static Cliente getCliente(int codcli)
         {
-            API<Cliente> api = new API<Cliente>(local);
+            API<List<Cliente>> api = new API<List<Cliente>>(local);
             var t = Task.Run(() => api.get($"clientes/codcli/{codcli}"));
             t.Wait();
-            return t.Result;
+            return t.Result[0];
+        }
+
+        public static Cliente getCliente(string urlnom)
+        {
+            API<List<Cliente>> api = new API<List<Cliente>>(local);
+            var t = Task.Run(() => api.get($"clientes/urlnom/{urlnom}"));
+            t.Wait();
+            if (t.Result != null)
+                return t.Result[0];
+            else
+                return null;
         }
 
         /// <summary>
@@ -557,7 +547,50 @@ namespace Interfaz
             }
             return bytes;
         }
+        /// <summary>
+        /// Permite validar un usuario
+        /// </summary>
+        /// <param name="user">usuario</param>
+        /// <param name="pass">password</param>
+        /// <param name="codcli">codcli</param>
+        /// <returns></returns>
+        public static Usuario Login(string user, string pass, int codcli)
+        {
+            Credenciales cred = new Credenciales(user, pass, codcli);
+            API<List<Usuario>> api = new API<List<Usuario>>(local);
+            var t = Task.Run(() => api.post("login", cred));
+            try
+            {
+                t.Wait();
+                return t.Result[0];
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+        }
 
+        /// <summary>
+        /// Permite validar un usuario
+        /// </summary>
+        /// <param name="user">usuario</param>
+        /// <param name="pass">password</param>        
+        /// <returns></returns>
+        public static Usuario Login(string user, string pass)
+        {
+            Credenciales cred = new Credenciales(user, pass);
+            API<List<Usuario>> api = new API<List<Usuario>>(local);
+            var t = Task.Run(() => api.post("login", cred));
+            try
+            {
+                t.Wait();
+                return t.Result[0];
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+        }
         private class Credenciales
         {
             public string user { get; set; }
@@ -569,7 +602,14 @@ namespace Interfaz
                 this.password = password;
                 this.codcli = codcli;
             }
+
+            public Credenciales(string user, string password)
+            {
+                this.user = user;
+                this.password = password;
+            }
         }
+
         public enum ESTADO
         {
             ESPERA,

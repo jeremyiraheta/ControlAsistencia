@@ -41,7 +41,8 @@ function authentication(req, res, next) {
     var user = auth[0];
     var pass = auth[1];
 
-    connection.query(`select if(e.CODDPTO = 1,TRUE,FALSE) admin  from EMPLEADOS e where usuario='${user}' and password=MD5('${pass}') and codcli=1 and activo = 'true'`, function(error, result){            
+    connection.query(`select if(e.CODDPTO = 1,TRUE,FALSE) admin, codcli  from EMPLEADOS e where usuario='${user}' and password=MD5('${pass}') and codcli = 1 and activo = 'true'`, function(error, result){                    
+        //Valida que el usuario que consume el recurso forme parte del cliente que tiene asignado
         if(error || (result.length == 0 || result[0].admin === undefined || result[0].admin == false)) 
         {
             var err = new Error('Usted no esta autorizado!');
@@ -235,7 +236,7 @@ app.get("/PERMISOS/codemp/:codemp/codcli/:codcli", (req, res) => {
         if(DEBUG)console.log(`get a PERMISOS codemp = ${req.params.codemp}`)
         try {
             for (let i = 0; i < result.length; i++) {
-                if (fs.existsSync( path.join(__dirname, "public") + path.sep + result[i].codper + ".zip")) {
+                if (fs.existsSync( path.join(__dirname, "public", "permisos", result[i].codcli, result[i].codper + ".zip"))) {
                     result[i].attch = true;
                 }
             }
@@ -253,7 +254,7 @@ app.get("/PERMISOS/codcli/:codcli/m/:m/y/:y", (req, res) => {
         if(DEBUG)console.log(`get a PERMISOS mes=${req.params.m}, anyo=${req.params.y}`)
         try {
             for (let i = 0; i < result.length; i++) {
-                if (fs.existsSync( path.join(__dirname, "public") + path.sep + result[i].codper + ".zip")) {
+                if (fs.existsSync( path.join(__dirname, "public", "permisos", result[i].codcli, result[i].codper + ".zip"))) {
                     result[i].attch = true;
                 }
             }
@@ -271,7 +272,7 @@ app.get("/PERMISOS/codper/:codper/codcli/:codcli", (req, res) => {
         if(DEBUG)console.log(`get a PERMISOS id = ${req.params.codper}`)
         try {
             for (let i = 0; i < result.length; i++) {
-                if (fs.existsSync( path.join(__dirname, "public") + path.sep + result[i].codper + ".zip")) {
+                if (fs.existsSync( path.join(__dirname, "public", "permisos", result[i].codcli, result[i].codper + ".zip"))) {
                     result[i].attch = true;
                 }
             }
@@ -356,7 +357,7 @@ app.get("/PRODUCTIVIDAD/codemp/:codemp/codcli/:codcli/fechaini/:fechaini/fechafi
         if(DEBUG)console.log(`get a PRODUCTIVIDAD id = ${req.params.codemp}`) 
         try {
             for (let i = 0; i < result.length; i++) {
-                if (fs.existsSync( path.join(__dirname, "public") + path.sep + "screenshot_" + result[i].codprod + ".webm")) {
+                if (fs.existsSync( path.join(__dirname, "public", "screenshots", result[i].codcli, result[i].codprod + ".webp"))) {
                     result[i].attch = true;
                 }
             }
@@ -414,7 +415,7 @@ app.get("/CLIENTES/codcli/:codcli", (req, res) => {
         if(DEBUG)console.log(`get a CLIENTES id = ${req.params.codcli}`)    
         try {
             for (let i = 0; i < result.length; i++) {
-                if (fs.existsSync( path.join(__dirname, "public") + path.sep + "logo_" + result[i].codcli + ".webm")) {
+                if (fs.existsSync( path.join(__dirname, "public", "logos", result[i].codcli + ".webp"))) {
                     result[i].attch = true;
                 }
             }
@@ -433,7 +434,26 @@ app.get("/CLIENTES/p/:page", (req, res) => {
         if(DEBUG)console.log(`get a CLIENTES id = ${req.params.codcli}`)    
         try {
             for (let i = 0; i < result.length; i++) {
-                if (fs.existsSync( path.join(__dirname, "public") + path.sep + "logo_" + result[i].codcli + ".webm")) {
+                if (fs.existsSync( path.join(__dirname, "public", "logos", result[i].codcli + ".webp"))) {
+                    result[i].attch = true;
+                }
+            }
+        } catch(err) {
+            console.error(err)
+        }       
+        res.send(result)
+    })
+});
+
+//Consulta un registro de cliente
+app.get("/CLIENTES/urlnom/:urlnom", (req, res) => {
+    var query = connection.query(`SELECT * FROM CLIENTES WHERE activo = 'true' and lower(urlnom) = lower('${req.params.urlnom}')`, function(error, result){
+        if(error) console.log('[mysql error] : ', error)
+        if(DEBUG)console.log(`get a CLIENTES`)  
+        if(DEBUG)console.log(`get a CLIENTES id = ${req.params.urlnom}`)    
+        try {
+            for (let i = 0; i < result.length; i++) {
+                if (fs.existsSync( path.join(__dirname, "public", "logos", result[i].codcli + ".webp"))) {
                     result[i].attch = true;
                 }
             }
@@ -446,7 +466,10 @@ app.get("/CLIENTES/p/:page", (req, res) => {
 
 //Comprueba si un usuario es valido
 app.post("/login", (req, res) => {
-    var query = connection.query(`select codemp,codcli,UPPER(nombres) nombres, UPPER(apellidos) apellidos,activo,(select UPPER(nombre) from DEPARTAMENTOS d where e.CODDPTO = d.CODDPTO) departamento,if(e.CODDPTO = 1,TRUE,FALSE) admin  from EMPLEADOS e where usuario='${req.body.user}' and password=MD5('${req.body.password}') and codcli=${req.body.codcli}`, function(error, result){
+    var wcodcli = ""    
+    if(req.body.codcli !== undefined && req.body.codcli > 0)
+        wcodcli = `and codcli=${req.body.codcli}`
+    var query = connection.query(`select codemp,codcli, usuario,UPPER(nombres) nombres, UPPER(apellidos) apellidos,activo,(select UPPER(nombre) from DEPARTAMENTOS d where e.CODDPTO = d.CODDPTO) departamento,(select if(UPPER(nombre) = 'ADMIN',TRUE,FALSE) from DEPARTAMENTOS d where e.CODDPTO = d.CODDPTO) admin  from EMPLEADOS e where usuario='${req.body.user}' and password=MD5('${req.body.password}') ${wcodcli}`, function(error, result){
         if(error) console.log('[mysql error] : ', error)
         if(DEBUG)console.log(`login user=${req.body.user}`)
         res.send(result)
@@ -464,7 +487,7 @@ app.post("/upload/permiso/codper/:codper/codcli/:codcli", async (req, res) => {
         } else {
             let file = req.files.attch;
             let ext = file.name.substring(file.name.lastIndexOf("."));            
-            let dir = path.join(__dirname, "public") + path.sep + req.params.codcli + req.params.codper + ext;
+            let dir = path.join(__dirname, "public", "permisos", req.params.codcli, req.params.codper + ext);
             if(ext.toLowerCase() == ".zip")
             {
                 file.mv(dir);            
@@ -490,7 +513,7 @@ app.post("/upload/captura/codprod/:codprod/codcli/:codcli", async (req, res) => 
             res.status(500).send("No se envio nada que procesar")
         }else{
             let file = req.body.file                       
-            let dir = path.join(__dirname, "public") + path.sep + "screenshot_" + req.params.codcli + req.params.codprod + ".webp";
+            let dir = path.join(__dirname, "public", "screenshots", req.params.codcli, req.params.codprod + ".webp");
             fs.writeFile(dir, Buffer.from(file), 'binary', (err) => {
                 res.status(500).send("Ocurrio un error al escribir el archivo:" + err.message)
             })
@@ -506,7 +529,7 @@ app.post("/upload/logo/codcli/:codcli", async (req, res) => {
             res.status(500).send("No se envio nada que procesar")
         }else{
             let file = req.body.file                       
-            let dir = path.join(__dirname, "public") + path.sep + "logo_" + req.params.codcli + ".webp";
+            let dir = path.join(__dirname, "public", "logos", req.params.codcli + ".webp");
             fs.writeFile(dir, Buffer.from(file), 'binary', (err) => {
                 res.status(500).send("Ocurrio un error al escribir el archivo")
             })
@@ -520,9 +543,9 @@ app.post("/upload/logo/codcli/:codcli", async (req, res) => {
 app.get("/download/permiso/codper/:codper/codcli/:codcli", async (req, res) => {
     try {
         var options = {
-            root: path.join(__dirname, "public")
+            root: path.join(__dirname, "public", "permisos", req.params.codcli)
         };        
-        res.sendFile(`${req.params.codcli}${req.params.codper}.zip`, options, (err) => {
+        res.sendFile(`${req.params.codper}.zip`, options, (err) => {
             if(err)
                 console.log(err)
         });
@@ -534,9 +557,9 @@ app.get("/download/permiso/codper/:codper/codcli/:codcli", async (req, res) => {
 app.get("/img/captura/codprod/:codprod/codcli/:codcli", async (req, res) => {
     try {
         var options = {
-            root: path.join(__dirname, "public")
+            root: path.join(__dirname, "public", "screenshots", req.params.codcli)
         };        
-        res.sendFile(`screenshot_${req.params.codcli}${req.params.codprod}.webp`, options, (err) => {
+        res.sendFile(`${req.params.codprod}.webp`, options, (err) => {
             if(err)
                 console.log(err)
         });
@@ -548,9 +571,9 @@ app.get("/img/captura/codprod/:codprod/codcli/:codcli", async (req, res) => {
 app.get("/img/logo/codcli/:codcli", async (req, res) => {
     try {
         var options = {
-            root: path.join(__dirname, "public")
+            root: path.join(__dirname, "public", "logos")
         };        
-        res.sendFile(`logo_${req.params.codcli}.webp`, options, (err) => {
+        res.sendFile(`${req.params.codcli}.webp`, options, (err) => {
             if(err)
                 console.log(err)
         });

@@ -4,14 +4,17 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using Interfaz;
+using Interfaz.modelos;
 
 public partial class Registros : System.Web.UI.Page
 {
+    Usuario usuario;
     protected void Page_Load(object sender, EventArgs e)
-    {
-        ViewBag.Set("title", "Sistema Administrativo Control Asistencia Remota - Registros - DIGESTYC");
+    {        
         if (!IsPostBack) txtfilter.Text = DateTime.Today.Year + "-" + DateTime.Today.Month;
         fillTable();
+        usuario = (Usuario)Session["usuario"];
     }
 
     public void fillTable()
@@ -19,10 +22,10 @@ public partial class Registros : System.Web.UI.Page
         var period = txtfilter.Text;
         int month = Convert.ToInt32(period.Substring(period.IndexOf("-") + 1));
         int year = Convert.ToInt32(period.Substring(0, period.IndexOf("-")));
-        var regxmes = RESTAPI.listRegistrosMes(month, year);
+        var regxmes = Datos.listRegistrosMes(usuario.codcli,month, year);
         Dictionary<int, Reg> horas = new Dictionary<int, Reg>();
-        var empleados = RESTAPI.listEmpleados();
-        var departamentos = RESTAPI.listDepartamentos();
+        var empleados = Datos.listEmpleados(usuario.codcli);
+        var departamentos = Datos.listDepartamentos(usuario.codcli);
         foreach (var item in regxmes)
         {
             var emp = empleados.Where(e => e.codemp == item.codemp).First();
@@ -60,8 +63,8 @@ public partial class Registros : System.Web.UI.Page
         var period = txtfilter.Text;
         int month = Convert.ToInt32(period.Substring(period.IndexOf("-") + 1));
         int year = Convert.ToInt32(period.Substring(0, period.IndexOf("-")));
-        var det = RESTAPI.listRegistrosEmpleado(codemp, month, year);
-        var emp = RESTAPI.getEmpleado(codemp);
+        var det = Datos.listRegistrosEmpleado(codemp, usuario.codcli,month, year);
+        var emp = Datos.getEmpleado(codemp, usuario.codcli);
         txtnom.Text = emp.nombres;
         txtape.Text = emp.apellidos;           
         foreach (var item in det)

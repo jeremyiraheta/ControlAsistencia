@@ -10,8 +10,8 @@ namespace Interfaz
 {
     class API<T>
     {
-        const string api_local = "http://localhost:8081/";
-        const string api_remote = "http://40.114.33.100:8081";
+        const string api_local = "http://localhost:8081/";//solo usada durante pruebas
+        const string api_remote = "http://40.114.33.100:8081";//usada en produccion
         const string token = "YWRtaW46YWRtaW4=";
         HttpClient client = null;
         /// <summary>

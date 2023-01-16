@@ -13,7 +13,8 @@ namespace Interfaz.modelos
     {
         public int codemp { get; set; }
         public int codcli { get; set; }
-        public char estado { get; set; }
+        public bool activo { get; set; }
+        public string usuario { get; set; }
         public string nombres { get; set; }
         public string apellidos { get; set; }
         public string departamento { get; set; }
