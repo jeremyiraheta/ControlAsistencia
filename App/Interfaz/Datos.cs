@@ -158,6 +158,19 @@ namespace Interfaz
             return t.Result[0];
         }
         /// <summary>
+        /// Obtiene un empleado por su usuario
+        /// </summary>
+        /// <param name="usuario"></param>
+        /// <param name="codcli"></param>
+        /// <returns></returns>
+        public static Empleado getEmpleado(string usuario, int codcli)
+        {
+            API<List<Empleado>> api = new API<List<Empleado>>(local);
+            var t = Task.Run(() => api.get($"empleados/usuario/{usuario}/codcli/{codcli}"));
+            t.Wait();
+            return t.Result[0];
+        }
+        /// <summary>
         /// Actualiza un empleado especifico
         /// </summary>
         /// <param name="codemp">codigo empleado</param>
@@ -394,7 +407,7 @@ namespace Interfaz
             API<List<Cliente>> api = new API<List<Cliente>>(local);
             var t = Task.Run(() => api.get($"clientes/urlnom/{urlnom}"));
             t.Wait();
-            if (t.Result != null)
+            if (t.Result != null && t.Result.Count > 0)
                 return t.Result[0];
             else
                 return null;
@@ -443,13 +456,23 @@ namespace Interfaz
             t.Wait();
         }
         /// <summary>
-        /// Elimina un registro de un cliente
+        /// Desactiva un cliente
         /// </summary>
         /// <param name="codcli">codigo de cliente</param>
         public static void deleteCliente(int codcli)
         {
             API api = new API(local);
             var t = Task.Run(() => api.delete($"clientes/codcli/{codcli}"));
+            t.Wait();
+        }
+        /// <summary>
+        /// Elimina toda la informacion de un cliente
+        /// </summary>
+        /// <param name="codcli">codigo de cliente</param>
+        public static void purgeCliente(int codcli)
+        {
+            API api = new API(local);
+            var t = Task.Run(() => api.delete($"clientes/codcli/{codcli}/purge"));
             t.Wait();
         }
         /// <summary>

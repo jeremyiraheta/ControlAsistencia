@@ -34,7 +34,7 @@ namespace Interfaz
         {
             get
             {
-                return client.BaseAddress.AbsolutePath;
+                return client.BaseAddress.AbsoluteUri;
             }
         }
         /// <summary>

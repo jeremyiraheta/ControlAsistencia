@@ -77,20 +77,32 @@ main .helper span {
   transition: all 0.15s linear;
   cursor: pointer;
 }
+.menu ul li.icon-dashboard {
+  background-image: url("../images/icons/pie-chart.svg");
+}
+.menu ul li.icon-opciones {
+  background-image: url("../images/icons/cog.svg");
+}
 .menu ul li.icon-departamentos {
-  background-image: url("../img/swden.svg");
+  background-image: url("../images/icons/swden.svg");
 }
 .menu ul li.icon-empleados {
-  background-image: url("../img/v-card.svg");
+  background-image: url("../images/icons/v-card.svg");
 }
 .menu ul li.icon-permisos {
-  background-image: url("../img/cake.svg");
+  background-image: url("../images/icons/cake.svg");
 }
 .menu ul li.icon-registros {
-  background-image: url("../img/database.svg");
+  background-image: url("../images/icons/database.svg");
+}
+.menu ul li.icon-productividad {
+  background-image: url("../images/icons/eye.svg");
+}
+.menu ul li.icon-clientes {
+  background-image: url("../images/icons/network.svg");
 }
 .menu ul li.icon-salir {
-  background-image: url("../img/logout.svg");
+  background-image: url("../images/icons/logout.svg");
 }
 .menu ul li:hover {
   background-color: rgba(0, 0, 0, 0.1);
@@ -108,6 +120,7 @@ main .helper span {
 .username{
     color:white;
     padding-top:20px;
+    overflow-wrap:break-word;
 }
 @media screen and (max-width: 900px) and (min-width: 400px) {
   body {

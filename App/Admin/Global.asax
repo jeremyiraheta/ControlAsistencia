@@ -14,10 +14,10 @@
                  CdnPath = "https://code.jquery.com/jquery-3.6.0.min.js",
                  CdnSupportsSecureConnection = true,
                  LoadSuccessExpression = "jQuery"
-             });
-        RegistrarRutas(RouteTable.Routes);
+             });        
         Datos.apiLocal();
         GlobalV.URLBASE = Datos.APIURL;        
+        RegistrarRutas(RouteTable.Routes);
     }
 
     void Application_End(object sender, EventArgs e)
@@ -52,6 +52,15 @@
         route.MapPageRoute("Login", "Login/{urlnom}", "~/Login.aspx");
         route.MapPageRoute("LoginEx", "Login", "~/Login.aspx");
         route.MapPageRoute("Admin", "Admin", "~/Admin.aspx");
+        route.MapPageRoute("Departamentos", "Departamentos", "~/Departamentos.aspx");
+        route.MapPageRoute("Empleados", "Empleados", "~/Empleados.aspx");
+        route.MapPageRoute("Permisos", "Permisos", "~/Permisos.aspx");
+        route.MapPageRoute("Registros", "Registros", "~/Registros.aspx");
+        route.MapPageRoute("Productividad", "Productividad", "~/Productividad.aspx");
+        route.MapPageRoute("Clientes", "Clientes", "~/Clientes.aspx");
+        route.MapPageRoute("Logout", "Logout", "~/Logout.ashx");
+        route.MapPageRoute("Subscripcion", "Subscripcion", "~/Subscripcion.aspx");        
+        route.MapPageRoute("Confirmacion", "Confirmacion", "~/Confirm.aspx");  
     }
 
 </script>

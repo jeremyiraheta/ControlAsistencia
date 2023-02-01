@@ -14,6 +14,7 @@ namespace Interfaz.modelos
         public string urlnom { set; get; }
         public string correo_contacto { set; get; }
         public string telefono_contacto { set; get; }
+        public string direccion { get; set; }
         public string fecha_registro { set; get; }
         public string fecha_fin_servicio { set; get; }
         public int plan { set; get; }

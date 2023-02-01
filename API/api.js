@@ -84,6 +84,14 @@ app.get("/EMPLEADOS/codcli/:codcli/coddpto/:coddpto/p/:page", (req, res) => {
         res.send(result)
     })
 });
+//Obtiene empleado por nombre de usuario
+app.get("/EMPLEADOS/usuario/:usuario/codcli/:codcli", (req, res) => {    
+    var query = connection.query(`SELECT * FROM EMPLEADOS where activo = '${req.query.activo === undefined ? 'true' : req.query.activo}' and codcli = ${req.params.codcli} and lower(usuario) = lower('${req.params.usuario}')`, function(error, result){
+        if(error) console.log('[mysql error] : ', error)
+        if(DEBUG)console.log(`get a EMPLEADO ${req.params.usuario}`)
+        res.send(result)
+    })
+});
 
 //Obtiene datos de un empleado por codigo de empleado
 app.get("/EMPLEADOS/codemp/:codemp/codcli/:codcli", (req, res) => {
@@ -460,6 +468,14 @@ app.get("/CLIENTES/urlnom/:urlnom", (req, res) => {
         } catch(err) {
             console.error(err)
         }       
+        res.send(result)
+    })
+});
+//Ejecuta un procedimiento que elimina toda la informacion de un cliente
+app.delete("/CLIENTES/codcli/:codcli/purge", (req, res) => {
+    var query = connection.query(`CALL purgeCliente(${req.params.codcli})`, function(error, result){
+        if(error) console.log('[mysql error] : ', error)        
+        if(DEBUG)console.log(`purga a CLIENTES id = ${req.params.codcli}`)            
         res.send(result)
     })
 });

@@ -41,7 +41,7 @@ public partial class Forms_Login : System.Web.UI.Page
             if (emp != null && emp.activo && emp.admin)
             {
                 Session["usuario"] = emp;
-                Session["cliente"] = Datos.getCliente(emp.codcli);
+                Session["cliente"] = Datos.getCliente(emp.codcli);                                
                 Response.Redirect("/Admin");
             }
             else if (emp != null)

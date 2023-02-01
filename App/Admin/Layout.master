@@ -21,15 +21,19 @@
     <nav class="menu" tabindex="0">
 	<div class="smartphone-menu-trigger"></div>
   <header class="avatar">
-		<a href="/"> <img src="img/logo new.jpg" /></a>
+		<a href="/"> <img src="/images/logo.png" /></a>
     <h2 class="username"><% Response.Write(usuario.usuario.ToUpper()); %></h2>
   </header>
 	<ul>
-    <a href="Departamentos.aspx" title="Departamentos" class="menulink"><li tabindex="0" class="icon-departamentos"><span >Departamentos</span></li></a>
-    <a href="Empleados.aspx" title="Empleados" class="menulink"><li tabindex="0" class="icon-empleados"><span>Empleados</span></li></a>
-    <a href="Permisos.aspx" title="Permisos" class="menulink"><li tabindex="0" class="icon-permisos"><span>Permisos</span></li></a>
-    <a href="Registros.aspx" title="Registros" class="menulink"><li tabindex="0" class="icon-registros"><span>Registros</span></li></a>
-    <a href="Logout.ashx" title="Salir" class="menulink"><li tabindex="0" class="icon-salir"><span>Salir</span></li></a>
+    <a href="/Admin" title="Dashboard" class="menulink"><li tabindex="0" class="icon-dashboard"><span >Dashboard</span></li></a>
+    <a href="/Departamentos" title="Departamentos" class="menulink"><li tabindex="0" class="icon-departamentos"><span >Departamentos</span></li></a>
+    <a href="/Empleados" title="Empleados" class="menulink"><li tabindex="0" class="icon-empleados"><span>Empleados</span></li></a>
+    <a href="/Permisos" title="Permisos" class="menulink"><li tabindex="0" class="icon-permisos"><span>Permisos</span></li></a>
+    <a href="/Registros" title="Registros" class="menulink"><li tabindex="0" class="icon-registros"><span>Registros</span></li></a>
+    <a href="/Productividad" title="Productividad" class="menulink"><li tabindex="0" class="icon-productividad"><span>Productividad</span></li></a>
+    <a href="/Clientes" title="Clientes" class="menulink"><li tabindex="0" class="icon-clientes"><span>Clientes</span></li></a>
+    <a href="/Logout" title="Salir" class="menulink"><li tabindex="0" class="icon-salir"><span>Salir</span></li></a>
+    <a href="/Opciones" title="Opciones" class="menulink"><li tabindex="0" class="icon-opciones"><span>Opciones</span></li></a>
   </ul>
 </nav>
 

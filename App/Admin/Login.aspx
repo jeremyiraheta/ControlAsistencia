@@ -164,7 +164,7 @@ input:focus :-ms-input-placeholder {
   <%       
       if (cliente != null && cliente.attch)
       {
-          Response.Write("<img src='" + GlobalV.URLBASE + "img/logo/codcli/" + cliente.codcli + ".webp' class='logo' />");
+          Response.Write("<img src='" + GlobalV.URLBASE + "/img/logo/codcli/" + cliente.codcli + ".webp' class='logo' />");
       }
       else
       {

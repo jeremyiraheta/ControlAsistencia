@@ -43,7 +43,7 @@
    	<div class="row">
 
    		<div class="logo">
-	         <a href="index.html">Shuseki</a>
+	         <a href="/">Shuseki</a>
 	      </div>
 
 	   	<nav id="main-nav-wrap">
@@ -193,9 +193,9 @@
 
 	            <div class="service-content">	
 
-	            	 <h3 class="h05">Fully Resposive</h3>
+	            	 <h3 class="h05">Diseño Simple</h3>
 
-		            <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit.
+		            <p>Gestione las entradas y salidas de sus empleados mediante una interfaz simple y amigable, accesible desde cualquier lugar usando computador de escritorio o móvil.
 	         		</p>
 	         		
 	         	</div> 	         	 
@@ -207,9 +207,9 @@
 					<span class="icon"><i class="icon-eye"></i></span>                          
 
 	            <div class="service-content">	
-	            	<h3 class="h05">Retina Ready</h3>  
+	            	<h3 class="h05">Asistencia Empleados Remotos</h3>  
 
-		            <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit.
+		            <p>Valide la productividad de sus empleados remotos y controle su asistencia laboral de una forma mas estructurada.
 	         		</p>
 
 	         		
@@ -222,9 +222,9 @@
 			   	<span class="icon"><i class="icon-paint-brush"></i></span>		            
 
 	            <div class="service-content">
-	            	<h3 class="h05">Stylish Design</h3>
+	            	<h3 class="h05">Diseño Personalizable</h3>
 
-		            <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit.
+		            <p>Personalice la interfaz, utilice los logotipos de su empresa.
 	        			</p> 
 
 	        			
@@ -237,9 +237,9 @@
 					<span class="icon"><i class="icon-file"></i></span>	              
 
 	            <div class="service-content">
-	            	<h3 class="h05">Clean Code</h3>
+	            	<h3 class="h05">Reportes</h3>
 
-		            <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit.
+		            <p>Imprima reportes mensuales de las horas laboradas por sus empleados remotos.
 	         		</p> 
 
 	         		
@@ -252,9 +252,9 @@
 			   	<span class="icon"><i class="icon-layers"></i></span>	            
 
 	            <div class="service-content">	
-	            	<h3 class="h05">Easy To Customize</h3>
+	            	<h3 class="h05">Productividad</h3>
 
-		            <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit.
+		            <p>El sistema tomara capturas de pantalla, ubicación geográfica, procesos y navegacion periodicamente para su posterior fiscalización.
 	        			</p> 
 
 	        			
@@ -267,9 +267,9 @@
 			   	<span class="icon"><i class="icon-gift"></i></span>	   	           
 
 	            <div class="service-content">
-	            	 <h3 class="h05">Free of Charge</h3>
+	            	 <h3 class="h05">Control de permisos laborales</h3>
 
-		            <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit.
+		            <p>Lleve un control de permisos solicitados por sus empleados, podran solicitarlos desde su terminal y verificar si fueron aprobados.
 	        			</p> 
 	        			
 	            </div>	               
@@ -294,7 +294,7 @@
    			<h5>Nuestros precios</h5>
    			<h1>Elija el plan que se ajuste a su negocio.</h1>
 
-   			<p class="lead">Lorem ipsum Do commodo in proident enim in dolor cupidatat adipisicing dolore officia nisi aliqua incididunt Ut veniam lorem ipsum Consectetur ut in in eu do.</p>
+   			<p class="lead">Puede contratar cualquier de los planes que mejor se ajuste a su empresa y podra cancelar la subcripción cuando lo deseé.</p>
 
    		</div>   		
    	</div>
@@ -312,20 +312,21 @@
 	            		<h3 class="plan-title">Startup</h3>
 		               <p class="plan-price"><sup>$</sup>4.99</p>
 		               <p class="price-month">Por mes</p>
-		               <p class="price-meta">Cobrado anualmente.</p>
+		               <p class="price-meta"></p>
 
 	            	</div>                
 
 	               <div class="bottom-part">
 
 	            		<ul class="features">
-		                  <li><strong>50</strong> Conexiones maximas</li>
+		                  <li><strong>50</strong> Empleados maximos</li>
 		                  <li>Monitor de entradas y salidas</li>		                  
-                          <li>Monitor de productividad</li>		                  
-                          <li>Dashboard y Reportes</li>		                  
+                          <li>Monitor de productividad</li>		                                            
+                          <li>Dashboard y Reportes</li>                           
+                          <li>Aplicación de escritorio y móvil</li> 		                  
 		               </ul>
 
-		               <a class="button large" href="">Seleccionar</a>
+		               <a class="button large" href="/Subscripcion?plan=1">Seleccionar</a>
 
 	            	</div>
 
@@ -342,21 +343,22 @@
 	            		<h3 class="plan-title">PYME</h3>
 		               <p class="plan-price"><sup>$</sup>9.99</p>
 		               <p class="price-month">Por mes</p>
-							<p class="price-meta">Cobrado anualmente.</p>
+							<p class="price-meta"></p>
 
 	            	</div>               
 
 	               <div class="bottom-part">
 
 	            		<ul class="features">
-		                  <li><strong>200</strong> Conexiones maximas</li>
+		                  <li><strong>200</strong> Empleados maximos</li>
 		                  <li>Monitor de entradas y salidas</li>		                  
                           <li>Monitor de productividad</li>		                  
                           <li>Dashboard y Reportes</li>
+                          <li>Aplicación de escritorio y móvil</li>
                           <li>Soporte para instalación del sistema</li>
 		               </ul>
 
-		               <a class="button large" href="">Seleccionar</a>
+		               <a class="button large" href="/Subscripcion?plan=2">Seleccionar</a>
 
 	            	</div>
             		
@@ -372,22 +374,23 @@
 	            		<h3 class="plan-title">Premium</h3>
 		               <p class="plan-price"><sup>$</sup>99.9</p>
 		               <p class="price-month">Por mes</p>
-		               <p class="price-meta">Cobrado anualmente.</p>
+		               <p class="price-meta"></p>
 
 	            	</div>                
 
 	               <div class="bottom-part">
 
 	            		<ul class="features">
-		                  <li><strong>Ilimitadas</strong> Conexiones</li>
+		                  <li>Empleados <strong>Ilimitados</strong></li>
 		                  <li>Monitor de entradas y salidas</li>		                  
-                          <li>Monitor de productividad</li>		                  
+                          <li>Monitor de productividad</li>
+                          <li>Aplicación de escritorio y móvil</li>	                  
                           <li>Dashboard y Reportes</li>
                           <li>Soporte para instalación del sistema</li>
-                          <li>Atención personalizada</li>
+                          <li>Sistema personalizado a sus requerimientos</li>
 		               </ul>
 
-		               <a class="button large" href="">Seleccionar</a>
+		               <a class="button large" href="/Subscripcion?plan=3">Seleccionar</a>
 
 	            	</div>
 
@@ -408,7 +411,7 @@
 
    	<div class="row">
    		<div class="col-twelve">
-   			<h2 class="h01">Hear What Are Clients Say.</h2>
+   			<h2 class="h01">Testimonios de clientes.</h2>
    		</div>   		
    	</div>   	
 
@@ -428,9 +431,7 @@
                   </div>
 
                   <p>
-                  Your work is going to fill a large part of your life, and the only way to be truly satisfied is
-                  to do what you believe is great work. And the only way to do great work is to love what you do.
-                  If you haven't found it yet, keep looking. Don't settle. As with all matters of the heart, you'll know when you find it.  						
+                 Cumple con lo prometido, simple y económico, le ha permitido a la empresa ahorrar miles de dolares en programadores e infraestructura.  						
                   </p>                  
              	</li> <!-- /slide -->
 
@@ -445,9 +446,7 @@
                   </div> 
 
                   <p>
-                  This is Photoshop's version  of Lorem Ipsum. Proin gravida nibh vel velit auctor aliquet.
-                  Aenean sollicitudin, lorem quis bibendum auctor, nisi elit consequat ipsum, nec sagittis sem
-                  nibh id elit. Duis sed odio sit amet nibh vulputate cursus a sit amet mauris.    
+                  Me gusta que sea personalizable permite presentarlo mas profesionalmente a los empleados y no parece que sea un servicio de terceros, es como si lo hubieran diseñado a la medida de nuestro negocio.    
                   </p>
                                          
                </li> <!-- /slide -->
@@ -469,9 +468,9 @@
    		<div class="col-twelve with-bottom-line">
 
    			<h5>Faq</h5>
-   			<h1>Questions and Answers.</h1>
+   			<h1>Preguntas y Respuestas.</h1>
 
-   			<p class="lead">Lorem ipsum Do commodo in proident enim in dolor cupidatat adipisicing dolore officia nisi aliqua incididunt Ut veniam lorem ipsum Consectetur ut in in eu do.</p>
+   			<p class="lead">Respuestas a las dudas mas comunes.</p>
 
    		</div>   		
    	</div>
@@ -567,23 +566,19 @@
 
    		<div class="col-twelve">
 
-   			<h1 class="h01">Get started now. Try Lhander free for 30 days.</h1>
+   			<h1 class="h01">Links de descarga.</h1>
 
-   			<p class="lead">Download the app now. Available on the:</p>
+   			<p class="lead">Descarge la aplicación para su sistema:</p>
 
    			<ul class="stores">
    				<li class="app-store">
    					<a href="#" class="button round large" title="">
-   						<i class="icon ion-social-apple"></i>App Store
+   						<i class="icon ion-social-android"></i>APK Android
    					</a>
-   				</li>
-   				<li class="play-store">
-   					<a href="#" class="button round large" title="">
-   						<i class="icon ion-social-android"></i>Play Store</a>
-   					</li>
+   				</li>   				
    				<li class="windows-store">
-   					<a href="#" class="button round large" title="">
-   						<i class="icon ion-social-windows"></i>Win Store</a>
+   					<a href="<%=GlobalV.URLBASE + "/app/publish.htm" %>" class="button round large" title="">
+   						<i class="icon ion-social-windows"></i>Windows</a>
    					</li>
    			</ul>
 
@@ -609,60 +604,12 @@
 	            <p>
 		        	1600 Amphitheatre Parkway<br>
             	Mountain View, CA 94043 US<br>
-		        	info@lhander.com &nbsp; +123-456-789
+		        	info@shuseki.azurewebsites.net &nbsp; +503 5555-5555
 		        	</p>
 
 		      </div> <!-- /footer-info -->
 
-	      	<div class="col-two tab-1-3 mob-1-2 site-links">
-
-	      		<h4>Site Links</h4>
-
-	      		<ul>
-	      			<li><a href="#">About Us</a></li>
-						<li><a href="#">Blog</a></li>
-						<li><a href="#">FAQ</a></li>
-						<li><a href="#">Terms</a></li>
-						<li><a href="#">Privacy Policy</a></li>
-					</ul>
-
-	      	</div> <!-- /site-links -->  
-
-	      	<div class="col-two tab-1-3 mob-1-2 social-links">
-
-	      		<h4>Social</h4>
-
-	      		<ul>
-	      			<li><a href="#">Twitter</a></li>
-						<li><a href="#">Facebook</a></li>
-						<li><a href="#">Dribbble</a></li>
-						<li><a href="#">Google+</a></li>
-						<li><a href="#">Skype</a></li>
-					</ul>
-	      	           	
-	      	</div> <!-- /social --> 
-
-	      	<div class="col-four tab-1-3 mob-full footer-subscribe">
-
-	      		<h4>Subscribe</h4>
-
-	      		<p>Keep yourself updated. Subscribe to our newsletter.</p>
-
-	      		<div class="subscribe-form">
-	      	
-	      			<form id="mc-form" class="group" novalidate="true">
-
-							<input type="email" value="" name="dEmail" class="email" id="mc-email" placeholder="type email &amp; hit enter" required=""> 
-	   		
-			   			<input type="submit" name="subscribe" >
-		   	
-		   				<label for="mc-email" class="subscribe-message"></label>
-			
-						</form>
-
-	      		</div>	      		
-	      	           	
-	      	</div> <!-- /subscribe -->         
+	      	      	       
 
 	      </div> <!-- /row -->
 
