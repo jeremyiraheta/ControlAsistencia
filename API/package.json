@@ -11,7 +11,8 @@
   "dependencies": {
     "express": "^4.17.1",
     "express-fileupload": "^1.2.1",
-    "mysql": "^2.18.1",
-    "nodemon": "^2.0.20"
+    "handlebars": "^4.7.7",
+    "html-pdf": "^3.0.1",
+    "mysql": "^2.18.1"
   }
 }

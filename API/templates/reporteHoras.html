@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <mate charest="utf-8" />
+    <title>ReporteLaboral.pdf</title>
+    <style>
+        *{
+            box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+        }
+        body{
+            font-family: 'Times New Roman', Times, serif;
+        }
+        h2{
+            text-align: center;
+            font-size: 18px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Table Styles */
+
+        .table-wrapper{
+            margin: 10px 70px 70px;
+            box-shadow: 0px 35px 50px rgba( 0, 0, 0, 0.2 );
+        }
+
+        .fl-table {
+            border-radius: 5px;
+            font-size: 12px;
+            font-weight: normal;
+            border: none;
+            border-collapse: collapse;
+            width: 100%;
+            max-width: 100%;
+            white-space: nowrap;
+            background-color: white;
+        }
+
+        .fl-table td, .fl-table th {
+            text-align: center;
+            padding: 8px;
+        }
+
+        .fl-table td {
+            border-right: 1px solid #f8f8f8;
+            font-size: 12px;
+        }
+
+        .fl-table thead th {
+            color: #ffffff;
+            background: #9fa7a4;
+        }
+
+
+        .fl-table thead th:nth-child(odd) {
+            color: #ffffff;
+            background: #324960;
+        }
+
+        .fl-table tr:nth-child(even) {
+            background: #F8F8F8;
+        }        
+    </style>
+  </head>
+  <body>
+    <h2>{{#each rows}}{{#if @first}} {{this.cliente}} - {{this.mes}}/{{this.anio}}{{/if}}{{/each}}</h2>
+    <div class="table-wrapper">
+        <table class="fl-table">
+            <thead>
+            <tr>
+                <th>Nombres</th>
+                <th>Apellidos</th>
+                <th>Departamento</th>
+                <th>Permisos</th>
+                <th>Horas Totales</th>                
+            </tr>
+            </thead>
+            <tbody>
+            {{#each rows}}
+            <tr>
+                <td>{{this.nombres}}</td>
+                <td>{{this.apellidos}}</td>
+                <td>{{this.departamento}}</td>
+                <td>{{this.permisos}}</td>
+                <td>{{this.horas}}</td>
+            </tr>
+            {{else}}
+                <div>No hay registros</div>
+            {{/each}}            
+            <tbody>
+        </table>
+    </div>
+  </body>
+</html>
