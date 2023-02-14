@@ -57,10 +57,10 @@
         route.MapPageRoute("Permisos", "Permisos", "~/Permisos.aspx");
         route.MapPageRoute("Registros", "Registros", "~/Registros.aspx");
         route.MapPageRoute("Productividad", "Productividad", "~/Productividad.aspx");
-        route.MapPageRoute("Clientes", "Clientes", "~/Clientes.aspx");
-        route.MapPageRoute("Logout", "Logout", "~/Logout.ashx");
+        route.MapPageRoute("Clientes", "Clientes", "~/Clientes.aspx");        
         route.MapPageRoute("Subscripcion", "Subscripcion", "~/Subscripcion.aspx");        
         route.MapPageRoute("Confirmacion", "Confirmacion", "~/Confirm.aspx");  
+        route.MapPageRoute("Opciones", "Opciones", "~/Opciones.aspx"); 
     }
 
 </script>

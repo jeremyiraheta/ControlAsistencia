@@ -9,7 +9,7 @@ using Interfaz.modelos;
 public partial class Layout : System.Web.UI.MasterPage
 {
     public string titulo;
-    public Usuario usuario;
+    public Usuario usuario;    
     protected void Page_Load(object sender, EventArgs e)
     {
         if (!(Session.Count > 0 && Session["usuario"] != null))

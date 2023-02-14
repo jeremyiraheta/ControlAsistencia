@@ -25,28 +25,24 @@ public partial class Subscripcion : System.Web.UI.Page
         switch (plan)
         {
             case 1:
-                outPlan.Text = "Plan Startup";
-                outCobro.Text = "4.99";
-                outTotal.Text = "4.99";
+                outPlan.Text = GlobalV.PLAN[0,0];
+                outCobro.Text = GlobalV.PLAN[0, 1];
+                outTotal.Text = GlobalV.PLAN[0, 1];
                 break;
             case 2:
-                outPlan.Text = "Plan PYME";
-                outCobro.Text = "9.99";
-                outTotal.Text = "9.99";
+                outPlan.Text = GlobalV.PLAN[1, 0];
+                outCobro.Text = GlobalV.PLAN[1, 1];
+                outTotal.Text = GlobalV.PLAN[1, 1];
                 break;
             case 3:
-                outPlan.Text = "Plan Premium";
-                outCobro.Text = "99.9";
-                outTotal.Text = "99.9";
-                break;
             default:
-                outPlan.Text = "Plan Premium";
-                outCobro.Text = "99.9";
-                outTotal.Text = "99.9";
+                outPlan.Text = GlobalV.PLAN[2, 0];
+                outCobro.Text = GlobalV.PLAN[2, 1];
+                outTotal.Text = GlobalV.PLAN[2, 1];
                 break;
         }
         
-        foreach (var p in PAISES)
+        foreach (var p in GlobalV.PAISES)
         {
             country.Items.Add(p);
         }
@@ -80,25 +76,7 @@ public partial class Subscripcion : System.Web.UI.Page
         }
     }
 
-    public static string[] PAISES = { 
-       "Afganistán", "Albania", "Argelia", "Andorra", "Angola", "Antigua y Barbuda",
-       "Argentina", "Armenia", "Australia", "Austria", "Azerbaiyán", "Bahamas",
-       "Bangladés", "Barbados", "Baréin", "Bélgica", "Belice", "Benín", "Bielorrusia",
-       "Birmania", "Bolivia", "Bosnia y Herzegovina", "Botsuana", "Brasil", "Brunéi",
-       "Bulgaria", "Burkina Faso", "Burundi", "Bután", "Cabo Verde", "Camboya",
-       "Camerún", "Canadá", "Catar", "Chad", "Chile", "China", "Chipre", "Colombia",
-       "Comoras", "Corea del Norte", "Corea del Sur", "Costa de Marfil", "Costa Rica",
-       "Croacia", "Cuba", "Dinamarca", "Dominica", "Ecuador", "Egipto", "El Salvador",
-       "Emiratos Árabes Unidos", "Eritrea", "Eslovaquia", "Eslovenia", "España",
-       "Estados Unidos", "Estonia", "Etiopía", "Filipinas", "Finlandia", "Fiyi",
-       "Francia", "Gabón", "Gambia", "Georgia", "Alemania", "Ghana", "Grecia",
-       "Granada", "Guatemala", "Guinea", "Guinea-Bisáu", "Guinea Ecuatorial", "Guyana",
-       "Haití", "Honduras", "Hungría", "Islandia", "India", "Indonesia", "Irán",
-       "Irak", "Irlanda", "Israel", "Italia", "Jamaica", "Japón", "Jordania", "Kazajistán",
-       "Kenia", "Kirguistán", "Kiribati", "Kuwait", "Laos", "Lesoto", "Letonia", "Líbano",
-       "Liberia", "Libia", "Liechtenstein", "Lituania", "Luxemburgo", "Macedonia", "Madagascar",
-       "Malasia", "Malaui", "Maldivas", "Malí", "Malta", "Marruecos", "Mauricio", "Mauritania",
-       "México", "Micronesia", "Moldavia", "Mónaco", "Mongolia", "Montenegro", "Mozambique" };
+    
 
 
     protected void pagar_Click(object sender, EventArgs e)

@@ -156,7 +156,7 @@
             <div class="row">
               <div class="col-md-5 mb-3">
                 <label for="country">País</label>
-                  <asp:DropDownList ID="country" ClientIDMode="Static" runat="server" required>
+                  <asp:DropDownList ID="country" ClientIDMode="Static" CssClass="form-control" runat="server" required>
                       <asp:ListItem Text="Seleccione" Value="" />
                   </asp:DropDownList>                                      
                 <div class="invalid-feedback">
@@ -186,14 +186,14 @@
                 <label for="ccname">Nombre de tarjeta</label>
                   <asp:TextBox MaxLength="200" ID="ccname" placeholder="" pattern="\w{3,}" CssClass="form-control input" runat="server" required />                            
                 <div class="invalid-feedback">
-                  Requerido
+                  Requerido minimo 3 caracteres
                 </div>
               </div>
               <div class="col-md-6 mb-3">
                 <label for="ccnumber">Numero de tarjeta</label>                
                   <asp:TextBox ID="ccnumber" placeholder="" pattern="\d{16}" MaxLength="16" CssClass="form-control input" runat="server" required />
                 <div class="invalid-feedback">
-                  Requerido
+                  No valido
                 </div>
               </div>
             </div>
@@ -202,14 +202,14 @@
                 <label for="ccexpiration">Expiración</label>                
                   <asp:TextBox MaxLength="5" ID="ccexpiration" placeholder="00/00" pattern="\d{2}\/\d{2}" CssClass="form-control input" runat="server" required />
                 <div class="invalid-feedback">
-                  Requerido
+                  No valido
                 </div>
               </div>
               <div class="col-md-3 mb-3">
                 <label for="cccvv">CVV</label>                
-                  <asp:TextBox MaxLength="3" ID="cccvv" placeholder="000" CssClass="form-control input" runat="server" required />
+                  <asp:TextBox MaxLength="3" ID="cccvv" pattern="\d{3}" placeholder="000" CssClass="form-control input" runat="server" required />
                 <div class="invalid-feedback">
-                  Requerido
+                  No valido
                 </div>
               </div>
             </div>

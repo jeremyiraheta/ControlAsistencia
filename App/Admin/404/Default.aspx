@@ -16,7 +16,14 @@
       <p>* Regresa a la pagina principal.<br />
       * Envianos un correo de consulta.</p>
       <nav class="nav">
-        <a href=".." class="link">Regresar</a>
+          <%if (Request.UrlReferrer != null)
+              {%>
+        <a href="<%=Request.UrlReferrer.AbsolutePath %>" class="link">Regresar</a>
+          <%}
+    else
+    { %>
+        <a href="/" class="link">Regresar</a>
+          <%} %>
       </nav>
     </main>
     </form>
