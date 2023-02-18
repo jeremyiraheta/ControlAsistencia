@@ -248,7 +248,7 @@ app.get("/PERMISOS/codemp/:codemp/codcli/:codcli", (req, res) => {
         if(DEBUG)console.log(`get a PERMISOS codemp = ${req.params.codemp}`)
         try {
             for (let i = 0; i < result.length; i++) {
-                if (fs.existsSync( path.join(__dirname, "public", "permisos", result[i].codcli, result[i].codper + ".zip"))) {
+                if (fs.existsSync( path.join(__dirname, "public", "permisos", result[i].CODCLI, result[i].codper + ".zip"))) {
                     result[i].attch = true;
                 }
             }
@@ -266,7 +266,7 @@ app.get("/PERMISOS/codcli/:codcli/m/:m/y/:y", (req, res) => {
         if(DEBUG)console.log(`get a PERMISOS mes=${req.params.m}, anyo=${req.params.y}`)
         try {
             for (let i = 0; i < result.length; i++) {
-                if (fs.existsSync( path.join(__dirname, "public", "permisos", result[i].codcli, result[i].codper + ".zip"))) {
+                if (fs.existsSync( path.join(__dirname, "public", "permisos", result[i].CODCLI, result[i].codper + ".zip"))) {
                     result[i].attch = true;
                 }
             }
@@ -284,7 +284,7 @@ app.get("/PERMISOS/codper/:codper/codcli/:codcli", (req, res) => {
         if(DEBUG)console.log(`get a PERMISOS id = ${req.params.codper}`)
         try {
             for (let i = 0; i < result.length; i++) {
-                if (fs.existsSync( path.join(__dirname, "public", "permisos", result[i].codcli, result[i].codper + ".zip"))) {
+                if (fs.existsSync( path.join(__dirname, "public", "permisos", result[i].CODCLI, result[i].codper + ".zip"))) {
                     result[i].attch = true;
                 }
             }
@@ -369,7 +369,7 @@ app.get("/PRODUCTIVIDAD/codemp/:codemp/codcli/:codcli/fechaini/:fechaini/fechafi
         if(DEBUG)console.log(`get a PRODUCTIVIDAD id = ${req.params.codemp}`) 
         try {
             for (let i = 0; i < result.length; i++) {
-                if (fs.existsSync( path.join(__dirname, "public", "screenshots", result[i].codcli, result[i].codprod + ".webp"))) {
+                if (fs.existsSync( path.join(__dirname, "public", "screenshots", result[i].CODCLI, result[i].codprod + ".webp"))) {
                     result[i].attch = true;
                 }
             }
@@ -382,8 +382,8 @@ app.get("/PRODUCTIVIDAD/codemp/:codemp/codcli/:codcli/fechaini/:fechaini/fechafi
 
 //Crea un registro de cliente nuevo
 app.post("/CLIENTES", (req, res) => {
-    var query = connection.query(`INSERT INTO CLIENTES(nombre,url,urlnom,correo_contacto,telefono_contacto,fecha_registro,fecha_fin_servicio,plan,capturarpantalla,capturarprocesos,capturarhistorialnav,loginbackground,zonahoraria,pais,invervalo,porctcapt,activo) 
-    values('${req.body.nombre}','${req.body.url}','${req.body.urlnom}','${req.body.correo_contacto}', '${req.body.telefono_contacto}',NOW(),DATE_ADD(NOW(), INTERVAL 31 day), ${req.body.plan}, '${req.body.capturarpantalla}', '${req.body.capturarprocesos}', '${req.body.capturarhistorialnav}', '${req.body.loginbackground}', '${req.body.zonahoraria}', '${req.body.pais}', ${req.body.invervalo}, ${req.body.porctcapt}, 'true')`, function(error, result){
+    var query = connection.query(`INSERT INTO CLIENTES(nombre,url,urlnom,correo_contacto,telefono_contacto,fecha_registro,fecha_fin_servicio,plan,capturarpantalla,capturarprocesos,capturarhistorialnav,loginbackground,zonahoraria,pais,invervalo,porctcapt,activo,direccion) 
+    values('${req.body.nombre}','${req.body.url}','${req.body.urlnom}','${req.body.correo_contacto}', '${req.body.telefono_contacto}',NOW(),DATE_ADD(NOW(), INTERVAL 31 day), ${req.body.plan}, '${req.body.capturarpantalla}', '${req.body.capturarprocesos}', '${req.body.capturarhistorialnav}', '${req.body.loginbackground}', '${req.body.zonahoraria}', '${req.body.pais}', ${req.body.invervalo}, ${req.body.porctcapt}, 'true', '${req.body.direccion}')`, function(error, result){
         if(error) console.log('[mysql error] : ', error)
         if(DEBUG)console.log(`post a CLIENTES`)        
         res.send(result)
@@ -392,7 +392,7 @@ app.post("/CLIENTES", (req, res) => {
 
 //Actualiza el registro de cliente
 app.put("/CLIENTES", (req, res) => {
-    var query = connection.query(`UPDATE CLIENTES SET nombre='${req.body.nombre}',url='${req.body.url}',urlnom='${req.body.urlnom}',correo_contacto='${req.body.correo_contacto}',telefono_contacto='${req.body.telefono_contacto}', fecha_fin_servicio=STR_TO_DATE('${req.body.fecha_fin_servicio}', '%d-%m-%YT%H:%i'), plan=${req.body.plan}, capturarpantalla='${req.body.capturarpantalla}', capturarprocesos='${req.body.capturarprocesos}', capturarhistorialnav='${req.body.capturarhistorialnav}', loginbackground='${req.body.loginbackground}', zonahoraria='${req.body.zonahoraria}', pais='${req.body.pais}', invervalo=${req.body.invervalo}, porctcapt=${req.body.porctcapt}, activo='${req.body.activo}'  where  codcli = ${req.body.codcli}`
+    var query = connection.query(`UPDATE CLIENTES SET nombre='${req.body.nombre}',url='${req.body.url}',urlnom='${req.body.urlnom}',correo_contacto='${req.body.correo_contacto}',telefono_contacto='${req.body.telefono_contacto}', fecha_fin_servicio=STR_TO_DATE('${req.body.fecha_fin_servicio}', '%d-%m-%YT%H:%i'), plan=${req.body.plan}, capturarpantalla='${req.body.capturarpantalla}', capturarprocesos='${req.body.capturarprocesos}', capturarhistorialnav='${req.body.capturarhistorialnav}', loginbackground='${req.body.loginbackground}', zonahoraria='${req.body.zonahoraria}', pais='${req.body.pais}', invervalo=${req.body.invervalo}, porctcapt=${req.body.porctcapt}, activo='${req.body.activo}', direccion='${req.body.direccion}'  where  codcli = ${req.body.codcli}`
         , function(error, result){
         if(error) console.log('[mysql error] : ', error)
         if(DEBUG)console.log(`put a CLIENTES id = ${req.body.codcli}`)
@@ -427,7 +427,7 @@ app.get("/CLIENTES/codcli/:codcli", (req, res) => {
         if(DEBUG)console.log(`get a CLIENTES id = ${req.params.codcli}`)    
         try {
             for (let i = 0; i < result.length; i++) {
-                if (fs.existsSync( path.join(__dirname, "public", "logos", result[i].codcli + ".webp"))) {
+                if (fs.existsSync( path.join(__dirname, "public", "logos", result[i].CODCLI + ".webp"))) {
                     result[i].attch = true;
                 }
             }
@@ -446,7 +446,7 @@ app.get("/CLIENTES/p/:page", (req, res) => {
         if(DEBUG)console.log(`get a CLIENTES id = ${req.params.codcli}`)    
         try {
             for (let i = 0; i < result.length; i++) {
-                if (fs.existsSync( path.join(__dirname, "public", "logos", result[i].codcli + ".webp"))) {
+                if (fs.existsSync( path.join(__dirname, "public", "logos", result[i].CODCLI + ".webp"))) {
                     result[i].attch = true;
                 }
             }
@@ -465,7 +465,7 @@ app.get("/CLIENTES/urlnom/:urlnom", (req, res) => {
         if(DEBUG)console.log(`get a CLIENTES id = ${req.params.urlnom}`)    
         try {
             for (let i = 0; i < result.length; i++) {
-                if (fs.existsSync( path.join(__dirname, "public", "logos", result[i].codcli + ".webp"))) {
+                if (fs.existsSync( path.join(__dirname, "public", "logos", result[i].CODCLI + ".webp"))) {
                     result[i].attch = true;
                 }
             }
@@ -541,7 +541,7 @@ app.post("/upload/captura/codprod/:codprod/codcli/:codcli", async (req, res) => 
         }else{
             let file = req.body.file                       
             let dir = path.join(__dirname, "public", "screenshots", req.params.codcli, req.params.codprod + ".webp");
-            fs.writeFile(dir, Buffer.from(file), (err) => {
+            fs.writeFile(dir, Buffer.from(file, 'base64'), 'binary', (err) => {
                 if(err)
                     res.status(500).send({
                         status: false,
@@ -573,7 +573,7 @@ app.post("/upload/logo/codcli/:codcli", async (req, res) => {
         }else{
             let file = req.body.file                       
             let dir = path.join(__dirname, "public", "logos", req.params.codcli + ".webp");
-            fs.writeFile(dir, Buffer.from(file), (err) => {
+            fs.writeFile(dir, Buffer.from(file, 'base64'), 'binary', (err) => {
                 if(err)
                     res.status(500).send({
                         status: false,
@@ -613,11 +613,14 @@ app.get("/img/captura/codprod/:codprod/codcli/:codcli", async (req, res) => {
     try {
         var options = {
             root: path.join(__dirname, "public", "screenshots", req.params.codcli)
-        };        
-        res.sendFile(`${req.params.codprod}.webp`, options, (err) => {
-            if(err)
-                console.log(err)
-        });
+        };   
+        if(fs.existsSync(path.join(options.root, `${req.params.codprod}.webp`)))     
+            res.sendFile(`${req.params.codprod}.webp`, options, (err) => {
+                if(err)
+                    console.log(err)
+            });
+        else
+            res.status(200).send(null);
     } catch (error) {
         res.status(500).send(error);
     }
@@ -627,11 +630,14 @@ app.get("/img/logo/codcli/:codcli", async (req, res) => {
     try {
         var options = {
             root: path.join(__dirname, "public", "logos")
-        };        
-        res.sendFile(`${req.params.codcli}.webp`, options, (err) => {
-            if(err)
-                console.log(err)
-        });
+        };  
+        if(fs.existsSync(path.join(options.root, `${req.params.codcli}.webp`)))      
+            res.sendFile(`${req.params.codcli}.webp`, options, (err) => {
+                if(err)
+                    console.log(err)
+            });
+        else
+            res.status(200).send(null);
     } catch (error) {
         res.status(500).send(error);
     }
