@@ -484,15 +484,17 @@ namespace Interfaz
         /// <returns></returns>
         public static UploadState uploadPermisoAdjunto(int codper, int codcli,string archivo)
         {
-            API<UploadState> api2 = new API<UploadState>(local);
-            var task2 = Task.Run(() => api2.post($"upload/permiso/codper/{codper}/codcli/{codcli}", archivo, "application/zip", "attch"));
+            API<UploadState> api = new API<UploadState>(local);
+            var task2 = Task.Run(() => api.post($"upload/permiso/codper/{codper}/codcli/{codcli}", archivo, "application/zip", "attch"));
             task2.Wait();
             return task2.Result;
         }
-        public static UploadState uploadCaptura(int codprod, int codcli, string archivo)
+        public static UploadState uploadCaptura(int codprod, int codcli, byte[] archivo)
         {
-            API<UploadState> api2 = new API<UploadState>(local);
-            var task2 = Task.Run(() => api2.post($"upload/captura/codprod/{codprod}/codcli/{codcli}", archivo, "*/*", "attch"));
+            API<UploadState> api = new API<UploadState>(local);
+            Upload u = new Upload();
+            u.file = archivo;
+            var task2 = Task.Run(() => api.post($"upload/captura/codprod/{codprod}/codcli/{codcli}",u));
             task2.Wait();
             return task2.Result;
         }
@@ -501,12 +503,14 @@ namespace Interfaz
         /// Subir un logo al servidor
         /// </summary>
         /// <param name="codcli">codigo de cliente</param>
-        /// <param name="archivo">directorio del archivo</param>
+        /// <param name="archivo">buffer de bytes del archivo</param>
         /// <returns></returns>
-        public static UploadState uploadLogo(int codcli, string archivo)
+        public static UploadState uploadLogo(int codcli, byte[] archivo)
         {
-            API<UploadState> api2 = new API<UploadState>(local);
-            var task2 = Task.Run(() => api2.post($"upload/logo/codcli/{codcli}", archivo, "*/*", "attch"));
+            API<UploadState> api = new API<UploadState>(local);
+            Upload u = new Upload();
+            u.file = archivo;
+            var task2 = Task.Run(() => api.post($"upload/logo/codcli/{codcli}",u));
             task2.Wait();
             return task2.Result;
         }
@@ -665,7 +669,16 @@ namespace Interfaz
 
             }
         }
-        
+        /// <summary>
+        /// Interfaz de subida de archivo por buffer
+        /// </summary>
+        public class Upload
+        {
+            public byte[] file { get; set; }
+        }
+        /// <summary>
+        /// Interfaz de consulta de tablas por filtro avanzado
+        /// </summary>
         private class Filter
         {
             public string query { get; set; }

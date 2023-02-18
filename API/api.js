@@ -523,39 +523,74 @@ app.post("/upload/permiso/codper/:codper/codcli/:codcli", async (req, res) => {
             }        
         }
     } catch (err) {
-        res.status(500).send(err);
+        res.status(500).send({
+            status: false,
+            message: err.message
+        });
     }
 });
 
 app.post("/upload/captura/codprod/:codprod/codcli/:codcli", async (req, res) => {
     try {
+        console.log("post captura codcli = " + req.params.codcli);
         if(req.body.file === undefined){
-            res.status(500).send("No se envio nada que procesar")
+            res.status(500).send({
+                status: false,
+                message: 'No se envio nada que procesar'
+            })
         }else{
             let file = req.body.file                       
             let dir = path.join(__dirname, "public", "screenshots", req.params.codcli, req.params.codprod + ".webp");
-            fs.writeFile(dir, Buffer.from(file), 'binary', (err) => {
-                res.status(500).send("Ocurrio un error al escribir el archivo:" + err.message)
-            })
+            fs.writeFile(dir, Buffer.from(file), (err) => {
+                if(err)
+                    res.status(500).send({
+                        status: false,
+                        message: 'Ocurrio un error al escribir el archivo'
+                    })
+                else
+                    res.send({
+                        status: true,
+                        message: 'Captura subida'
+                    });
+            });            
         }            
     } catch (err) {
-        res.status(500).send(err);
+        res.status(500).send({
+            status: false,
+            message: 'Ocurrio un error al escribir el archivo'
+        });
     }
 });
 
 app.post("/upload/logo/codcli/:codcli", async (req, res) => {
     try {
-        if(req.body.file !== undefined){
-            res.status(500).send("No se envio nada que procesar")
+        console.log("post logo codcli = " + req.params.codcli);
+        if(req.body.file === undefined){
+            res.status(500).send({
+                status: false,
+                message: 'No se envio nada que procesar'
+            })
         }else{
             let file = req.body.file                       
             let dir = path.join(__dirname, "public", "logos", req.params.codcli + ".webp");
-            fs.writeFile(dir, Buffer.from(file), 'binary', (err) => {
-                res.status(500).send("Ocurrio un error al escribir el archivo")
-            })
+            fs.writeFile(dir, Buffer.from(file), (err) => {
+                if(err)
+                    res.status(500).send({
+                        status: false,
+                        message: 'Ocurrio un error al escribir el archivo'
+                    })
+                else
+                    res.send({
+                        status: true,
+                        message: 'Logo subido'
+                    });
+            });            
         }            
     } catch (err) {
-        res.status(500).send(err);
+        res.status(500).send({
+            status: false,
+            message: 'Ocurrio un error al escribir el archivo'
+        });
     }
 });
 

@@ -41,8 +41,7 @@ public partial class Opciones : System.Web.UI.Page
             txtcliid.Text = cliente.urlnom;
             txturl.Text = cliente.url;
             txtemail.Text = cliente.correo_contacto;
-            txtnumcont.Text = cliente.telefono_contacto;
-            txturl.Text = cliente.url;
+            txtnumcont.Text = cliente.telefono_contacto;           
             txtprob.Text = String.Format("%d", cliente.porctcapt);
             txtint.Text = String.Format("%f", cliente.invervalo);
             txtdir.Text = cliente.direccion;
@@ -53,10 +52,7 @@ public partial class Opciones : System.Web.UI.Page
             chknav.Checked = cliente.capturarhistorialnav;
             chkpant.Checked = cliente.capturarpantalla;
             chkpross.Checked = cliente.capturarprocesos;
-            if(cliente.attch)
-            {
-                btnimg.ImageUrl = "/Logos.ashx";
-            }
+            btnimg.ImageUrl = "/Logos.ashx?id=" + cliente.codcli;
         }
     }
 
@@ -72,6 +68,54 @@ public partial class Opciones : System.Web.UI.Page
 
     protected void btnGuardar_Click(object sender, EventArgs e)
     {
+        cliente = (Cliente)Session["cliente"];
+        cliente.nombre = txtclinom.Text;
+        cliente.urlnom = txtcliid.Text;
+        cliente.url = txturl.Text;
+        cliente.correo_contacto = txtemail.Text;
+        cliente.telefono_contacto = txtnumcont.Text;
+        try
+        {
+            cliente.porctcapt = int.Parse(txtprob.Text);
+        }
+        catch (Exception)
+        {
+        }
+        try
+        {
+            cliente.invervalo = int.Parse(txtint.Text);
+        }
+        catch (Exception)
+        {
+        }
+        cliente.direccion = txtdir.Text;
+        cliente.pais = country.SelectedValue;
+        cliente.plan = int.Parse(plan.SelectedValue);
+        cliente.zonahoraria = int.Parse(ddlTimeZones.SelectedValue);
+        cliente.capturarhistorialnav = chknav.Checked;
+        cliente.capturarpantalla = chkpant.Checked;
+        cliente.capturarprocesos = chkpross.Checked;
+        try
+        {
+            Datos.updateCliente(cliente);
+        }
+        catch (Exception)
+        {
+            
+        }
+        try
+        {
+            if(ulogo.HasFile)
+            {                
+                byte[] file = ulogo.FileBytes;
+                Datos.UploadState state = Datos.uploadLogo(cliente.codcli, file);
+                if (!state.status)
+                    throw new Exception("No se pudo subir el logotipo");
+            }            
+        }
+        catch (Exception)
+        {                        
+        }
 
     }
 }

@@ -1,15 +1,20 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Layout.master" AutoEventWireup="true" CodeFile="Opciones.aspx.cs" Inherits="Opciones" %>
 
-<script runat="server">
-
-    protected void btnGuardar_Click(object sender, EventArgs e)
-    {
-
-    }
-</script>
-
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
+    <script>
+    function previewImage(event) {
+        var input = event.target;
+        var preview = document.getElementById("btnimg");
+        var reader = new FileReader();
+
+        reader.onload = function () {
+            preview.src = reader.result;
+        }
+
+        reader.readAsDataURL(input.files[0]);
+    }
+</script>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="Content" Runat="Server">
     <div class="content" style="text-align:left;">
@@ -55,7 +60,7 @@
         <div class="row" >
             <div class="col-md-6 mb-3">
                 <label for="txturl">Página web del Cliente (opcional)</label>
-                <asp:TextBox ID="txturl" TextMode="Url" ClientIDMode="Static" CssClass="form-control" MaxLength="200" placeholder="www.minegocio.com" runat="server" />
+                <asp:TextBox ID="txturl" ClientIDMode="Static" CssClass="form-control" MaxLength="200" placeholder="www.minegocio.com" runat="server" />
             </div>
               
             <div class="col-md-6 mb-3">
@@ -67,8 +72,9 @@
               
              <div class="row">
                  <div class="col-md-2 mb-3">
-                  <label for="btnimg">Logo</label>
-                  <asp:Image ID="btnimg" ClientIDMode="Static" CssClass="form-control" runat="server" ImageUrl="~/Logos.ashx"  />                                   
+                  <label for="btnimg">Logo</label>                      
+                     <asp:Image ID="btnimg" ClientIDMode="Static" CssClass="form-control cursor-pointer" runat="server" Height="200" Width="200"  AlternateText="Click para seleccionar imagen" ToolTip="Click para seleccionar imagen" onclick="$('#ulogo').trigger('click');" />                                         
+                     <asp:FileUpload ID="ulogo" ClientIDMode="Static" AllowMultiple="false"  runat="server" style="display:none;" accept=".jpg,.jpeg,.png,.webp" onchange="previewImage(event)" />                                
               </div>
                 <div class="mb-3 col-md-10">
                   <label for="txtdir">Dirección de negocio</label>
@@ -123,7 +129,7 @@
             </div>
         <div class="row">
             <div class="col-md-4 mb-3">
-                <label for="country">Plan activo</label>
+                <label for="country">Plan a Renovar</label>
                   <asp:DropDownList ID="plan" CssClass="form-control" ClientIDMode="Static" runat="server">                      
                   </asp:DropDownList> 
             </div>

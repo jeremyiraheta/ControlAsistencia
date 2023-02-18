@@ -6,34 +6,31 @@ using System.Drawing;
 using System.IO;
 using System.Threading.Tasks;
 using Interfaz;
-using Interfaz.modelos;
 
 public class Logos : IHttpHandler {
 
     public void ProcessRequest (HttpContext context) {
-        Cliente cliente=null;
+        int codcli = 0;
         try
         {
-            cliente = (Cliente)context.Session["cliente"];
+            codcli = int.Parse(context.Request.QueryString["id"]);
         }
         catch (Exception)
         {
         }
-        byte[] img;
-        if(cliente == null || !cliente.attch)
+        byte[] img= null;        
+        if(codcli != 0)
+            img = Task.Run( () =>  Datos.imgLogo(codcli)).Result;
+        context.Response.ContentType = "image/webp";
+        if(img == null)
         {
             Bitmap blankImage = new Bitmap(100, 100);
-
             using (MemoryStream memoryStream = new MemoryStream())
             {
                 blankImage.Save(memoryStream, System.Drawing.Imaging.ImageFormat.Png);
                 img = memoryStream.ToArray();
             }
-        }else
-        {
-            img = Task.Run( () =>  Datos.imgLogo(cliente.codcli)).Result;
         }
-        context.Response.ContentType = "image/webp";
         context.Response.OutputStream.Write(img,0,img.Length);
     }
 
