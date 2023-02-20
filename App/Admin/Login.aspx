@@ -17,7 +17,7 @@ body {
   font-weight: 100;
   display: flex;
   overflow: hidden;
-  background: url(../img/background.png);
+  background: url(../images/background.png);
 }
 
 input ::-webkit-input-placeholder {
@@ -159,12 +159,16 @@ input:focus :-ms-input-placeholder {
 }
 </style>
 </head>
-<body>
+    <%if (cliente != null && cliente.loginbackground != null)
+            Response.Write("<body style='background: " + cliente.loginbackground + "'>");
+        else
+            Response.Write("<body>"); %>
+
    <form class="login-form" runat="server">
   <%       
       if (cliente != null && cliente.attch)
       {
-          Response.Write("<img src='" + GlobalV.URLBASE + "/img/logo/codcli/" + cliente.codcli + ".webp' class='logo' />");
+          Response.Write("<img src='/Logos.ashx?id=" + cliente.codcli + "' class='logo' />");
       }
       else
       {

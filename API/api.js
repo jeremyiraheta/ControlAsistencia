@@ -74,7 +74,7 @@ app.get("/", (req, res) => {
 });
 //Obtiene listado de EMPLEADOS
 app.get("/EMPLEADOS/codcli/:codcli/p/:page", (req, res) => {    
-    var query = connection.query(`SELECT * FROM EMPLEADOS where activo = '${req.query.activo === undefined ? 'true' : req.query.activo}' and codcli = ${req.params.codcli} limit ${req.params.page},10`, function(error, result){
+    var query = connection.query(`SELECT * FROM EMPLEADOS where activo = '${req.query.activo === undefined ? 'true' : req.query.activo}' and codcli = ${req.params.codcli} order by codemp limit ${req.params.page},${req.params.page+10}`, function(error, result){
         if(error) console.log('[mysql error] : ', error)
         if(DEBUG)console.log(`get a EMPLEADOS`)
         res.send(result)
@@ -82,7 +82,7 @@ app.get("/EMPLEADOS/codcli/:codcli/p/:page", (req, res) => {
 });
 //Obtiene listado de EMPLEADOS activos de un departamento
 app.get("/EMPLEADOS/codcli/:codcli/coddpto/:coddpto/p/:page", (req, res) => {    
-    var query = connection.query(`SELECT * FROM EMPLEADOS where activo = '${req.query.activo === undefined ? 'true' : req.query.activo}' and codcli = ${req.params.codcli} and coddpto = ${req.params.coddpto} limit ${req.params.page},10`, function(error, result){
+    var query = connection.query(`SELECT * FROM EMPLEADOS where activo = '${req.query.activo === undefined ? 'true' : req.query.activo}' and codcli = ${req.params.codcli} and coddpto = ${req.params.coddpto} limit ${req.params.page},${req.params.page+10}`, function(error, result){
         if(error) console.log('[mysql error] : ', error)
         if(DEBUG)console.log(`get a EMPLEADOS`)
         res.send(result)
@@ -440,7 +440,7 @@ app.get("/CLIENTES/codcli/:codcli", (req, res) => {
 
 //Consulta un registro de cliente
 app.get("/CLIENTES/p/:page", (req, res) => {
-    var query = connection.query(`SELECT * FROM CLIENTES WHERE activo = '${req.query.activo === undefined ? 'true' : req.query.activo}' limit ${req.params.page},10`, function(error, result){
+    var query = connection.query(`SELECT * FROM CLIENTES WHERE activo = '${req.query.activo === undefined ? 'true' : req.query.activo}' limit ${req.params.page},${req.params.page+10}`, function(error, result){
         if(error) console.log('[mysql error] : ', error)
         if(DEBUG)console.log(`get a CLIENTES`)  
         if(DEBUG)console.log(`get a CLIENTES id = ${req.params.codcli}`)    

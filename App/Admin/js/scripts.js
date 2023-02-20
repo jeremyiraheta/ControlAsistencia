@@ -1,6 +1,6 @@
 ﻿function selectDpto(id, element)
 {    
-    fetch("/Ajax/ajaxDepartamentos.ashx?action=select&id=" + id).
+    fetch("/Ajax/ajaxDepartamentos.ashx?action=select&coddpto=" + id).
         then(resp => resp.text()).
         then(data => {
             var s = document.getElementsByClassName("active")

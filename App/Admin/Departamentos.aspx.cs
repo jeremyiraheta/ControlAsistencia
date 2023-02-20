@@ -13,18 +13,20 @@ public partial class Departamentos : System.Web.UI.Page
     protected void Page_Load(object sender, EventArgs e)
     {       
         string tabdp = @"<li class='nav-item'>
-                              <span style='display:flex;'><a class='nav-link {1}' href=# onclick='selectDpto({2},this)'>{0}</a><a href=/Ajax/ajaxDepartamentos.ashx?action=delete&id={2} class='btn-close btn-close-white' style='{3}' aria-label='Close'></a></span>
+                              <span style='display:flex;'><a class='nav-link {1}' href=# onclick='selectDpto({2},this)'>{0}</a><a href=/Ajax/ajaxDepartamentos.ashx?action=delete&coddpto={2} class='btn-close btn-close-white' style='{3}' aria-label='Close'></a></span>
                           </li>";
         usuario = (Usuario)Session["usuario"];
+        if (usuario == null)
+            Response.Redirect("/Login");
         var dpts = Datos.listDepartamentos(usuario.codcli);
         var emp = Datos.listEmpleados(usuario.codcli);
-        ltabs.Text = String.Format(tabdp, dpts.First().nombre.ToUpper(), "active", dpts.First().coddpto,emp.Where(v => v.coddpto == dpts.First().coddpto).Count() > 0  ? "display:none;" : "");
+        ltabs.Text = String.Format(tabdp, dpts.First().nombre.ToUpper(), "active", dpts.First().coddpto, "display:none;");
         tbldpto.Text = "";        
         foreach (var itm in emp.Where(v => v.coddpto == dpts.First().coddpto))
             tbldpto.Text += String.Format("<tr><td>{0}</td><td>{1}</td><td>{2}</td><tr>\n", itm.codemp, itm.nombres, itm.apellidos);
         dpts.RemoveAt(0);
         foreach (var item in dpts)
-            ltabs.Text += String.Format(tabdp, item.nombre.ToUpper(), "", item.coddpto, emp.Where(v => v.coddpto == item.coddpto).Count() > 0 ? "display:none;" : "" );
+            ltabs.Text += String.Format(tabdp, item.nombre.ToUpper(), "", item.coddpto,emp.Where(v => v.coddpto == item.coddpto).Count() > 0 ? "display:none;" : "" );
     }
 
     protected void btnAdd_Click(object sender, EventArgs e)

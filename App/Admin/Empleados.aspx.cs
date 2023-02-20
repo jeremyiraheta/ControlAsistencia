@@ -9,19 +9,46 @@ using Interfaz.modelos;
 
 public partial class Empleados : System.Web.UI.Page
 {
-    Usuario usuario;  
+    Usuario usuario;
+    public int EDITID { get; set; }
+    public bool editing;
+    public int minp=1;
+    public int maxp=10;
+    public int cpage = 1;
     protected void Page_Load(object sender, EventArgs e)
     {
         usuario = (Usuario)Session["usuario"];
-        var emps = Datos.listEmpleados(usuario.codcli);
-        filltable(emps);               
+        if (usuario == null)
+            Response.Redirect("/Login");        
+        if (Page.RouteData.Values.ContainsKey("page"))
+        {
+            cpage = int.Parse(Page.RouteData.Values["page"].ToString());  
+            if(cpage > 9)
+            {
+                minp = 10 * Convert.ToInt32(cpage / 10);
+                maxp = minp + 10;
+            }
+        }
+        var emps = Datos.listEmpleados(usuario.codcli, (cpage-1)*10);
+        filltable(emps);
+        var dptos = Datos.listDepartamentos(usuario.codcli);
+        if (!IsPostBack || cmbDptos.Items.Count == 0)
+        {
+            cmbDptos.Items.Clear();
+            cmbDptos.Items.Add(new ListItem("Seleccionar...", "0"));
+            foreach (var item in dptos)
+                cmbDptos.Items.Add(new ListItem(item.nombre.ToUpper(), item.coddpto.ToString()));
+        }
+        if (!IsPostBack) clearForm();
+        if (EDITID > 0)
+            editing = true;
+        title.Text = "Agregar Empleado";
     }
     protected void editCommand(object sender, CommandEventArgs e)
-    {
-        ASP.control_emp_ascx emp = (ASP.control_emp_ascx)LoadControl("~/Control/emp.ascx");                     
-        emp.EDITID = Convert.ToInt32(e.CommandArgument);
-        var o = Datos.getEmpleado(emp.EDITID, usuario.codcli);
-        emp.editForm(o);
+    {                           
+        this.EDITID = Convert.ToInt32(e.CommandArgument);
+        var o = Datos.getEmpleado(this.EDITID, usuario.codcli);
+        this.editForm(o);
         ScriptManager.RegisterStartupScript(Page, Page.GetType(), "addEmp", "new bootstrap.Modal(document.getElementById('addEmp'), { keyboard:false}).show()", true);
     }
     private void filltable(List<Empleado> emps)
@@ -30,7 +57,7 @@ public partial class Empleados : System.Web.UI.Page
         var head = tblemp.Rows[0];
         tblemp.Rows.Clear();
         tblemp.Rows.Add(head);
-        foreach (var item in emps.Where(v => v.coddpto != 1))
+        foreach (var item in emps)
         {
             TableRow row = new TableRow();
             row.Cells.Add(new TableCell() { Text = item.codemp.ToString() });
@@ -54,10 +81,9 @@ public partial class Empleados : System.Web.UI.Page
         }
     }
     protected void btnAdd_Click(object sender, EventArgs e)
-    {
-        ASP.control_emp_ascx emp = (ASP.control_emp_ascx)LoadControl("~/Control/emp.ascx");        
-        emp.EDITID = 0;
-        emp.clearForm();
+    {        
+        this.EDITID = 0;
+        this.clearForm();
         ScriptManager.RegisterStartupScript(Page, Page.GetType(), "addEmp", "new bootstrap.Modal(document.getElementById('addEmp'), { keyboard:false}).show()", true);
     }
 
@@ -67,4 +93,102 @@ public partial class Empleados : System.Web.UI.Page
         var emps = Datos.filter<Empleado>("empleados", String.Format("concat_ws(' ', nombres, apellidos, correo, nacimiento, (SELECT nombre FROM departamentos d WHERE d.coddpto = empleados.coddpto)) LIKE '%{0}%' and estado = 'A'", txtfilter.Text));
         filltable(emps);
     }
+
+    protected void guardar(object sender, EventArgs e)
+    {
+        if (txtnom.Text == "") return;        
+        string nombres = txtnom.Text;
+        string apellidos = txtape.Text;
+        string nacimiento = txtDate.Text;
+        string email = txtemail.Text;
+        string tel = txttel.Text;
+        string dui = txtdui.Text;
+        string afp = txtafp.Text;
+        string nit = txtnit.Text;
+        string dir = txtdir.Text;
+        string genero = rdoGen.SelectedValue;
+        int dpto = Convert.ToInt32(cmbDptos.SelectedValue);
+        string user = txtuser.Text;
+        string password = txtpass.Text;
+        int cod = Convert.ToInt32(codemp.Value);
+        Empleado emp = new Empleado();
+        emp.codemp = cod;
+        emp.nombres = nombres;
+        emp.apellidos = apellidos;
+        emp.coddpto = dpto;
+        emp.correo = email;
+        emp.telefonos = tel;
+        emp.dui = dui;
+        emp.afp = afp;
+        emp.nit = nit;
+        emp.genero = genero;
+        emp.direccion = dir;
+        emp.nacimiento = formatDate(nacimiento);
+        emp.usuario = user;
+        emp.password = password;
+        emp.codcli = usuario.codcli;
+        if (cod > 0)
+        {
+            if( Datos.updateEmpleado(emp))
+                ((Layout)Master).toast("INFO", "Se actualizo el registro", 0, ClientScript);
+            else
+                ((Layout)Master).toast("ERROR", "Ocurrio un error y no se pudo actualizar", 2, ClientScript);
+        }
+        else
+        {
+           if( Datos.insertEmpleado(emp))
+                ((Layout)Master).toast("INFO", "Se agrego el registro", 0, ClientScript);
+           else
+                ((Layout)Master).toast("ERROR", "No se pudo agregar el registro", 2, ClientScript);
+        }        
+    }
+    protected void desactivar(object sender, EventArgs e)
+    {
+        int cod = Convert.ToInt32(codemp.Value);
+        Datos.disableEmpleado(cod, 1);
+        Response.Redirect(Request.RawUrl);
+    }
+    public void editForm(Empleado emp)
+    {
+        txtnom.Text = emp.nombres;
+        txtape.Text = emp.apellidos;
+        txtDate.Text = emp.nacimiento.Substring(0, emp.nacimiento.IndexOf('T'));
+        txtemail.Text = emp.correo;
+        txttel.Text = emp.telefonos;
+        txtdui.Text = emp.dui;
+        txtafp.Text = emp.afp;
+        txtnit.Text = emp.nit;
+        cmbDptos.SelectedValue = emp.coddpto.ToString();
+        rdoGen.SelectedValue = emp.genero;
+        txtdir.Text = emp.direccion;
+        txtuser.Text = emp.usuario;
+        codemp.Value = EDITID.ToString();
+        editing = true;
+        title.Text = "Editar Empleado";
+    }
+    private string formatDate(string date)
+    {
+        DateTime theDate = DateTime.ParseExact(date, "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
+        return theDate.ToString("dd-MM-yyyy");
+    }
+    public void clearForm()
+    {
+        txtnom.Text = "";
+        txtape.Text = "";
+        txtDate.Text = "";
+        txtafp.Text = "";
+        txtdir.Text = "";
+        txtdui.Text = "";
+        txtemail.Text = "";
+        txtnit.Text = "";
+        txttel.Text = "";
+        txtuser.Text = "";
+        txtpass.Text = "";
+        txtpass2.Text = "";
+        cmbDptos.SelectedIndex = 0;
+        codemp.Value = "0";
+    }
+
+
+
 }

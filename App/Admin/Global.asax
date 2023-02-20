@@ -53,7 +53,8 @@
         route.MapPageRoute("LoginEx", "Login", "~/Login.aspx");
         route.MapPageRoute("Admin", "Admin", "~/Admin.aspx");
         route.MapPageRoute("Departamentos", "Departamentos", "~/Departamentos.aspx");
-        route.MapPageRoute("Empleados", "Empleados", "~/Empleados.aspx");
+        route.MapPageRoute("Empleados", "Empleados/{page}", "~/Empleados.aspx");
+        route.MapPageRoute("EmpleadosEx", "Empleados", "~/Empleados.aspx");
         route.MapPageRoute("Permisos", "Permisos", "~/Permisos.aspx");
         route.MapPageRoute("Registros", "Registros", "~/Registros.aspx");
         route.MapPageRoute("Productividad", "Productividad", "~/Productividad.aspx");

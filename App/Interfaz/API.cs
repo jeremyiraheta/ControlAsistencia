@@ -10,7 +10,7 @@ namespace Interfaz
 {
     class API<T>
     {
-        const string api_local = "http://192.168.1.10:8081/";//solo usada durante pruebas
+        const string api_local = "http://localhost:8081/";//solo usada durante pruebas
         const string api_remote = "http://40.114.33.100:8081";//usada en produccion
         const string token = "YWRtaW46YWRtaW4=";
         HttpClient client = null;
@@ -62,6 +62,22 @@ namespace Interfaz
         {
             byte[] array;
             HttpResponseMessage response = await client.GetAsync(endpoint);
+            if (response.IsSuccessStatusCode)
+            {
+                array = await response.Content.ReadAsByteArrayAsync();
+                return array;
+            }
+            return null;
+        }
+        /// <summary>
+        /// Descarga de archivo asincrona peticion enviando datos post
+        /// </summary>
+        /// <param name="endpoint">recurso de la api</param>
+        /// <returns></returns>
+        public async Task<byte[]> download(string endpoint, object obj)
+        {
+            byte[] array;
+            HttpResponseMessage response = await client.PostAsync(endpoint, new StringContent(JsonConvert.SerializeObject(obj), Encoding.UTF8, "application/json"));
             if (response.IsSuccessStatusCode)
             {
                 array = await response.Content.ReadAsByteArrayAsync();

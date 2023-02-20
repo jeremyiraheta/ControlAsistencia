@@ -16,7 +16,7 @@
     }
 </script>
 </asp:Content>
-<asp:Content ID="Content2" ContentPlaceHolderID="Content" Runat="Server">
+<asp:Content ID="Content2" ContentPlaceHolderID="Content" Runat="Server">    
     <div class="content" style="text-align:left;">
         <h3 style="text-align:center">Opciones</h3> 
         <div class="row">
@@ -73,7 +73,7 @@
              <div class="row">
                  <div class="col-md-2 mb-3">
                   <label for="btnimg">Logo</label>                      
-                     <asp:Image ID="btnimg" ClientIDMode="Static" CssClass="form-control cursor-pointer" runat="server" Height="200" Width="200"  AlternateText="Click para seleccionar imagen" ToolTip="Click para seleccionar imagen" onclick="$('#ulogo').trigger('click');" />                                         
+                     <asp:Image ID="btnimg" ClientIDMode="Static" CssClass="form-control cursor-pointer" ImageUrl="~/Logos.ashx" runat="server" Height="200" Width="200"  AlternateText="Click para seleccionar imagen" ToolTip="Click para seleccionar imagen" onclick="$('#ulogo').trigger('click');" />                                         
                      <asp:FileUpload ID="ulogo" ClientIDMode="Static" AllowMultiple="false"  runat="server" style="display:none;" accept=".jpg,.jpeg,.png,.webp" onchange="previewImage(event)" />                                
               </div>
                 <div class="mb-3 col-md-10">
@@ -88,7 +88,7 @@
                             <label for="chkpant" class="form-check-inline">Capturar Pantalla</label>
                         </div>
                         <div class="col-md-3 mb-3 form-check" style="margin-top:30px;">                    
-                            <asp:CheckBox ID="chkpross" ClientIDMode="Static" CssClass="form-check-inline form-switch" runat="server" />
+                            <asp:CheckBox ID="chkpross" ClientIDMode="Static" CssClass="form-check-inline" runat="server" />
                             <label for="chkpross" class="form-check-inline">Capturar Procesos</label>
                         </div>
                         <div class="col-md-3 mb-3 form-check" style="margin-top:30px;">                    
@@ -115,15 +115,15 @@
                     </div>
               </div>              
                 <div class="col-md-4 mb-3" >
-                    <label for="chkpant" style="form-control">Intervalo de captura (horas)</label>                    
-                    <asp:TextBox ID="txtint" ClientIDMode="Static" CssClass="form-control" MaxLength="2" TextMode="Number" runat="server" title="Seleccione cada cuanto se intentara capturar información de productividad" max="24" min="1"/>
-                    <asp:RangeValidator runat="server" ControlToValidate="txtint" ErrorMessage="El rango de valores es 1-24" Type="Integer" MinimumValue="1" MaximumValue="24" ForeColor="Red" />
+                    <label for="chkpant" style="form-control">Intervalo de captura (minutos)</label>                    
+                    <asp:TextBox ID="txtint" ClientIDMode="Static" CssClass="form-control" MaxLength="4" TextMode="Number" runat="server" title="Seleccione cada cuanto se intentara capturar información de productividad" max="1440" min="5"/>
+                    <asp:RangeValidator runat="server" ControlToValidate="txtint" ErrorMessage="El rango de valores es 5-1440" Type="Integer" MinimumValue="5" MaximumValue="1440" ForeColor="Red" />
                     
                 </div> 
                 <div class="col-md-4 mb-3" >
                     <label for="chkpant" style="form-control">Probabilidad de captura (%)</label>                    
-                    <asp:TextBox ID="txtprob" ClientIDMode="Static" CssClass="form-control" MaxLength="3" TextMode="Number" runat="server" title="Seleccione la propablidad de captura" max="100" min="1" />
-                    <asp:RangeValidator runat="server" ControlToValidate="txtprob" ErrorMessage="El rango de valores es 1-100" Type="Double" MinimumValue="1" MaximumValue="100" ForeColor="Red" />
+                    <asp:TextBox ID="txtprob" ClientIDMode="Static" CssClass="form-control" MaxLength="6" TextMode="Number" step="0.10" runat="server" title="Seleccione la propablidad de capturar productividad" max="100.00" min="0.0" />
+                    <asp:RangeValidator runat="server" ControlToValidate="txtprob" ErrorMessage="El rango de valores es 0-100" Type="Double" MinimumValue="0" MaximumValue="100" ForeColor="Red" />
                     
                 </div>                
             </div>
@@ -141,6 +141,6 @@
                 <asp:Button CssClass="form-control btn-secondary btn" Text="Guardar" OnClick="btnGuardar_Click" ID="btnGuardar" runat="server" />
             </div>
         </div>
-    </div>
+    </div>    
 </asp:Content>
 

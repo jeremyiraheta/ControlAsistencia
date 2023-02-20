@@ -11,13 +11,13 @@ public partial class Opciones : System.Web.UI.Page
 {
 
     public string validdisplay = "display:none";
-    public string invaliddisplay = "display:none";
-    private bool urlnomvalid = false;    
-    private Cliente cliente;
+    public string invaliddisplay = "display:none";           
     protected void Page_Load(object sender, EventArgs e)
     {
+        Cliente cliente = (Cliente)Session["cliente"];
         if (!IsPostBack)
         {
+            Session["urlnomvalid"] = true;
             foreach (TimeZoneInfo timeZone in TimeZoneInfo.GetSystemTimeZones())
             {
                 ddlTimeZones.Items.Add(new ListItem(timeZone.DisplayName, timeZone.BaseUtcOffset.Hours.ToString()));
@@ -30,8 +30,7 @@ public partial class Opciones : System.Web.UI.Page
             for(int i = 0; i< GlobalV.PLAN.GetLength(0);i++)
             {
                 plan.Items.Add(new ListItem(GlobalV.PLAN[i, 0], GlobalV.PLAN[i, 2]));
-            }          
-            cliente = (Cliente)Session["cliente"];
+            }                      
             if(cliente == null)
             {
                 Response.RedirectLocation = "/Login";
@@ -42,8 +41,8 @@ public partial class Opciones : System.Web.UI.Page
             txturl.Text = cliente.url;
             txtemail.Text = cliente.correo_contacto;
             txtnumcont.Text = cliente.telefono_contacto;           
-            txtprob.Text = String.Format("%d", cliente.porctcapt);
-            txtint.Text = String.Format("%f", cliente.invervalo);
+            txtprob.Text = String.Format("{0:F2}", cliente.porctcapt);
+            txtint.Text = String.Format("{0}", cliente.invervalo);
             txtdir.Text = cliente.direccion;
             txtfin.Text = cliente.fecha_fin_servicio_format;
             country.SelectedValue = cliente.pais;
@@ -52,23 +51,28 @@ public partial class Opciones : System.Web.UI.Page
             chknav.Checked = cliente.capturarhistorialnav;
             chkpant.Checked = cliente.capturarpantalla;
             chkpross.Checked = cliente.capturarprocesos;
-            btnimg.ImageUrl = "/Logos.ashx?id=" + cliente.codcli;
+            pickcolor.Text = cliente.loginbackground;
         }
     }
 
     protected void txtcliid_TextChanged(object sender, EventArgs e)
     {
-
+        string nom = txtcliid.Text;
+        validarnom(nom);
     }
 
     protected void txtclinom_TextChanged(object sender, EventArgs e)
     {
-
+        string nom = txtclinom.Text;
+        nom = GlobalV.RemoveSpecialCharacters(nom).ToLower();
+        txtcliid.Text = nom;
+        validarnom(nom);
     }
 
     protected void btnGuardar_Click(object sender, EventArgs e)
     {
-        cliente = (Cliente)Session["cliente"];
+        Cliente cliente = (Cliente)Session["cliente"];
+        bool urlnomvalid = bool.Parse(Session["urlnomvalid"].ToString());
         cliente.nombre = txtclinom.Text;
         cliente.urlnom = txtcliid.Text;
         cliente.url = txturl.Text;
@@ -76,7 +80,7 @@ public partial class Opciones : System.Web.UI.Page
         cliente.telefono_contacto = txtnumcont.Text;
         try
         {
-            cliente.porctcapt = int.Parse(txtprob.Text);
+            cliente.porctcapt = float.Parse(txtprob.Text);
         }
         catch (Exception)
         {
@@ -95,9 +99,17 @@ public partial class Opciones : System.Web.UI.Page
         cliente.capturarhistorialnav = chknav.Checked;
         cliente.capturarpantalla = chkpant.Checked;
         cliente.capturarprocesos = chkpross.Checked;
+        cliente.loginbackground = pickcolor.Text;
+        if(!urlnomvalid)
+        {
+            ((Layout)Master).toast("ALERT", "El nombre de acceso no esta disponible", 1, ClientScript);
+            return;
+        }
         try
         {
             Datos.updateCliente(cliente);
+            Session["cliente"] = cliente;
+            ((Layout)Master).toast("INFO", "Se guardo correctamente", 0,ClientScript);
         }
         catch (Exception)
         {
@@ -115,7 +127,21 @@ public partial class Opciones : System.Web.UI.Page
         }
         catch (Exception)
         {                        
-        }
+        }        
+    }
 
+    private void validarnom(string nom)
+    {
+        Cliente cliente = (Cliente)Session["cliente"];
+        if (nom.Trim() != "" && nom.Length > 3 && Datos.getCliente(nom) != null && txtcliid.Text != cliente.urlnom)
+        {
+            invaliddisplay = "display: block";
+            Session["urlnomvalid"] = false;
+        }
+        else
+        {
+            validdisplay = "display: block";
+            Session["urlnomvalid"] = true;
+        }
     }
 }

@@ -117,11 +117,23 @@ namespace Interfaz
         /// Inserta un nuevo empleado
         /// </summary>
         /// <param name="empleado">nuevo empleado</param>
-        public static void insertEmpleado(Empleado empleado)
+        public static bool insertEmpleado(Empleado empleado)
         {
             API api = new API(local);
             var t = Task.Run(() => api.post("empleados", empleado));
-            t.Wait();
+            try
+            {
+                t.Wait();
+                var r = t.Result;
+                if (t.Status == TaskStatus.RanToCompletion && r != null)
+                    return true;
+                else
+                    return false;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
         /// <summary>
         /// Obtiene todos los empleados
@@ -175,11 +187,23 @@ namespace Interfaz
         /// </summary>
         /// <param name="codemp">codigo empleado</param>
         /// <param name="empleado">objeto editado del empleado</param>
-        public static void updateEmpleado(Empleado empleado)
+        public static bool updateEmpleado(Empleado empleado)
         {
             API api = new API(local);
             var t = Task.Run(() => api.put("empleados", empleado));
-            t.Wait();
+            try
+            {
+                t.Wait();
+                var r = t.Result;
+                if (t.Status == TaskStatus.RanToCompletion && r != null)
+                    return true;
+                else
+                    return false;
+            }
+            catch (Exception)
+            {
+                return false;                
+            }
         }
         /// <summary>
         /// Desactiva un empleado
@@ -493,7 +517,7 @@ namespace Interfaz
         {
             API<UploadState> api = new API<UploadState>(local);
             Upload u = new Upload();
-            u.file = archivo;
+            u.file = Convert.ToBase64String(archivo);
             var task2 = Task.Run(() => api.post($"upload/captura/codprod/{codprod}/codcli/{codcli}",u));
             task2.Wait();
             return task2.Result;
@@ -509,7 +533,7 @@ namespace Interfaz
         {
             API<UploadState> api = new API<UploadState>(local);
             Upload u = new Upload();
-            u.file = archivo;
+            u.file = Convert.ToBase64String(archivo);
             var task2 = Task.Run(() => api.post($"upload/logo/codcli/{codcli}",u));
             task2.Wait();
             return task2.Result;
@@ -574,6 +598,62 @@ namespace Interfaz
             }
             return bytes;
         }
+        /// <summary>
+        /// Permite acceder a un reporte de horas laboradas
+        /// </summary>
+        /// <param name="codcli">cliente</param>
+        /// <param name="m">mes</param>
+        /// <param name="y">anio</param>
+        /// <returns></returns>
+        public async static Task<byte[]> reporteHoras(int codcli, int m, int y)
+        {
+            API api = new API(local);
+            Reporte rpt = new Reporte()
+            {
+                codcli = codcli,
+                m = m,
+                y = y
+            };
+            byte[] bytes;
+            try
+            {
+                bytes = await Task.Run(() => api.download($"reporteHoras.pdf", rpt) );
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+            return bytes;
+        }
+
+        /// <summary>
+        /// Permite acceder a un reporte de permisos
+        /// </summary>
+        /// <param name="codcli">cliente</param>
+        /// <param name="m">mes</param>
+        /// <param name="y">anio</param>
+        /// <returns></returns>
+        public async static Task<byte[]> reportePermisos(int codcli, int m, int y)
+        {
+            API api = new API(local);
+            Reporte rpt = new Reporte()
+            {
+                codcli = codcli,
+                m = m,
+                y = y
+            };
+            byte[] bytes;
+            try
+            {
+                bytes = await Task.Run(() => api.download($"reportePermisos.pdf", rpt));
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+            return bytes;
+        }
+
         /// <summary>
         /// Permite validar un usuario
         /// </summary>
@@ -646,7 +726,7 @@ namespace Interfaz
         private enum SizeUnits
         {
             Byte, KB, MB, GB, TB, PB, EB, ZB, YB
-        }
+        }                
         /// <summary>
         /// Convierte bites a un valor en base a su unidad
         /// </summary>
@@ -674,7 +754,16 @@ namespace Interfaz
         /// </summary>
         public class Upload
         {
-            public byte[] file { get; set; }
+            public string file { get; set; }
+        }
+        /// <summary>
+        /// Interfaz de consulta de reportes
+        /// </summary>
+        public class Reporte
+        {
+            public int codcli { get; set; }
+            public int m { get; set; }
+            public int y { get; set; }
         }
         /// <summary>
         /// Interfaz de consulta de tablas por filtro avanzado

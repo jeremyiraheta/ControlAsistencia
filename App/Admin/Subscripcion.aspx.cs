@@ -157,7 +157,7 @@ public partial class Subscripcion : System.Web.UI.Page
     {
         alerttitle.Text = titulo;
         alertmsg.Text = msg;
-        string script = "window.onload = function() { $('#alert').modal('show') }";
+        string script = "window.onload = function() { $('#alert').modal('show') }";        
         ClientScript.RegisterStartupScript(this.GetType(), "Alert", script, true);
     }
 }
