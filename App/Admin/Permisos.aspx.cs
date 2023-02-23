@@ -13,7 +13,7 @@ public partial class Permisos : System.Web.UI.Page
     protected void Page_Load(object sender, EventArgs e)
     {
         usuario = (Usuario)Session["usuario"];
-        if (!IsPostBack) txtfilter.Text = DateTime.Today.Year + "-" + DateTime.Today.Month;
+        if (!IsPostBack) txtfilter.Text = String.Format("{0}-{1:00}", DateTime.Today.Year, DateTime.Today.Month);
         switch(curstate.Value)
         {
             case "1":

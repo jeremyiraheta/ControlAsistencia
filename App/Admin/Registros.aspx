@@ -13,7 +13,7 @@
                     <asp:TableHeaderCell>DEPARTAMENTO</asp:TableHeaderCell>
                     <asp:TableHeaderCell>EMPLEADO</asp:TableHeaderCell>
                     <asp:TableHeaderCell>HORAS</asp:TableHeaderCell>                    
-                    <asp:TableHeaderCell><asp:Image ImageUrl="~/img/edit.svg" runat="server" Width="20px" Height="20px" /></asp:TableHeaderCell>
+                    <asp:TableHeaderCell><asp:Image ImageUrl="~/images/icons/edit.svg" runat="server" Width="20px" Height="20px" /></asp:TableHeaderCell>
                 </asp:TableHeaderRow>
             </asp:Table>
             

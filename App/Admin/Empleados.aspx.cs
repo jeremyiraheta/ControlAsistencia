@@ -19,15 +19,26 @@ public partial class Empleados : System.Web.UI.Page
     {
         usuario = (Usuario)Session["usuario"];
         if (usuario == null)
-            Response.Redirect("/Login");        
+            Response.Redirect("/Login");
+        int tmax = maxpages() * 10;
         if (Page.RouteData.Values.ContainsKey("page"))
         {
             cpage = int.Parse(Page.RouteData.Values["page"].ToString());  
             if(cpage > 9)
             {
-                minp = 10 * Convert.ToInt32(cpage / 10);
+                minp = 10 * Convert.ToInt32(cpage / 10);                
                 maxp = minp + 10;
+                if (maxp > tmax)
+                    maxp = tmax;
             }
+        }
+        else
+        {
+            minp = 1;
+            if (tmax > 9)
+                maxp = 9;
+            else
+                maxp = tmax;
         }
         var emps = Datos.listEmpleados(usuario.codcli, (cpage-1)*10);
         filltable(emps);
@@ -90,8 +101,24 @@ public partial class Empleados : System.Web.UI.Page
     protected void filtrar(object sender, ImageClickEventArgs e)
     {
         if (txtfilter.Text.Trim() == "") return;
-        var emps = Datos.filter<Empleado>("empleados", String.Format("concat_ws(' ', nombres, apellidos, correo, nacimiento, (SELECT nombre FROM departamentos d WHERE d.coddpto = empleados.coddpto)) LIKE '%{0}%' and estado = 'A'", txtfilter.Text));
+        var emps = Datos.filter<Empleado>("EMPLEADOS", String.Format("concat_ws(' ', NOMBRES, APELLIDOS, CORREO, NACIMIENTO, (SELECT NOMBRE FROM DEPARTAMENTOS d WHERE d.CODDPTO = EMPLEADOS.CODDPTO)) LIKE UPPER('%{0}%') and ACTIVO = 'true' and CODCLI = {1}", txtfilter.Text, usuario.codcli));
+        if (emps == null)
+            emps = new List<Empleado>();
         filltable(emps);
+    }    
+
+    private int maxpages()
+    {
+        try
+        {
+            var i = Datos.filter<object>("EMPLEADOS", "ACTIVO = 'true' and CODCLI = " + usuario.codcli, "COUNT(*)");
+            return Convert.ToInt32(i);
+        }
+        catch (Exception)
+        {
+            return 10;
+        }
+        
     }
 
     protected void guardar(object sender, EventArgs e)
@@ -140,13 +167,15 @@ public partial class Empleados : System.Web.UI.Page
                 ((Layout)Master).toast("INFO", "Se agrego el registro", 0, ClientScript);
            else
                 ((Layout)Master).toast("ERROR", "No se pudo agregar el registro", 2, ClientScript);
-        }        
+        }
+        filltable(Datos.listEmpleados(usuario.codcli, (cpage - 1) * 10));      
     }
     protected void desactivar(object sender, EventArgs e)
     {
         int cod = Convert.ToInt32(codemp.Value);
-        Datos.disableEmpleado(cod, 1);
-        Response.Redirect(Request.RawUrl);
+        Datos.disableEmpleado(cod, usuario.codcli);
+        filltable(Datos.listEmpleados(usuario.codcli, (cpage - 1) * 10));
+        ((Layout)Master).toast("INFO", "Se desactivo al empleado", 0, ClientScript);
     }
     public void editForm(Empleado emp)
     {

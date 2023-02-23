@@ -15,7 +15,7 @@
                  CdnSupportsSecureConnection = true,
                  LoadSuccessExpression = "jQuery"
              });        
-        Datos.apiLocal();
+        Datos.apiRemota();
         GlobalV.URLBASE = Datos.APIURL;        
         RegistrarRutas(RouteTable.Routes);
     }

@@ -107,6 +107,7 @@ public partial class Subscripcion : System.Web.UI.Page
             cliente.pais = country.Text;
             cliente.plan = plan;
             cliente.direccion = txtdir.Text;
+            cliente.invervalo = 60;
             Datos.insertCliente(cliente);
             cliente = Datos.getCliente(cliente.urlnom);
             if (cliente == null)
@@ -115,14 +116,14 @@ public partial class Subscripcion : System.Web.UI.Page
                 return;
             }
             Datos.insertDepartamento(cliente.codcli, "ADMIN");
-            List<Departamento> dptos = Datos.listDepartamentos(cliente.codcli);
+            var dptos = Datos.listDepartamentos(cliente.codcli);
             if(dptos == null || dptos.Count == 0)
             {
                 alert("ERROR", "No se pudo crear el departamento, intente mas tarde");
                 Datos.purgeCliente(cliente.codcli);
                 return;
             }
-            Empleado empleado = new Empleado();
+            var empleado = new Empleado();
             empleado.codcli = cliente.codcli;
             empleado.coddpto = dptos[0].coddpto;
             empleado.nombres = txtnom.Text;
@@ -131,6 +132,7 @@ public partial class Subscripcion : System.Web.UI.Page
             empleado.telefonos = txtnumcont.Text;
             empleado.usuario = txtusername.Text;
             empleado.password = txtpass.Text;
+            empleado.genero = "M";            
             empleado.nacimiento = nacimiento.ToString("dd-MM-yyyy");
             Datos.insertEmpleado(empleado);
             empleado = Datos.getEmpleado(empleado.usuario, cliente.codcli);

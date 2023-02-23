@@ -34,7 +34,7 @@ public static class GlobalV
         }
         return sb.ToString();
     }
-
+   
     public static string[] PAISES = {
        "Afganistán", "Albania", "Argelia", "Andorra", "Angola", "Antigua y Barbuda",
        "Argentina", "Armenia", "Australia", "Austria", "Azerbaiyán", "Bahamas",

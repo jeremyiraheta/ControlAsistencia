@@ -3,8 +3,8 @@
 
     <script>
         $(document).ready(function () {
-            $('#txtdui').mask('00000000-0');
-            $('#txtnit').mask('0000-000000-000-0');
+            $('#txtdui').inputmask('99999999-9');
+            $('#txtnit').inputmask('9999-999999-999-9');
             
         });
     </script>

@@ -104,11 +104,12 @@ namespace Interfaz
         /// <param name="table">nombre de la tabla</param>
         /// <param name="cond">condicion</param>
         /// <returns></returns>
-        public static List<T> filter<T>(string table, string cond)
+        public static List<T> filter<T>(string table, string cond, string fields = null)
         {
             API<List<T>> api = new API<List<T>>(local);
             Filter f = new Filter();
             f.query = cond;
+            f.fields = fields;
             var t = Task.Run(() => api.post("query/" + table, f));
             t.Wait();
             return t.Result;
@@ -771,6 +772,7 @@ namespace Interfaz
         private class Filter
         {
             public string query { get; set; }
+            public string fields { get; set; }
         }
     }
 }

@@ -12,9 +12,9 @@ public partial class Registros : System.Web.UI.Page
     Usuario usuario;
     protected void Page_Load(object sender, EventArgs e)
     {        
-        if (!IsPostBack) txtfilter.Text = DateTime.Today.Year + "-" + DateTime.Today.Month;
-        fillTable();
+        if (!IsPostBack) txtfilter.Text = String.Format("{0}-{1:00}", DateTime.Today.Year, DateTime.Today.Month);
         usuario = (Usuario)Session["usuario"];
+        fillTable();        
     }
 
     public void fillTable()

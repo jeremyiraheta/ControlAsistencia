@@ -28,7 +28,7 @@
                     <asp:TableHeaderCell>TIPO</asp:TableHeaderCell>
                     <asp:TableHeaderCell>INICIA</asp:TableHeaderCell>                    
                     <asp:TableHeaderCell>FINALIZA</asp:TableHeaderCell>                    
-                    <asp:TableHeaderCell><asp:Image ImageUrl="~/img/edit.svg" runat="server" Width="20px" Height="20px" /></asp:TableHeaderCell>
+                    <asp:TableHeaderCell><asp:Image ImageUrl="~/images/icons/edit.svg" runat="server" Width="20px" Height="20px" /></asp:TableHeaderCell>
                 </asp:TableHeaderRow>
             </asp:Table>
             
