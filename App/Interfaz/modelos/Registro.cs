@@ -7,7 +7,7 @@
         public string fecha { get; set; }
         public string horaentrada { get; set; }
         public string horasalida { get; set; }
-        public float total { get; set; }
+        public decimal total { get; set; }
         public Registro()
         {
 

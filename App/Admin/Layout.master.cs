@@ -12,15 +12,14 @@ public partial class Layout : System.Web.UI.MasterPage
     public Usuario usuario;
     public string msg;
     public string title;
-    public string icon;    
+    public string icon;        
     protected void Page_Load(object sender, EventArgs e)
     {
         if (!(Session.Count > 0 && Session["usuario"] != null))
             Response.Redirect("/Login");
         else
         {
-            usuario = (Usuario)Session["usuario"];
-            titulo = (string)ViewState["titulo"];
+            usuario = (Usuario)Session["usuario"];            
         }        
     }
     /// <summary>

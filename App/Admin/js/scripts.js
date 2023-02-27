@@ -69,3 +69,29 @@ function validateEmp()
     }
     return true;
 }
+
+function reporte() {
+    window.open("/Reporte.ashx", "Reporte", "width=1000, height=800")
+}
+//Funcion Inicializacion
+
+$(document).ready(function () {
+    var url = document.location.pathname.toLowerCase();
+    if (url.match(".empleados")) {
+        document.getElementById("mnempl").childNodes[0].classList.add("selected");
+    } else if (url.match(".admin")) {
+        document.getElementById("mndash").childNodes[0].classList.add("selected");
+    } else if (url.match(".departamentos")) {
+        document.getElementById("mndepto").childNodes[0].classList.add("selected");
+    } else if (url.match(".permisos")) {
+        document.getElementById("mnperm").childNodes[0].classList.add("selected");
+    } else if (url.match(".registros")) {
+        document.getElementById("mnreg").childNodes[0].classList.add("selected");
+    } else if (url.match(".productividad")) {
+        document.getElementById("mnprod").childNodes[0].classList.add("selected");
+    } else if (url.match(".opciones")) {
+        document.getElementById("mnopc").childNodes[0].classList.add("selected");
+    } else if (url.match(".clientes")) {
+        document.getElementById("mncli").childNodes[0].classList.add("selected");
+    }
+});

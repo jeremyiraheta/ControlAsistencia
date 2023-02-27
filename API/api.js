@@ -81,8 +81,8 @@ app.get("/EMPLEADOS/codcli/:codcli/p/:page", (req, res) => {
     })
 });
 //Obtiene listado de EMPLEADOS activos de un departamento
-app.get("/EMPLEADOS/codcli/:codcli/coddpto/:coddpto/p/:page", (req, res) => {    
-    var query = connection.query(`SELECT * FROM EMPLEADOS where activo = '${req.query.activo === undefined ? 'true' : req.query.activo}' and codcli = ${req.params.codcli} and coddpto = ${req.params.coddpto} limit ${req.params.page},${req.params.page+10}`, function(error, result){
+app.get("/EMPLEADOS/codcli/:codcli/coddpto/:coddpto", (req, res) => {    
+    var query = connection.query(`SELECT * FROM EMPLEADOS where activo = '${req.query.activo === undefined ? 'true' : req.query.activo}' and codcli = ${req.params.codcli} and coddpto = ${req.params.coddpto}`, function(error, result){
         if(error) console.log('[mysql error] : ', error)
         if(DEBUG)console.log(`get a EMPLEADOS`)
         res.send(result)
@@ -197,7 +197,7 @@ app.delete("/DEPARTAMENTOS/coddpto/:coddpto/codcli/:codcli", (req, res) => {
 
 //Obtiene listado de REGISTROS del control de asistencia
 app.get("/REGISTROS/codemp/:codemp/codcli/:codcli", (req, res) => {
-    var query = connection.query(`SELECT codemp,codcli,DATE_FORMAT(fecha,'%d/%m/%Y') fecha, horaentrada,horasalida FROM REGISTROS WHERE codemp = ${req.params.codemp} and codcli = ${req.params.codcli}`, function(error, result){
+    var query = connection.query(`SELECT codemp,codcli,DATE_FORMAT(fecha,'%d/%m/%Y') fecha, horaentrada,horasalida, total FROM REGISTROS WHERE codemp = ${req.params.codemp} and codcli = ${req.params.codcli}`, function(error, result){
         if(error) console.log('[mysql error] : ', error)
         if(DEBUG)console.log(`get a REGISTROS id = ${req.params.codemp}`)
         res.send(result)
@@ -206,7 +206,7 @@ app.get("/REGISTROS/codemp/:codemp/codcli/:codcli", (req, res) => {
 
 //Obtiene listado de REGISTROS del control de asistencia de un mes especifico
 app.get("/REGISTROS/codcli/:codcli/m/:m/y/:y", (req, res) => {
-    var query = connection.query(`SELECT e.CODEMP,e.codcli,DATE_FORMAT(r.FECHA,'%d/%m/%Y') fecha, r.HORAENTRADA, r.HORASALIDA FROM REGISTROS r LEFT JOIN EMPLEADOS e ON r.CODEMP = e.CODEMP AND YEAR(r.FECHA) = ${req.params.y} AND MONTH(r.FECHA) = ${req.params.m} WHERE e.activo = 'true' and e.codcli = ${req.params.codcli}`, function(error, result){
+    var query = connection.query(`SELECT e.CODEMP,e.codcli,DATE_FORMAT(r.FECHA,'%d/%m/%Y') fecha, r.HORAENTRADA, r.HORASALIDA, total FROM REGISTROS r LEFT JOIN EMPLEADOS e ON r.CODEMP = e.CODEMP AND YEAR(r.FECHA) = ${req.params.y} AND MONTH(r.FECHA) = ${req.params.m} WHERE e.activo = 'true' and e.codcli = ${req.params.codcli}`, function(error, result){
         if(error) console.log('[mysql error] : ', error)
         if(DEBUG)console.log(`get a REGISTROS mes = ${req.params.m}, anyo= ${req.params.y}`)
         res.send(result)
@@ -215,7 +215,7 @@ app.get("/REGISTROS/codcli/:codcli/m/:m/y/:y", (req, res) => {
 
 //Obtiene un registro del control de asistencia por codigo de empleado y fecha
 app.get("/REGISTROS/codemp/:codemp/codcli/:codcli/m/:m/y/:y", (req, res) => {
-    var query = connection.query(`SELECT codemp,codcli,DATE_FORMAT(fecha,'%d/%m/%Y') fecha,horaentrada,horasalida FROM REGISTROS WHERE YEAR(fecha) = ${req.params.y} and MONTH(fecha) = ${req.params.m} and codemp = ${req.params.codemp} and codcli = ${req.params.codcli}`, function(error, result){
+    var query = connection.query(`SELECT codemp,codcli,DATE_FORMAT(fecha,'%d/%m/%Y') fecha,horaentrada,horasalida, total FROM REGISTROS WHERE YEAR(fecha) = ${req.params.y} and MONTH(fecha) = ${req.params.m} and codemp = ${req.params.codemp} and codcli = ${req.params.codcli}`, function(error, result){
         if(error) console.log('[mysql error] : ', error)
         if(DEBUG)console.log(`get a REGISTROS de EMPLEADOS id = ${req.params.codemp}`)
         res.send(result)
@@ -674,7 +674,7 @@ app.post("/reporteHoras.pdf", (req, res) => {
         c.NOMBRE cliente, YEAR(r.FECHA) anio, MONTH(r.FECHA) mes FROM REGISTROS r LEFT JOIN EMPLEADOS e ON r.CODEMP = e.CODEMP 
         LEFT JOIN CLIENTES c on r.CODCLI = c.CODCLI
         LEFT JOIN DEPARTAMENTOS d on r.CODCLI = d.CODCLI AND e.CODDPTO = d.CODDPTO        
-        WHERE e.activo = 'true' and e.CODCLI = ${req.body.codcli} AND YEAR(r.FECHA) = '${req.body.y}' AND MONTH(r.FECHA) = '${req.body.m}'`, function(error, result){
+        WHERE e.activo = 'true' and e.CODCLI = ${req.body.codcli} AND YEAR(r.FECHA) = '${req.body.y}' AND MONTH(r.FECHA) = '${req.body.m}' ORDER BY horas asc`, function(error, result){
             if(error)
             {
                 console.log('[mysql error] : ', error)

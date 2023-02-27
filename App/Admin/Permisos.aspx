@@ -7,7 +7,7 @@
         <h3>Permisos</h3>
        <div style="float:right"><asp:TextBox TextMode="Month" ID="txtfilter" runat="server" AutoPostBack="true" OnTextChanged="txtfilter_TextChanged" /></div>  
        <asp:HiddenField ID="curstate" runat="server" Value="0" />      
-       <div class="row" style="padding:30px;">
+       <div class="row" style="padding:30px;"><input type="button" class="btn btn-toolbar btn-outline-primary" style="width:100px;margin-bottom: 19px;" value="Reporte" onclick="reporte()" />
             <ul class="nav nav-tabs">
                  <li class='nav-item'>
                     <span style='display:flex;'><asp:LinkButton ID="linkPend" CssClass="nav-link active" Text="Espera" runat="server" OnClick="linkPend_Click" /></span>

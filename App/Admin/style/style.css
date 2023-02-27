@@ -30,6 +30,7 @@ main .content {
   border-radius: 20px;  
   margin-top:10%;
   margin-left:10%;
+  overflow:auto;
 }
 main .helper span {
   color: rgba(0, 0, 0, 0.2);
@@ -114,8 +115,12 @@ main .helper span {
     text-decoration: none;
     color:white;
 }
+.selected{
+    border-right-style: outset;
+    box-shadow: 4px 4px 11px 1px black;
+}
 .menulink:hover{
-    color:white;
+    color:#2e88ab;
 }
 .menu-botton{
     position: fixed;    

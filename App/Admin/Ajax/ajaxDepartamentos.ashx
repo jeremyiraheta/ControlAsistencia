@@ -11,7 +11,7 @@ public class ajaxDepartamentos : IHttpHandler, System.Web.SessionState.IReadOnly
     public void ProcessRequest (HttpContext context) {
         Cliente cliente = (Cliente)context.Session["cliente"];
         var action = context.Request.QueryString["action"];
-        if (action == null) context.Response.Redirect("../Departamentos.aspx");
+        if (action == null) context.Response.Redirect("../Departamentos");
         int id = int.Parse(context.Request.QueryString["coddpto"]);
         int cli = cliente.codcli;        
         var resp = "";
@@ -25,13 +25,13 @@ public class ajaxDepartamentos : IHttpHandler, System.Web.SessionState.IReadOnly
                 catch (Exception)
                 {
                 }
-                context.Response.Redirect("../Departamentos.aspx");
+                context.Response.Redirect("../Departamentos");
                 break;
             case "select":
                 try
                 {                    
-                    var emp = Datos.listEmpleados( cli);
-                    foreach (var item in emp.Where(v => v.coddpto == id))
+                    var emp = Datos.listEmpleadosDpto( cli, id);
+                    foreach (var item in emp)
                         resp += String.Format("<tr><td>{0}</td><td>{1}</td><td>{2}</td></tr>", item.codemp,item.nombres,item.apellidos);
                 }
                 catch (Exception)

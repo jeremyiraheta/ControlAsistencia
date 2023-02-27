@@ -13,8 +13,16 @@ public partial class Permisos : System.Web.UI.Page
     protected void Page_Load(object sender, EventArgs e)
     {
         usuario = (Usuario)Session["usuario"];
-        if (!IsPostBack) txtfilter.Text = String.Format("{0}-{1:00}", DateTime.Today.Year, DateTime.Today.Month);
-        switch(curstate.Value)
+        if (!IsPostBack)
+        {
+            txtfilter.Text = String.Format("{0}-{1:00}", DateTime.Today.Year, DateTime.Today.Month);
+            Session["m"] = DateTime.Today.Month;
+            Session["y"] = DateTime.Today.Year;
+            Session["t"] = 1;
+        }
+        if (usuario == null)
+            Response.Redirect("/Login");
+        switch (curstate.Value)
         {
             case "1":
                 fillTable(Datos.ESTADO.APROBADO);
@@ -218,5 +226,10 @@ public partial class Permisos : System.Web.UI.Page
                 fillTable(Datos.ESTADO.RECHAZADO);
                 break;
         }
+        var period = txtfilter.Text;
+        int month = Convert.ToInt32(period.Substring(period.IndexOf("-") + 1));
+        int year = Convert.ToInt32(period.Substring(0, period.IndexOf("-")));
+        Session["m"] = month;
+        Session["y"] = year;
     }
 }

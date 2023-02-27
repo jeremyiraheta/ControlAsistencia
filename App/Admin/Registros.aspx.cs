@@ -12,8 +12,16 @@ public partial class Registros : System.Web.UI.Page
     Usuario usuario;
     protected void Page_Load(object sender, EventArgs e)
     {        
-        if (!IsPostBack) txtfilter.Text = String.Format("{0}-{1:00}", DateTime.Today.Year, DateTime.Today.Month);
+        if (!IsPostBack)
+        {
+            txtfilter.Text = String.Format("{0}-{1:00}", DateTime.Today.Year, DateTime.Today.Month);
+            Session["m"] = DateTime.Today.Month;
+            Session["y"] = DateTime.Today.Year;
+            Session["t"] = 0;
+        }
         usuario = (Usuario)Session["usuario"];
+        if (usuario == null)
+            Response.Redirect("/Login");
         fillTable();        
     }
 
@@ -31,9 +39,9 @@ public partial class Registros : System.Web.UI.Page
             var emp = empleados.Where(e => e.codemp == item.codemp).First();
             var dpto = departamentos.Where(d => d.coddpto == emp.coddpto).First();                                             
             if (!horas.Keys.Contains(item.codemp))
-                horas.Add(emp.codemp, new Reg() { codemp = emp.codemp, departamento = dpto.nombre, empleado = emp.nombres + " " + emp.apellidos, horas = Convert.ToDecimal(calcHours(item.horaentrada, item.horasalida)) });
+                horas.Add(emp.codemp, new Reg() { codemp = emp.codemp, departamento = dpto.nombre, empleado = emp.nombres + " " + emp.apellidos, horas = item.total });
             else
-                horas[item.codemp].horas += Convert.ToDecimal(calcHours(item.horaentrada, item.horasalida));
+                horas[item.codemp].horas += item.total;
         }
         var sort = from e in horas orderby e.Value.horas ascending select e;
         var head = tblreg.Rows[0];
@@ -77,7 +85,7 @@ public partial class Registros : System.Web.UI.Page
             TableCell tchf = new TableCell();
             tchf.Controls.Add(new TextBox() { TextMode = TextBoxMode.Time, Text = item.horasalida.Substring(0,5), ReadOnly = true, CssClass = "control-hide-gray" });
             row.Cells.Add(tchf);
-            row.Cells.Add(new TableCell() { Text = calcHours(item.horaentrada, item.horasalida) });
+            row.Cells.Add(new TableCell() { Text = item.total.ToString() });
             tbldet.Rows.Add(row);            
         }        
         ScriptManager.RegisterStartupScript(Page, Page.GetType(), "detReg", "new bootstrap.Modal(document.getElementById('detReg'), { keyboard:false}).show()", true);
@@ -113,5 +121,10 @@ public partial class Registros : System.Web.UI.Page
     protected void txtfilter_TextChanged(object sender, EventArgs e)
     {
         fillTable();
+        var period = txtfilter.Text;
+        int month = Convert.ToInt32(period.Substring(period.IndexOf("-") + 1));
+        int year = Convert.ToInt32(period.Substring(0, period.IndexOf("-")));
+        Session["m"] = month;
+        Session["y"] = year;
     }
 }

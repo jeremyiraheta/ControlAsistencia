@@ -19,14 +19,17 @@ public partial class Departamentos : System.Web.UI.Page
         if (usuario == null)
             Response.Redirect("/Login");
         var dpts = Datos.listDepartamentos(usuario.codcli);
-        var emp = Datos.listEmpleados(usuario.codcli);
+        var emp = Datos.listEmpleadosDpto(usuario.codcli,dpts.First().coddpto);
         ltabs.Text = String.Format(tabdp, dpts.First().nombre.ToUpper(), "active", dpts.First().coddpto, "display:none;");
         tbldpto.Text = "";        
         foreach (var itm in emp.Where(v => v.coddpto == dpts.First().coddpto))
             tbldpto.Text += String.Format("<tr><td>{0}</td><td>{1}</td><td>{2}</td><tr>\n", itm.codemp, itm.nombres, itm.apellidos);
         dpts.RemoveAt(0);
         foreach (var item in dpts)
-            ltabs.Text += String.Format(tabdp, item.nombre.ToUpper(), "", item.coddpto,emp.Where(v => v.coddpto == item.coddpto).Count() > 0 ? "display:none;" : "" );
+        {
+            var temp = Datos.filter<Datos.Counter>("EMPLEADOS", string.Format("codcli = {0} and coddpto = {1}", item.codcli, item.coddpto), "COUNT(*) count");            
+            ltabs.Text += string.Format(tabdp, item.nombre.ToUpper(), "", item.coddpto, (temp[0].count > 0) ? "display:none;" : "");
+        }
     }
 
     protected void btnAdd_Click(object sender, EventArgs e)

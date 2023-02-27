@@ -115,14 +115,14 @@
                     </div>
               </div>              
                 <div class="col-md-4 mb-3" >
-                    <label for="chkpant" style="form-control">Intervalo de captura (minutos)</label>                    
+                    <label for="chkpant" style="form-control">Intervalo de captura pantalla y productividad (minutos)</label>                    
                     <asp:TextBox ID="txtint" ClientIDMode="Static" CssClass="form-control" MaxLength="4" TextMode="Number" runat="server" title="Seleccione cada cuanto se intentara capturar información de productividad" max="1440" min="5"/>
                     <asp:RangeValidator runat="server" ControlToValidate="txtint" ErrorMessage="El rango de valores es 5-1440" Type="Integer" MinimumValue="5" MaximumValue="1440" ForeColor="Red" />
                     
                 </div> 
                 <div class="col-md-4 mb-3" >
-                    <label for="chkpant" style="form-control">Probabilidad de captura (%)</label>                    
-                    <asp:TextBox ID="txtprob" ClientIDMode="Static" CssClass="form-control" MaxLength="6" TextMode="Number" step="0.10" runat="server" title="Seleccione la propablidad de capturar productividad" max="100.00" min="0.0" />
+                    <label for="chkpant" style="form-control">Probabilidad de captura pantalla y productividad (%)</label>                    
+                    <asp:TextBox ID="txtprob" ClientIDMode="Static" CssClass="form-control" MaxLength="6" TextMode="Number" step="0.10" runat="server" title="Seleccione la probabilidad de capturar productividad" max="100.00" min="0.0" />
                     <asp:RangeValidator runat="server" ControlToValidate="txtprob" ErrorMessage="El rango de valores es 0-100" Type="Double" MinimumValue="0" MaximumValue="100" ForeColor="Red" />
                     
                 </div>                

@@ -151,10 +151,10 @@ namespace Interfaz
         /// Obtiene todos los empleados de un departamento
         /// </summary>
         /// <returns>Listado de empleados</returns>
-        public static List<Empleado> listEmpleadosDpto(int codcli, int coddpto, int pagina = 0,bool activo = true)
+        public static List<Empleado> listEmpleadosDpto(int codcli, int coddpto,bool activo = true)
         {
             API<List<Empleado>> api = new API<List<Empleado>>(local);
-            var t = Task.Run(() => api.get($"empleados/codcli/{codcli}/coddpto({coddpto}/p/{pagina}?activo={activo}"));
+            var t = Task.Run(() => api.get($"empleados/codcli/{codcli}/coddpto/{coddpto}?activo={activo}"));
             t.Wait();
             return t.Result;
         }
@@ -443,13 +443,14 @@ namespace Interfaz
         /// </summary>
         /// <param name="pagina">no pagina</param>
         /// <returns></returns>
-        public static List<Cliente> getClientes(int pagina=0)
+        public static List<Cliente> listClientes(bool activo, int pagina=0)
         {
             API<List<Cliente>> api = new API<List<Cliente>>(local);
-            var t = Task.Run(() => api.get($"clientes/p/{pagina}"));
+            var t = Task.Run(() => api.get($"clientes/p/{pagina}?activo={activo.ToString()}"));
             t.Wait();
             return t.Result;
         }
+        
         /// <summary>
         /// Ingresa un registro de cliente
         /// </summary>
@@ -773,6 +774,11 @@ namespace Interfaz
         {
             public string query { get; set; }
             public string fields { get; set; }
+        }
+
+        public class Counter
+        {
+            public int count { get; set; }
         }
     }
 }

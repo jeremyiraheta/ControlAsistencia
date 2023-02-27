@@ -2,9 +2,11 @@
 
 using System;
 using System.Web;
+using System.Threading.Tasks;
 using Interfaz;
+using Interfaz.modelos;
 
-public class Reporte : IHttpHandler {
+public class Reporte : IHttpHandler, System.Web.SessionState.IReadOnlySessionState {
 
     public void ProcessRequest (HttpContext context) {
         int codcli = 0;
@@ -14,14 +16,15 @@ public class Reporte : IHttpHandler {
         byte[] bytes;
         try
         {
-            codcli = int.Parse(context.Request.Params["id"]);
-            m = int.Parse(context.Request.Params["m"]);
-            y = int.Parse(context.Request.Params["y"]);
-            t = int.Parse(context.Request.Params["t"]);
+            Cliente c = (Cliente)context.Session["cliente"];
+            codcli = c.codcli;
+            m = int.Parse(context.Session["m"].ToString());
+            y = int.Parse(context.Session["y"].ToString());
+            t = int.Parse(context.Session["t"].ToString());
             if (t == 0)
-                bytes = Datos.reporteHoras(codcli, m, y).Result;
+                bytes = Task.Run(() => Datos.reporteHoras(codcli,m,y)).Result;
             else
-                bytes = Datos.reportePermisos(codcli, m, y).Result;
+                bytes = Task.Run(() => Datos.reportePermisos(codcli, m, y)).Result;
             if (bytes == null || bytes.Length == 0)
                 throw new Exception("Api devolvio vacio");
         }
@@ -32,7 +35,8 @@ public class Reporte : IHttpHandler {
             return;
         }
         context.Response.ContentType = "application/pdf";
-        context.Response.Write(bytes);
+        context.Response.AddHeader("Content-Disposition", "inline; name=\"ReporteHoras\"; filename=\"ReporteHoras.pdf\"");
+        context.Response.BinaryWrite(bytes);
     }
 
     public bool IsReusable {

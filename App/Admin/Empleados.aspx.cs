@@ -20,7 +20,12 @@ public partial class Empleados : System.Web.UI.Page
         usuario = (Usuario)Session["usuario"];
         if (usuario == null)
             Response.Redirect("/Login");
-        int tmax = maxpages() * 10;
+        int tmax = maxpages()+1;
+        minp = 1;
+        if (tmax > 9)
+            maxp = 9;
+        else
+            maxp = tmax;
         if (Page.RouteData.Values.ContainsKey("page"))
         {
             cpage = int.Parse(Page.RouteData.Values["page"].ToString());  
@@ -31,15 +36,7 @@ public partial class Empleados : System.Web.UI.Page
                 if (maxp > tmax)
                     maxp = tmax;
             }
-        }
-        else
-        {
-            minp = 1;
-            if (tmax > 9)
-                maxp = 9;
-            else
-                maxp = tmax;
-        }
+        }        
         var emps = Datos.listEmpleados(usuario.codcli, (cpage-1)*10);
         filltable(emps);
         var dptos = Datos.listDepartamentos(usuario.codcli);
@@ -111,8 +108,9 @@ public partial class Empleados : System.Web.UI.Page
     {
         try
         {
-            var i = Datos.filter<object>("EMPLEADOS", "ACTIVO = 'true' and CODCLI = " + usuario.codcli, "COUNT(*)");
-            return Convert.ToInt32(i);
+            List<Datos.Counter> i = Datos.filter<Datos.Counter>("EMPLEADOS", "ACTIVO = 'true' and CODCLI = " + usuario.codcli, "COUNT(*) count");
+            int numero = i[0].count;                
+            return (int)Math.Ceiling(numero / 10.0);
         }
         catch (Exception)
         {

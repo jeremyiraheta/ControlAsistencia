@@ -6,7 +6,7 @@
     <div class="content ">
         <h3>Registros</h3>
        <div style="float:right"><asp:TextBox TextMode="Month" ID="txtfilter" runat="server" AutoPostBack="true" OnTextChanged="txtfilter_TextChanged" /></div>    
-        <div class="row" style="padding:30px;"></div>   
+        <div class="row" style="padding:30px;"><input type="button" class="btn btn-toolbar btn-outline-primary" style="width:100px;" value="Reporte" onclick="reporte()" /></div>   
         <div class="row">
             <asp:Table ID="tblreg" CssClass="table table-dark table-hover" runat="server" >
                 <asp:TableHeaderRow runat="server">

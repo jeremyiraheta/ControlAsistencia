@@ -1,6 +1,6 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Layout.master" AutoEventWireup="true" CodeFile="Empleados.aspx.cs" Inherits="Empleados" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
-
+    <title>Shuseki - Empleados</title>
     <script>
         $(document).ready(function () {
             $('#txtdui').inputmask('99999999-9');
