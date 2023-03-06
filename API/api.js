@@ -224,7 +224,7 @@ app.get("/REGISTROS/codemp/:codemp/codcli/:codcli/m/:m/y/:y", (req, res) => {
 
 //crea un registro de un empleado
 app.post("/REGISTROS/codemp/:codemp/codcli/:codcli", (req, res) => {
-    var query = connection.query(`INSERT INTO REGISTROS(fecha, horaentrada, horasalida, codemp, codcli) values( CURDATE(), TIME(NOW()), TIME(NOW()), ${req.params.codemp}, ${req.params.codcli})`, function(error, result){
+    var query = connection.query(`INSERT INTO REGISTROS(fecha, horaentrada, horasalida, codemp, codcli, total) values( CURDATE(), TIME(NOW()), TIME(NOW()), ${req.params.codemp}, ${req.params.codcli}, 0)`, function(error, result){
         if(error && error.errno != 1062) console.log('[mysql error] : ', error)
         if(DEBUG)console.log(`post tick a REGISTROS`)
         res.send(result)
@@ -233,7 +233,7 @@ app.post("/REGISTROS/codemp/:codemp/codcli/:codcli", (req, res) => {
 
 //Genera un tick de hora de salida en el registro del control de asistencia por codigo de empleado
 app.put("/REGISTROS/codemp/:codemp/codcli/:codcli", (req, res) => {
-    var query = connection.query(`UPDATE REGISTROS SET horasalida = TIME(NOW()) where codemp = ${req.params.codemp} and codcli = ${req.params.codcli} and fecha = CURDATE()`
+    var query = connection.query(`UPDATE REGISTROS SET horasalida = TIME(NOW()), total = total+1 where codemp = ${req.params.codemp} and codcli = ${req.params.codcli} and fecha = CURDATE()`
         , function(error, result){
         if(error) console.log('[mysql error] : ', error)
         if(DEBUG)console.log(`put tick a REGISTROS id = ${req.params.codemp}`)
