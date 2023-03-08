@@ -7,9 +7,9 @@ const Handlebars = require('handlebars');
 const connection = mysql.createConnection({
    host: mysqlhost,
    user: 'root',
-   password: '',
+   password: 'brandom',
    database: 'Control',
-   port: 3306
+   port: 3316
 });
 connection.connect(function(error){
    if(error){
@@ -75,6 +75,13 @@ app.get("/", (req, res) => {
 //Obtiene listado de EMPLEADOS
 app.get("/EMPLEADOS/codcli/:codcli/p/:page", (req, res) => {    
     var query = connection.query(`SELECT * FROM EMPLEADOS where activo = '${req.query.activo === undefined ? 'true' : req.query.activo}' and codcli = ${req.params.codcli} order by codemp limit ${req.params.page},${req.params.page+10}`, function(error, result){
+        if(error) console.log('[mysql error] : ', error)
+        if(DEBUG)console.log(`get a EMPLEADOS`)
+        res.send(result)
+    })
+});
+app.get("/EMPLEADOS/codcli/:codcli", (req, res) => {    
+    var query = connection.query(`SELECT * FROM EMPLEADOS where activo = '${req.query.activo === undefined ? 'true' : req.query.activo}' and codcli = ${req.params.codcli} order by codemp`, function(error, result){
         if(error) console.log('[mysql error] : ', error)
         if(DEBUG)console.log(`get a EMPLEADOS`)
         res.send(result)
