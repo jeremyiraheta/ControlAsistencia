@@ -255,7 +255,7 @@ app.get("/PERMISOS/codemp/:codemp/codcli/:codcli", (req, res) => {
         if(DEBUG)console.log(`get a PERMISOS codemp = ${req.params.codemp}`)
         try {
             for (let i = 0; i < result.length; i++) {
-                if (fs.existsSync( path.join(__dirname, "public", "permisos", result[i].CODCLI, result[i].codper + ".zip"))) {
+                if (fs.existsSync( path.join(__dirname, "public", "permisos", result[i].CODCLI, result[i].CODPER + ".zip"))) {
                     result[i].attch = true;
                 }
             }
@@ -273,7 +273,7 @@ app.get("/PERMISOS/codcli/:codcli/m/:m/y/:y", (req, res) => {
         if(DEBUG)console.log(`get a PERMISOS mes=${req.params.m}, anyo=${req.params.y}`)
         try {
             for (let i = 0; i < result.length; i++) {
-                if (fs.existsSync( path.join(__dirname, "public", "permisos", result[i].CODCLI, result[i].codper + ".zip"))) {
+                if (fs.existsSync( path.join(__dirname, "public", "permisos", result[i].CODCLI, result[i].CODPER + ".zip"))) {
                     result[i].attch = true;
                 }
             }
@@ -291,7 +291,7 @@ app.get("/PERMISOS/codper/:codper/codcli/:codcli", (req, res) => {
         if(DEBUG)console.log(`get a PERMISOS id = ${req.params.codper}`)
         try {
             for (let i = 0; i < result.length; i++) {
-                if (fs.existsSync( path.join(__dirname, "public", "permisos", result[i].CODCLI, result[i].codper + ".zip"))) {
+                if (fs.existsSync( path.join(__dirname, "public", "permisos", result[i].CODCLI, result[i].CODPER + ".zip"))) {
                     result[i].attch = true;
                 }
             }
@@ -376,7 +376,7 @@ app.get("/PRODUCTIVIDAD/codemp/:codemp/codcli/:codcli/fechaini/:fechaini/fechafi
         if(DEBUG)console.log(`get a PRODUCTIVIDAD id = ${req.params.codemp}`) 
         try {
             for (let i = 0; i < result.length; i++) {
-                if (fs.existsSync( path.join(__dirname, "public", "screenshots", result[i].CODCLI, result[i].codprod + ".webp"))) {
+                if (fs.existsSync( path.join(__dirname, "public", "screenshots", result[i].CODCLI, result[i].CODPROD + ".webp"))) {
                     result[i].attch = true;
                 }
             }
