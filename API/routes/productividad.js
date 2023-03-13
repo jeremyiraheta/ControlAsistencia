@@ -42,7 +42,7 @@ router.get("/PRODUCTIVIDAD/codemp/:codemp/codcli/:codcli/fechaini/:fechaini/fech
         if(DEBUG)console.log(`get a PRODUCTIVIDAD id = ${req.params.codemp}`) 
         try {
             for (let i = 0; i < result.length; i++) {
-                if (fs.existsSync( path.join(__dirname, "public", "screenshots", result[i].CODCLI.toString(), result[i].CODPROD.toString() + ".webp"))) {
+                if (fs.existsSync( path.join(__dirname, "..", "public", "screenshots", result[i].CODCLI.toString(), result[i].CODPROD.toString() + ".webp"))) {
                     result[i].attch = true;
                 }
             }

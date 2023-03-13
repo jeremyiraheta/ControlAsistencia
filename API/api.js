@@ -18,7 +18,7 @@ var app = express();
 function authentication(req, res, next) {
     var authheader = req.headers.authorization; 
     
-    if(req.path == '/' || req.path.startsWith('/app/')){              
+    if(req.path == '/' || req.path.startsWith('/app')){              
         return next();//si admite acceder sin loguear al endpoint raiz
     }        
     

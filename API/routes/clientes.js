@@ -52,7 +52,7 @@ router.get("/CLIENTES/codcli/:codcli", (req, res) => {
         if(DEBUG)console.log(`get a CLIENTES id = ${req.params.codcli}`)    
         try {
             for (let i = 0; i < result.length; i++) {
-                if (fs.existsSync( path.join(__dirname, "public", "logos", result[i].CODCLI.toString() + ".webp"))) {
+                if (fs.existsSync( path.join(__dirname, "..", "public", "logos", result[i].CODCLI.toString() + ".webp"))) {
                     result[i].attch = true;
                 }
             }
@@ -70,7 +70,7 @@ router.get("/CLIENTES/p/:page", (req, res) => {
         if(DEBUG)console.log(`get a CLIENTES page = ${req.params.page}`)           
         try {
             for (let i = 0; i < result.length; i++) {
-                if (fs.existsSync( path.join(__dirname, "public", "logos", result[i].CODCLI.toString() + ".webp"))) {
+                if (fs.existsSync( path.join(__dirname, "..", "public", "logos", result[i].CODCLI.toString() + ".webp"))) {
                     result[i].attch = true;
                 }
             }
@@ -88,7 +88,7 @@ router.get("/CLIENTES/urlnom/:urlnom", (req, res) => {
         if(DEBUG)console.log(`get a CLIENTES id = ${req.params.urlnom}`)    
         try {
             for (let i = 0; i < result.length; i++) {
-                if (fs.existsSync( path.join(__dirname, "public", "logos", result[i].CODCLI.toString() + ".webp"))) {
+                if (fs.existsSync( path.join(__dirname, "..", "public", "logos", result[i].CODCLI.toString() + ".webp"))) {
                     result[i].attch = true;
                 }
             }

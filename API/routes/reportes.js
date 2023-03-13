@@ -13,7 +13,7 @@ router.post("/reporteHoras.pdf", (req, res) => {
         if(req.body.codcli == undefined)
             throw Error("La peticion no tiene parametros validos");
         if(DEBUG) console.log("get reporte horas codcli = " + req.body.codcli);
-        var html = fs.readFileSync( path.join(__dirname, "templates","reporteHoras.html"), "utf8");
+        var html = fs.readFileSync( path.join(__dirname, "..", "templates","reporteHoras.html"), "utf8");
         var options = {
             format: "A4",
             orientation: "landscape",
@@ -76,7 +76,7 @@ router.post("/reportePermisos.pdf", (req, res) => {
         if(req.body.codcli == undefined)
             throw Error("La peticion no tiene parametros validos");
         if(DEBUG) console.log("get reporte permisos codcli = " + req.body.codcli);
-        var html = fs.readFileSync( path.join(__dirname, "templates","reportePermisos.html"), "utf8");
+        var html = fs.readFileSync( path.join(__dirname, "..", "templates","reportePermisos.html"), "utf8");
         var options = {
             format: "A4",
             orientation: "landscape",

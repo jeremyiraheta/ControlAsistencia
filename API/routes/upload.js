@@ -16,7 +16,7 @@ router.post("/upload/permiso/codper/:codper/codcli/:codcli", async (req, res) =>
         } else {
             let file = req.files.attch;
             let ext = file.name.substring(file.name.lastIndexOf("."));            
-            let dir = path.join(__dirname, "public", "permisos", req.params.codcli, req.params.codper + ext);
+            let dir = path.join(__dirname, "..", "public", "permisos", req.params.codcli, req.params.codper + ext);
             if(ext.toLowerCase() == ".zip")
             {
                 file.mv(dir);            
@@ -49,7 +49,7 @@ router.post("/upload/captura/codprod/:codprod/codcli/:codcli", async (req, res) 
             })
         }else{
             let file = req.body.file                       
-            let dir = path.join(__dirname, "public", "screenshots", req.params.codcli, req.params.codprod + ".webp");
+            let dir = path.join(__dirname, "..", "public", "screenshots", req.params.codcli, req.params.codprod + ".webp");
             fs.writeFile(dir, Buffer.from(file, 'base64'), 'binary', (err) => {
                 if(err)
                     res.status(500).send({
@@ -81,7 +81,7 @@ router.post("/upload/logo/codcli/:codcli", async (req, res) => {
             })
         }else{
             let file = req.body.file                       
-            let dir = path.join(__dirname, "public", "logos", req.params.codcli + ".webp");
+            let dir = path.join(__dirname, "..", "public", "logos", req.params.codcli + ".webp");
             fs.writeFile(dir, Buffer.from(file, 'base64'), 'binary', (err) => {
                 if(err)
                     res.status(500).send({

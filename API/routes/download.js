@@ -9,7 +9,7 @@ const DEBUG = process.env.DEBUG || true;
 router.get("/download/permiso/codper/:codper/codcli/:codcli", async (req, res) => {
     try {
         var options = {
-            root: path.join(__dirname, "public", "permisos", req.params.codcli)
+            root: path.join(__dirname, "..", "public", "permisos", req.params.codcli)
         };        
         res.sendFile(`${req.params.codper}.zip`, options, (err) => {
             if(err)
@@ -23,7 +23,7 @@ router.get("/download/permiso/codper/:codper/codcli/:codcli", async (req, res) =
 router.get("/img/captura/codprod/:codprod/codcli/:codcli", async (req, res) => {
     try {
         var options = {
-            root: path.join(__dirname, "public", "screenshots", req.params.codcli)
+            root: path.join(__dirname, "..", "public", "screenshots", req.params.codcli)
         };   
         if(fs.existsSync(path.join(options.root, `${req.params.codprod}.webp`)))     
             res.sendFile(`${req.params.codprod}.webp`, options, (err) => {
@@ -40,7 +40,7 @@ router.get("/img/captura/codprod/:codprod/codcli/:codcli", async (req, res) => {
 router.get("/img/logo/codcli/:codcli", async (req, res) => {
     try {
         var options = {
-            root: path.join(__dirname, "public", "logos")
+            root: path.join( __dirname, "..","public", "logos")
         };  
         if(fs.existsSync(path.join(options.root, `${req.params.codcli}.webp`)))      
             res.sendFile(`${req.params.codcli}.webp`, options, (err) => {
@@ -53,3 +53,5 @@ router.get("/img/logo/codcli/:codcli", async (req, res) => {
         res.status(500).send(error);
     }
 });
+
+module.exports = router;

@@ -12,7 +12,7 @@ router.get("/PERMISOS/codemp/:codemp/codcli/:codcli", (req, res) => {
         if(DEBUG)console.log(`get a PERMISOS codemp = ${req.params.codemp}`)
         try {
             for (let i = 0; i < result.length; i++) {
-                if (fs.existsSync( path.join(__dirname, "public", "permisos", result[i].codcli.toString(), result[i].codper.toString() + ".zip"))) {
+                if (fs.existsSync( path.join(__dirname, "..", "public", "permisos", result[i].codcli.toString(), result[i].codper.toString() + ".zip"))) {
                     result[i].attch = true;
                 }
             }
@@ -30,7 +30,7 @@ router.get("/PERMISOS/codcli/:codcli/m/:m/y/:y", (req, res) => {
         if(DEBUG)console.log(`get a PERMISOS mes=${req.params.m}, anyo=${req.params.y}`)
         try {
             for (let i = 0; i < result.length; i++) {
-                if (fs.existsSync( path.join(__dirname, "public", "permisos", result[i].codcli.toString(), result[i].codper.toString() + ".zip"))) {
+                if (fs.existsSync( path.join(__dirname, "..", "public", "permisos", result[i].codcli.toString(), result[i].codper.toString() + ".zip"))) {
                     result[i].attch = true;
                 }
             }
@@ -48,7 +48,7 @@ router.get("/PERMISOS/codper/:codper/codcli/:codcli", (req, res) => {
         if(DEBUG)console.log(`get a PERMISOS id = ${req.params.codper}`)
         try {
             for (let i = 0; i < result.length; i++) {
-                if (fs.existsSync( path.join(__dirname, "public", "permisos", result[i].codcli.toString(), result[i].codper.toString() + ".zip"))) {
+                if (fs.existsSync( path.join(__dirname, "..", "public", "permisos", result[i].codcli.toString(), result[i].codper.toString() + ".zip"))) {
                     result[i].attch = true;
                 }
             }
