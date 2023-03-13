@@ -1,7 +1,7 @@
 
 const express = require('express');
-const fileUpload = require('express-fileupload');
 const path = require('path');
+const fileUpload = require('express-fileupload');
 const connection = require('./mysql.js');
 const departamentos = require('./routes/departamentos.js');
 const clientes = require('./routes/clientes.js');
@@ -55,7 +55,7 @@ app.use(fileUpload({
     limits: { 
         fileSize: 20 * 1024 * 1024 //20MB max
     }
-}));
+}), upload);
 app.use('/app', express.static(path.join(__dirname,  'Instalador')));
 app.use('/api', departamentos, clientes, download, empleados, permisos, productividad, registros, reportes, upload);
 

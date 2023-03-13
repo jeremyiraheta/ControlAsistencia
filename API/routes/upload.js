@@ -42,25 +42,18 @@ router.post("/upload/permiso/codper/:codper/codcli/:codcli", async (req, res) =>
 router.post("/upload/captura/codprod/:codprod/codcli/:codcli", async (req, res) => {
     try {
         if(DEBUG) console.log("post captura codcli = " + req.params.codcli);
-        if(req.body.file === undefined){
-            res.status(500).send({
+        if(!req.files) {
+            res.send({
                 status: false,
-                message: 'No se envio nada que procesar'
-            })
-        }else{
-            let file = req.body.file                       
+                message: 'No se pudo subir el archivo'
+            });
+        } else {
+            let file = req.files.attch;                       
             let dir = path.join(__dirname, "..", "public", "screenshots", req.params.codcli, req.params.codprod + ".webp");
-            fs.writeFile(dir, Buffer.from(file, 'base64'), 'binary', (err) => {
-                if(err)
-                    res.status(500).send({
-                        status: false,
-                        message: 'Ocurrio un error al escribir el archivo'
-                    })
-                else
-                    res.send({
-                        status: true,
-                        message: 'Captura subida'
-                    });
+            file.mv(dir);            
+            res.send({
+                status: true,
+                message: 'Archivo subido correctamente'                
             });            
         }            
     } catch (err) {
@@ -74,26 +67,19 @@ router.post("/upload/captura/codprod/:codprod/codcli/:codcli", async (req, res) 
 router.post("/upload/logo/codcli/:codcli", async (req, res) => {
     try {
         if(DEBUG) console.log("post logo codcli = " + req.params.codcli);
-        if(req.body.file === undefined){
-            res.status(500).send({
+        if(!req.files) {
+            res.send({
                 status: false,
-                message: 'No se envio nada que procesar'
-            })
-        }else{
-            let file = req.body.file                       
+                message: 'No se pudo subir el archivo'
+            });
+        } else {
+            let file = req.files.attch;                       
             let dir = path.join(__dirname, "..", "public", "logos", req.params.codcli + ".webp");
-            fs.writeFile(dir, Buffer.from(file, 'base64'), 'binary', (err) => {
-                if(err)
-                    res.status(500).send({
-                        status: false,
-                        message: 'Ocurrio un error al escribir el archivo'
-                    })
-                else
-                    res.send({
-                        status: true,
-                        message: 'Logo subido'
-                    });
-            });            
+            file.mv(dir);            
+            res.send({
+                status: true,
+                message: 'Archivo subido correctamente'                
+            });           
         }            
     } catch (err) {
         res.status(500).send({
