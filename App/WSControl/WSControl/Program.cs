@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Interfaz;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceProcess;
@@ -17,7 +18,8 @@ namespace WSControl
         [STAThread]
         static void Main(string[] args)
         {
-            Microsoft.Win32.Registry.CurrentUser.OpenSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Run", true).SetValue("WSControl", System.Reflection.Assembly.GetExecutingAssembly().Location);      
+            Microsoft.Win32.Registry.CurrentUser.OpenSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Run", true).SetValue("WSControl", System.Reflection.Assembly.GetExecutingAssembly().Location);
+            Datos.apiRemota();
             if (Environment.UserInteractive)
             {
                 ControlService test = new ControlService();                

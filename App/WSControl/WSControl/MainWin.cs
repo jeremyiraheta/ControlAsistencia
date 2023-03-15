@@ -8,7 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Net.Http;
-using WSControl.modelos;
+using Interfaz;
+using Interfaz.modelos;
 
 
 namespace WSControl
@@ -16,24 +17,14 @@ namespace WSControl
     /// <summary>
     /// Ventana que permite gestionar los permisos del empleado logueado
     /// </summary>
-<<<<<<< HEAD:App/WSControl/WSControl/Main.cs
-    public partial class Main : Form
-    {
-        private static readonly Main singleton = new Main();
-=======
     public partial class MainWin : Form
     {
         private static readonly MainWin singleton = new MainWin();
->>>>>>> 2d583b6e9ca23c55042b92d8ac341b8ad1d2ffee:App/WSControl/WSControl/MainWin.cs
 
         /// <summary>
         /// La ventana solo tendra una instancia activa, clase singleton
         /// </summary>
-<<<<<<< HEAD:App/WSControl/WSControl/Main.cs
-        public static Main Instance
-=======
         public static MainWin Instance
->>>>>>> 2d583b6e9ca23c55042b92d8ac341b8ad1d2ffee:App/WSControl/WSControl/MainWin.cs
         {
             get
             {
@@ -43,11 +34,7 @@ namespace WSControl
         /// <summary>
         /// Inicializa la ventana de permisos
         /// </summary>
-<<<<<<< HEAD:App/WSControl/WSControl/Main.cs
-        private Main()
-=======
         private MainWin()
->>>>>>> 2d583b6e9ca23c55042b92d8ac341b8ad1d2ffee:App/WSControl/WSControl/MainWin.cs
         {
             InitializeComponent();
             this.Text = "Shuseki - Control de Asistencia Remota - " + Login.usuario.nombres + " " + Login.usuario.apellidos + " - " + Login.usuario.departamento;
@@ -68,7 +55,7 @@ namespace WSControl
         /// <param name="e"></param>
         private void c_btnCrear_Click(object sender, EventArgs e)
         {
-            new Permiso().ShowDialog(this);
+            new WPermisos().ShowDialog(this);
             ListadoPermisos_Load(sender, e);
         }
         /// <summary>
@@ -80,14 +67,15 @@ namespace WSControl
         {
             loadPermit();
             loadHistory(DateTime.Now.Month, DateTime.Now.Year);
-            c_lstMeses.SelectedIndex = DateTime.Now.Month - 1;
+            if(c_lstMeses != null)
+                c_lstMeses.SelectedIndex = DateTime.Now.Month - 1;
         }   
         /// <summary>
         /// Agrega permisos a la tabla
         /// </summary>
         /// <param name="p"></param>
         /// <returns></returns>
-        private int addRow(Permisos p)
+        private int addRow(Permiso p)
         {
             Bitmap img;
             switch (p.estado)
@@ -124,8 +112,8 @@ namespace WSControl
         /// <param name="e"></param>
         private void c_tblPermisos_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            Permisos p = (Permisos)c_tblPermisos.Rows.SharedRow(e.RowIndex).Tag;
-            Permiso frmperm = new Permiso(p.codper,p.fecha,p.tipo,p.horainicial,p.horafinal,p.descripcion, p.estado, p.attch);            
+            Permiso p = (Permiso)c_tblPermisos.Rows.SharedRow(e.RowIndex).Tag;
+            WPermisos frmperm = new WPermisos(p.codper,p.fecha,p.tipo,p.horainicial,p.horafinal,p.descripcion, p.estado, p.attch);            
             if(frmperm.ShowDialog(this) == DialogResult.OK)
                 ListadoPermisos_Load(sender, null);
         }
@@ -137,14 +125,8 @@ namespace WSControl
         private void c_tblPermisos_RowEnter(object sender, DataGridViewCellEventArgs e)
         {
             this.BeginInvoke(new MethodInvoker(() => {
-                Permisos p = (Permisos)c_tblPermisos.Rows[e.RowIndex].Tag;
-                try
-                {
-                    c_btnElim.Enabled = false;
-                }
-                catch (Exception)
-                {
-                }
+                Permiso p = (Permiso)c_tblPermisos.Rows[e.RowIndex].Tag;
+                c_btnElim.Enabled = false;
                 if (p == null)
                     return;
                 if (p.estado == 'E')
@@ -160,16 +142,20 @@ namespace WSControl
         private void c_btnElim_Click(object sender, EventArgs e)
         {
             if (c_tblPermisos.SelectedRows.Count == 0) return;
-            Permisos p = (Permisos)c_tblPermisos.SelectedRows[0].Tag;
+            Permiso p = (Permiso)c_tblPermisos.SelectedRows[0].Tag;
             if (p == null) return;
-            API api = new API();
-            var task = Task.Run(() => api.delete($"permisos/{p.codper}"));
             try
             {
-                task.Wait();
+                var result = Datos.deletePermiso(p.codper, p.codcli);
+                if (result.affectedRows > 0)
+                    MessageBox.Show("Se elimino el permiso", "INFO", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                else
+                    throw new Exception();
             }
             catch (Exception)
             {
+                MessageBox.Show("No se pudo eliminar permiso", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
             ListadoPermisos_Load(sender, null);
         }
@@ -195,12 +181,6 @@ namespace WSControl
                 ListadoPermisos_Load(sender, null);
             }
         }
-<<<<<<< HEAD:App/WSControl/WSControl/Main.cs
-
-        private void c_btnsalirm_Click(object sender, EventArgs e)
-        {
-            this.Close();
-=======
         /// <summary>
         /// Carga el historial de registros
         /// </summary>
@@ -208,19 +188,19 @@ namespace WSControl
         {
             try
             {
-                API<Registros[]> api = new API<Registros[]>();
-                Registros[] registros;
-                var task = Task.Run(() => api.get($"registros/{Login.codemp}/{m}/{year}"));
-                task.Wait();
-                registros = task.Result;
-                c_lstHist.Items.Clear();
+                List<Registro> registros = Datos.listRegistrosEmpleado(Login.usuario.codemp, Login.usuario.codcli, m, year);
+                Cliente cliente = Datos.getCliente(Login.usuario.codcli);
+                c_table.Rows.Clear();
                 foreach (var item in registros)
                 {
-                    c_lstHist.Items.Add($"{item.fecha} - Entrada: {item.horaentrada} || Salida: {item.horasalida}");
+                    string horaentrada = AdjustTimeForTimeZone(item.horaentrada, cliente.zonahoraria);
+                    string horasalida = AdjustTimeForTimeZone(item.horasalida, cliente.zonahoraria);
+                    c_table.Rows.Add(item.fecha, horaentrada, horasalida);                    
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                MessageBox.Show("No se pudieron cargar los registros", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         
@@ -228,17 +208,16 @@ namespace WSControl
         /// Carga los permisos
         /// </summary>
         private void loadPermit()
-        {
-            API<Permisos[]> api = new API<Permisos[]>();
-            Permisos[] permisos = new Permisos[0];
-            var task = Task.Run(() => api.get($"permisos/emp/{Login.codemp}"));
+        {            
+            List<Permiso> permisos = new List<Permiso>();            
             try
             {
-                task.Wait();
-                permisos = task.Result;
+                permisos = Datos.listPermisos(Login.usuario.codemp, Login.usuario.codcli);
             }
             catch (Exception)
             {
+                MessageBox.Show("No se pudieron cargar los permisos", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
             c_tblPermisos.Rows.Clear();
             foreach (var p in permisos)
@@ -246,10 +225,28 @@ namespace WSControl
             c_tblPermisos.CurrentCell = null;
         }
 
+        public static string AdjustTimeForTimeZone(string timeString, int timeZoneOffset)
+        {
+            // Convertir la cadena de tiempo a un objeto DateTime
+            DateTime time = DateTime.ParseExact(timeString, "HH:mm:ss", null);
+
+            // Ajustar la hora para la zona horaria especificada
+            time = time.AddHours(timeZoneOffset);
+
+            // Formatear la hora ajustada como una cadena en formato HH:mm:ss
+            string adjustedTimeString = time.ToString("HH:mm:ss");
+
+            return adjustedTimeString;
+        }
+
         private void c_lstMeses_SelectedIndexChanged(object sender, EventArgs e)
         {
             loadHistory(c_lstMeses.SelectedIndex + 1, DateTime.Now.Year);
->>>>>>> 2d583b6e9ca23c55042b92d8ac341b8ad1d2ffee:App/WSControl/WSControl/MainWin.cs
+        }
+
+        private void c_btnsalirm_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

@@ -5,8 +5,8 @@ using System.Runtime.InteropServices;
 // La información general de un ensamblado se controla mediante el siguiente 
 // conjunto de atributos. Cambie estos valores de atributo para modificar la información
 // asociada con un ensamblado.
-[assembly: AssemblyTitle("Control Asistencia DIGESTYC")]
-[assembly: AssemblyDescription("Sistema automatizado de control asistencias laborales y solicitud de permisos DIGESTYC")]
+[assembly: AssemblyTitle("Control Asistencia SHUSEKI")]
+[assembly: AssemblyDescription("Sistema automatizado de control asistencias laborales y solicitud de permisos SHUSEKI")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Microsoft")]
 [assembly: AssemblyProduct("WSControl")]

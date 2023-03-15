@@ -44,14 +44,15 @@ namespace Interfaz
         /// Inserta nuevo departamento
         /// </summary>
         /// <param name="nombre">nombre departamento</param>
-        public static void insertDepartamento(int codcli, string nombre)
+        public static Result insertDepartamento(int codcli, string nombre)
         {
-            API<Departamento> api = new API<Departamento>(local);
+            API<Result> api = new API<Result>(local);
             Departamento dep = new Departamento();
             dep.nombre = nombre;
             dep.codcli = codcli;
-            Task t = Task.Run(() => api.post("departamentos", dep));
+            var t = Task.Run(() => api.post("departamentos", dep));
             t.Wait();
+            return t.Result;
         }
         /// <summary>
         /// Obtiene todos los departamentos
@@ -68,23 +69,25 @@ namespace Interfaz
         /// </summary>
         /// <param name="coddpto">codigo departamento</param>
         /// <param name="nombre">nombre departamento</param>
-        public static void updateDepartamento(int coddpto, int codcli,string nombre)
+        public static Result updateDepartamento(int coddpto, int codcli,string nombre)
         {
-            API api = new API(local);
+            API<Result> api = new API<Result>(local);
             Departamento dep = new Departamento();
             dep.nombre = nombre;
-            Task t = Task.Run(() => api.put($"departamentos/coddpto/{coddpto}/codcli/{codcli}", dep));
+            var t = Task.Run(() => api.put($"departamentos/coddpto/{coddpto}/codcli/{codcli}", dep));
             t.Wait();
+            return t.Result;
         }
         /// <summary>
         /// Elimina un departamento
         /// </summary>
         /// <param name="coddpto">codigo departamento</param>
-        public static void deleteDepartamento(int coddpto, int codcli)
+        public static Result deleteDepartamento(int coddpto, int codcli)
         {
-            API api = new API(local);
-            Task t = Task.Run(() => api.delete($"departamentos/coddpto/{coddpto}/codcli/{codcli}"));
+            API<Result> api = new API<Result>(local);
+            var t = Task.Run(() => api.delete($"departamentos/coddpto/{coddpto}/codcli/{codcli}"));
             t.Wait();
+            return t.Result;
         }
         /// <summary>
         /// Obtiene un departamento por id
@@ -118,34 +121,43 @@ namespace Interfaz
         /// Inserta un nuevo empleado
         /// </summary>
         /// <param name="empleado">nuevo empleado</param>
-        public static bool insertEmpleado(Empleado empleado)
+        public static Result insertEmpleado(Empleado empleado)
         {
-            API api = new API(local);
+            API<Result> api = new API<Result>(local);
             var t = Task.Run(() => api.post("empleados", empleado));
             try
             {
                 t.Wait();
                 var r = t.Result;
                 if (t.Status == TaskStatus.RanToCompletion && r != null)
-                    return true;
+                    return r;
                 else
-                    return false;
+                    return null;
             }
             catch (Exception)
             {
-                return false;
+                return null;
             }
         }
         /// <summary>
         /// Obtiene todos los empleados
         /// </summary>
         /// <returns>Listado de empleados</returns>
-        public static List<Empleado> listEmpleados(int codcli, int pagina = 0,bool activo = true)
+        public static List<Empleado> listEmpleados(int codcli, int pagina = -1, bool activo = true)
         {
             API<List<Empleado>> api = new API<List<Empleado>>(local);
-            var t = Task.Run(() => api.get($"empleados/codcli/{codcli}/p/{pagina}?activo={activo}"));
-            t.Wait();
-            return t.Result;
+            if (pagina == -1)
+            {
+                var t = Task.Run(() => api.get($"empleados/codcli/{codcli}?activo={activo}"));
+                t.Wait();
+                return t.Result;
+            }
+            else
+            {
+                var t = Task.Run(() => api.get($"empleados/codcli/{codcli}/p/{pagina}?activo={activo}"));
+                t.Wait();
+                return t.Result;
+            }
         }
         /// <summary>
         /// Obtiene todos los empleados de un departamento
@@ -188,43 +200,45 @@ namespace Interfaz
         /// </summary>
         /// <param name="codemp">codigo empleado</param>
         /// <param name="empleado">objeto editado del empleado</param>
-        public static bool updateEmpleado(Empleado empleado)
+        public static Result updateEmpleado(Empleado empleado)
         {
-            API api = new API(local);
+            API<Result> api = new API<Result>(local);
             var t = Task.Run(() => api.put("empleados", empleado));
             try
             {
                 t.Wait();
                 var r = t.Result;
                 if (t.Status == TaskStatus.RanToCompletion && r != null)
-                    return true;
+                    return r;
                 else
-                    return false;
+                    return null;
             }
             catch (Exception)
             {
-                return false;                
+                return null;                
             }
         }
         /// <summary>
         /// Desactiva un empleado
         /// </summary>
         /// <param name="codemp">codigo empleado</param>
-        public static void disableEmpleado(int codemp, int codcli)
+        public static Result disableEmpleado(int codemp, int codcli)
         {
-            API api = new API(local);
+            API<Result> api = new API<Result>(local);
             var t = Task.Run(() => api.delete($"empleados/codemp/{codemp}/codcli/{codcli}"));
             t.Wait();
+            return t.Result;
         }
         /// <summary>
         /// Activa un empleado
         /// </summary>
         /// <param name="codemp">codigo empleado</param>
-        public static void enableEmpleado(int codemp, int codcli)
+        public static Result enableEmpleado(int codemp, int codcli)
         {
-            API api = new API(local);
+            API<Result> api = new API<Result>(local);
             var t = Task.Run(() => api.put($"empleados/codemp/{codemp}/codcli/{codcli}/enable"));
             t.Wait();
+            return t.Result;
         }
         
         /// <summary>
@@ -263,13 +277,16 @@ namespace Interfaz
             return t.Result;
         }
 
-        public static void tickRegistro(int codemp, int codcli, bool crear)
+        public static Result tickRegistro(int codemp, int codcli, bool crear)
         {
-            API api = new API(local);
+            API<Result> api = new API<Result>(local);
+            Task<Result> r;
             if(crear)
-                Task.Run(() => api.post($"registros/codemp/{codemp}/codcli/{codcli}"));
+                r = Task.Run(() => api.post($"registros/codemp/{codemp}/codcli/{codcli}"));
             else
-                Task.Run(() => api.put($"registros/codemp/{codemp}/codcli/{codcli}"));
+                r = Task.Run(() => api.put($"registros/codemp/{codemp}/codcli/{codcli}"));
+            r.Wait();
+            return r.Result;
         }
 
         /// <summary>
@@ -289,12 +306,12 @@ namespace Interfaz
         /// <param name="codemp">codigo de empleado</param>
         /// <param name="codcli">codigo de cliente</param>
         /// <returns></returns>
-        public static Permiso getPermisos(int codemp, int codcli)
+        public static List<Permiso> listPermisos(int codemp, int codcli)
         {
             API<List<Permiso>> api = new API<List<Permiso>>(local);
             var t = Task.Run(() => api.get($"permisos/codemp/{codemp}/codcli/{codcli}"));
             t.Wait();
-            return t.Result[0];
+            return t.Result;
         }
         /// <summary>
         /// Obtiene un permiso particular
@@ -314,31 +331,34 @@ namespace Interfaz
         /// Inserta un permiso nuevo
         /// </summary>
         /// <param name="permiso">nuevo permiso</param>
-        public static void insertPermiso(Permiso permiso)
+        public static Result insertPermiso(Permiso permiso)
         {
-            API api = new API(local);
+            API<Result> api = new API<Result>(local);
             var t = Task.Run(() => api.post("permisos", permiso));
             t.Wait();
+            return t.Result;
         }
         /// <summary>
         /// Actualiza un permiso
         /// </summary>
         /// <param name="codper">codigo del permiso</param>
         /// <param name="permiso">permiso editado</param>
-        public static void updatePermiso(int codper, Permiso permiso)
+        public static Result updatePermiso(int codper, Permiso permiso)
         {
-            API api = new API(local);
+            API<Result> api = new API<Result>(local);
+            permiso.codper = codper;
             var t = Task.Run(() => api.put("permisos", permiso));
             t.Wait();
+            return t.Result;
         }
         /// <summary>
         /// Cambia el estado de un permiso
         /// </summary>
         /// <param name="codper">codigo del permiso</param>
         /// <param name="estado">estado</param>
-        public static void cambiarEstadoPermiso(int codper, int codcli,ESTADO estado)
+        public static Result cambiarEstadoPermiso(int codper, int codcli,ESTADO estado)
         {
-            API api = new API(local);
+            API<Result> api = new API<Result>(local);
             string c = "E";
             switch (estado)
             {
@@ -356,16 +376,18 @@ namespace Interfaz
             }
             var t = Task.Run(() => api.put($"permisos/codper/{codper}/codcli/{codcli}/estado/{c}"));
             t.Wait();
+            return t.Result;
         }
         /// <summary>
         /// Elimina un permiso
         /// </summary>
         /// <param name="codper">codigo del permiso</param>
-        public static void deletePermiso(int codper, int codcli)
+        public static Result deletePermiso(int codper, int codcli)
         {
-            API api = new API(local);
+            API<Result> api = new API<Result>(local);
             var t = Task.Run(() => api.delete($"permisos/codper/{codper}/codcli/{codcli}"));
             t.Wait();
+            return t.Result;
         }
 
         /// <summary>
@@ -387,32 +409,35 @@ namespace Interfaz
         /// Crea un registro de productividad
         /// </summary>
         /// <param name="productividad">Entidad de productividad</param>
-        public static void insertProductividad(Productividad productividad)
+        public static Result insertProductividad(Productividad productividad)
         {
-            API api = new API(local);
+            API<Result> api = new API<Result>(local);
             var t = Task.Run(() => api.post("productividad",productividad));
             t.Wait();
+            return t.Result;
         }
         /// <summary>
         /// Actualiza un registro de productividad
         /// </summary>
         /// <param name="productividad">Entidad que debe actualizarse</param>
-        public static void updateProductividad(Productividad productividad)
+        public static Result updateProductividad(Productividad productividad)
         {
-            API api = new API(local);
+            API<Result> api = new API<Result>(local);
             var t = Task.Run(() => api.put("productividad", productividad));
             t.Wait();
+            return t.Result;
         }
         /// <summary>
         /// Elimina un registro de productividad
         /// </summary>
         /// <param name="codprod">codigo de productividad</param>
         /// <param name="codcli">codigo de cliente</param>
-        public static void deleteProductividad(int codprod, int codcli)
+        public static Result deleteProductividad(int codprod, int codcli)
         {
-            API api = new API(local);
+            API<Result> api = new API<Result>(local);
             var t = Task.Run(() => api.delete($"productividad/codprod/{codprod}/codcli/{codcli}"));
             t.Wait();
+            return t.Result;
         }
         /// <summary>
         /// Consultar un cliente
@@ -455,41 +480,45 @@ namespace Interfaz
         /// Ingresa un registro de cliente
         /// </summary>
         /// <param name="cliente">Entidad del cliente</param>
-        public static void insertCliente(Cliente cliente)
+        public static Result insertCliente(Cliente cliente)
         {
-            API api = new API(local);
+            API<Result> api = new API<Result>(local);
             var t = Task.Run(() => api.post("clientes", cliente));
             t.Wait();
+            return t.Result;
         }
         /// <summary>
         /// Actualiza un cliente
         /// </summary>
         /// <param name="cliente">Entidad que se actualizara</param>
-        public static void updateCliente(Cliente cliente)
+        public static Result updateCliente(Cliente cliente)
         {
-            API api = new API(local);
+            API<Result> api = new API<Result>(local);
             var t = Task.Run(() => api.put("clientes", cliente));
             t.Wait();
+            return t.Result;
         }
         /// <summary>
         /// Reactiva un cliente
         /// </summary>
         /// <param name="codcli">codigo de cliente</param>
-        public static void enableCliente(int codcli)
+        public static Result enableCliente(int codcli)
         {
-            API api = new API(local);
+            API<Result> api = new API<Result>(local);
             var t = Task.Run(() => api.put($"clientes/codcli/{codcli}/enable"));
             t.Wait();
+            return t.Result;
         }
         /// <summary>
         /// Desactiva un cliente
         /// </summary>
         /// <param name="codcli">codigo de cliente</param>
-        public static void deleteCliente(int codcli)
+        public static Result deleteCliente(int codcli)
         {
-            API api = new API(local);
+            API<Result> api = new API<Result>(local);
             var t = Task.Run(() => api.delete($"clientes/codcli/{codcli}"));
             t.Wait();
+            return t.Result;
         }
         /// <summary>
         /// Elimina toda la informacion de un cliente
@@ -517,10 +546,8 @@ namespace Interfaz
         }
         public static UploadState uploadCaptura(int codprod, int codcli, byte[] archivo)
         {
-            API<UploadState> api = new API<UploadState>(local);
-            Upload u = new Upload();
-            u.file = Convert.ToBase64String(archivo);
-            var task2 = Task.Run(() => api.post($"upload/captura/codprod/{codprod}/codcli/{codcli}",u));
+            API<UploadState> api = new API<UploadState>(local);                        
+            var task2 = Task.Run(() => api.post($"upload/captura/codprod/{codprod}/codcli/{codcli}", archivo,"*/*", "attch"));
             task2.Wait();
             return task2.Result;
         }
@@ -533,10 +560,8 @@ namespace Interfaz
         /// <returns></returns>
         public static UploadState uploadLogo(int codcli, byte[] archivo)
         {
-            API<UploadState> api = new API<UploadState>(local);
-            Upload u = new Upload();
-            u.file = Convert.ToBase64String(archivo);
-            var task2 = Task.Run(() => api.post($"upload/logo/codcli/{codcli}",u));
+            API<UploadState> api = new API<UploadState>(local);                       
+            var task2 = Task.Run(() => api.post($"upload/logo/codcli/{codcli}", archivo, "*/*", "attch"));
             task2.Wait();
             return task2.Result;
         }
@@ -751,13 +776,7 @@ namespace Interfaz
 
             }
         }
-        /// <summary>
-        /// Interfaz de subida de archivo por buffer
-        /// </summary>
-        public class Upload
-        {
-            public string file { get; set; }
-        }
+        
         /// <summary>
         /// Interfaz de consulta de reportes
         /// </summary>
@@ -776,9 +795,27 @@ namespace Interfaz
             public string fields { get; set; }
         }
 
+        /// <summary>
+        /// Resultado de filtro de contador
+        /// </summary>
         public class Counter
         {
             public int count { get; set; }
+        }
+
+        /// <summary>
+        /// Resultado de edicion en base de datos
+        /// </summary>
+        public class Result
+        {
+            public int fieldCount;
+            public int affectedRows;
+            public int insertId;
+            public int serverStatus;
+            public int warningCount;
+            public string message;
+            public bool protocol41;
+            public int changedRows;
         }
     }
 }

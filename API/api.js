@@ -7,9 +7,9 @@ const Handlebars = require('handlebars');
 const connection = mysql.createConnection({
    host: mysqlhost,
    user: 'root',
-   password: 'brandom',
+   password: '',
    database: 'Control',
-   port: 3316
+   port: 3306
 });
 connection.connect(function(error){
    if(error){

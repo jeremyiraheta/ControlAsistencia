@@ -1,29 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Globalization;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using WSControl.modelos;
+using Interfaz;
+using Interfaz.modelos;
 
 namespace WSControl
 {
     /// <summary>
     /// Ventana que permite crear o editar permisos
     /// </summary>
-    public partial class Permiso : Form
+    public partial class WPermisos : Form
     {
         private int codper = 0;
         private string file;
         /// <summary>
         /// Inicializa ventana de permisos vacia
         /// </summary>
-        public Permiso()
+        public WPermisos()
         {
             InitializeComponent();
         }
@@ -38,12 +33,12 @@ namespace WSControl
         /// <param name="descripcion">descripcion</param>
         /// <param name="estado">estado</param>
         /// <param name="attch">si tiene archivo adjunto</param>
-        public Permiso(int codper,string fecha, char tipo, string horainicial, string horafinal, string descripcion, char estado, bool attch)
+        public WPermisos(int codper, string fecha, char tipo, string horainicial, string horafinal, string descripcion, char estado, bool attch)
         {
             InitializeComponent();
             this.codper = codper;
             CultureInfo provider = CultureInfo.InvariantCulture;
-            c_tpFecha.Value = DateTime.ParseExact(fecha,"dd/MM/yyyy", provider);
+            c_tpFecha.Value = DateTime.ParseExact(fecha, "dd/MM/yyyy", provider);
             switch (tipo)
             {
                 case 'O':
@@ -97,7 +92,7 @@ namespace WSControl
         /// <param name="e"></param>
         private void Permiso_Load(object sender, EventArgs e)
         {
-            if(c_cmbTipo.SelectedIndex == -1)
+            if (c_cmbTipo.SelectedIndex == -1)
                 c_cmbTipo.SelectedIndex = 0;
         }
         /// <summary>
@@ -107,45 +102,51 @@ namespace WSControl
         /// <param name="e"></param>
         private void c_btnSolicitar_Click(object sender, EventArgs e)
         {
-            API<LastID> api = new API<LastID>();
-            Permisos permiso = new Permisos();
-            permiso.codemp = Login.codemp;
-            if(c_txtDescripcion.Text.Trim().Length < 10)
+            try
             {
-                MessageBox.Show(this, "Debe justificar su permiso!", "Descripcion no valida", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
+                Permiso permiso = new Permiso();
+                permiso.codemp = Login.usuario.codemp;
+                permiso.codcli = Login.usuario.codcli;
+                if (c_txtDescripcion.Text.Trim().Length < 10)
+                {
+                    MessageBox.Show(this, "Debe justificar su permiso!, almenos 10 caracteres", "Descripcion no valida", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                permiso.descripcion = Uri.EscapeDataString(c_txtDescripcion.Text);
+                permiso.fecha = c_tpFecha.Value.ToString("dd-MM-yyyy");
+                permiso.horainicial = c_tpHoraInicial.Value.ToString("HH:mm");
+                permiso.horafinal = c_tpHoraFinal.Value.ToString("HH:mm");
+                permiso.estado = 'E';
+                if (c_cmbTipo.SelectedIndex == 0)
+                    permiso.tipo = 'P';
+                else if (c_cmbTipo.SelectedIndex == 1)
+                    permiso.tipo = 'O';
+                else if (c_cmbTipo.SelectedIndex == 2)
+                    permiso.tipo = 'S';
+                if (codper == 0)
+                {
+                    Datos.Result result = Datos.insertPermiso(permiso);
+                    codper = result.insertId;
+                }
+                else
+                {
+                    Datos.Result result = Datos.updatePermiso(codper, permiso);
+                    if (result == null || result.affectedRows == 0)
+                        throw new Exception();
+                }
+                if (c_dlgAdj.FileNames.Length > 0)
+                {
+                    var result = Datos.uploadPermisoAdjunto(codper, Login.usuario.codcli, c_dlgAdj.FileName);
+                    if (!result.status)
+                        MessageBox.Show(this, result.message, "Adjuntar", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                this.DialogResult = DialogResult.OK;
+                this.Close();
             }
-            permiso.descripcion = Uri.EscapeDataString(c_txtDescripcion.Text);
-            permiso.fecha = c_tpFecha.Value.ToString("dd-MM-yyyy");
-            permiso.horainicial = c_tpHoraInicial.Value.ToString("HH:mm");
-            permiso.horafinal = c_tpHoraFinal.Value.ToString("HH:mm");
-            permiso.estado = 'E';
-            if (c_cmbTipo.SelectedIndex == 0)
-                permiso.tipo = 'P';
-            else if(c_cmbTipo.SelectedIndex == 1)
-                permiso.tipo = 'O';
-            else if(c_cmbTipo.SelectedIndex == 2)
-                permiso.tipo = 'S';
-            Task<LastID> task = null;           
-            if (codper == 0)
+            catch (Exception)
             {
-                task = Task.Run(() => api.post("permisos", permiso));
-                codper = task.Result.insertId;
-            }                
-            else
-                task = Task.Run(() => api.put($"permisos/{codper}", permiso));
-            task.Wait();                        
-            if (c_dlgAdj.FileNames.Length > 0)
-            {
-                API<UploadState> api2 = new API<UploadState>();
-                var task2 = Task.Run(() => api2.post($"upload/{codper}", c_dlgAdj.FileName, "attch"));
-                task2.Wait();
-                UploadState result = task2.Result;
-                if(!result.status)
-                    MessageBox.Show(this, result.message, "Adjuntar", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(this, "Ocurrio un error interno y la accion no pudo ejecutarse", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            this.DialogResult = DialogResult.OK;
-            this.Close();
         }
         /// <summary>
         /// Evento vinculado al boton de adjuntar, permite adjuntar archivo zip al permiso
@@ -154,11 +155,11 @@ namespace WSControl
         /// <param name="e"></param>
         private void c_btnAdjuntar_Click(object sender, EventArgs e)
         {
-            if(c_dlgAdj.ShowDialog(this) == DialogResult.OK)
+            if (c_dlgAdj.ShowDialog(this) == DialogResult.OK)
             {
                 file = c_dlgAdj.FileName;
                 FileInfo fi = new FileInfo(file);
-                if (ToSize(fi.Length, SizeUnits.MB) >  20)
+                if (ToSize(fi.Length, SizeUnits.MB) > 20)
                     MessageBox.Show(this, "El archivo no debe exceder los 20MB!!!", "Adjuntar", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 else
                 {
@@ -169,7 +170,7 @@ namespace WSControl
                     }
                     else
                         MessageBox.Show(this, "El formato no es valido!!!", "Adjuntar", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }                
+                }
             }
         }
         /// <summary>
@@ -178,14 +179,13 @@ namespace WSControl
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private async void c_linkDescargar_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            API api = new API();
-            if(c_dlgSave.ShowDialog() == DialogResult.OK)
+        {            
+            if (c_dlgSave.ShowDialog() == DialogResult.OK)
             {
                 byte[] bytes;
                 try
                 {
-                    bytes = await Task.Run(() => api.download($"download/{codper}"));
+                    bytes = await Datos.downloadPermisoAdjunto(codper, Login.usuario.codcli);
                 }
                 catch (Exception)
                 {
@@ -197,7 +197,7 @@ namespace WSControl
                 writer.Flush();
                 writer.Close();
                 System.Diagnostics.Process.Start("explorer.exe", c_dlgSave.FileName);
-            }                        
+            }
         }
         public enum SizeUnits
         {
@@ -212,25 +212,6 @@ namespace WSControl
         public double ToSize(Int64 value, SizeUnits unit)
         {
             return (value / (double)Math.Pow(1024, (Int64)unit));
-        }
-        /// <summary>
-        /// Entidad de archivos adjuntos
-        /// </summary>
-        class UploadState
-        {
-            public bool status { get; set; }
-            public string message { get; set; }
-            public UploadState()
-            {
-
-            }
-        }
-        /// <summary>
-        /// Entidad respuesta de la api para determinar el ultimo id ingresado de una peticion
-        /// </summary>
-        class LastID
-        {
-            public int insertId { get; set; }
-        }       
+        }        
     }
 }

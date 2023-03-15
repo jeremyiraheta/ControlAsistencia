@@ -7,14 +7,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Interfaz;
+using Interfaz.modelos;
 
 namespace WSControl
 {
     public partial class Login : Form
-    {
-        public static int codemp = 0;
-        private char estado;
-        public static Empleado usuario { get; set; }
+    {        
+        public static Usuario usuario { get; set; }
         /// <summary>
         /// Inicializador de la ventana de login
         /// </summary>
@@ -50,8 +50,8 @@ namespace WSControl
             }
             if (login(c_txtUsuario.Text, c_txtPass.Text))
             {
-                if(estado.ToString().ToUpper() == "A")
-                {
+                if(usuario.activo)
+                {                    
                     this.DialogResult = DialogResult.OK;
                     this.Close();
                 }
@@ -70,62 +70,18 @@ namespace WSControl
         /// <param name="pass">Password</param>
         /// <returns>True si es un usuario valido</returns>
         private bool login(string user, string pass)
-        {
-            API<List< Empleado >> api = new API<List<Empleado>>();
-            List<Empleado> valid = null;
-            Credenciales c = new Credenciales(user,pass);
-            var task = Task.Run(() => api.post("login", c));
+        {            
             try
             {
-                task.Wait();
+                usuario = Datos.Login(user, pass);                
             }
             catch (Exception)
             {
                 MessageBox.Show("Error al accesar datos!!!", "Login", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Environment.Exit(1);
             }
-            valid = task.Result;
-            if (valid != null && valid.Count > 0)
-            {
-                codemp = valid[0].codemp;
-                estado = valid[0].estado;
-                usuario = valid[0];
-                return true;
-            }
-            else
-                return false;
+            return usuario != null && usuario.activo;
         }
-        /// <summary>
-        /// Entidad de usuarios
-        /// </summary>
-        class Credenciales
-        {
-            public string user { get; set; }
-            public string password { get; set; }
-            public Credenciales(string user, string pass)
-            {
-                this.user = user;
-                this.password = pass;
-            }
-            public Credenciales()
-            {
-
-            }
-        }
-        /// <summary>
-        /// Entidad de Empleados
-        /// </summary>
-        public class Empleado
-        {
-            public int codemp { get; set; }
-            public char estado { get; set; }
-            public string nombres { get; set; }
-            public string apellidos { get; set; }
-            public string departamento { get; set; }
-            public Empleado()
-            {
-
-            }
-        }
+        
     }
 }

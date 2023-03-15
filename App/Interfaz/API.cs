@@ -10,8 +10,8 @@ namespace Interfaz
 {
     class API<T>
     {
-        const string api_local = "http://localhost:8081/";//solo usada durante pruebas
-        const string api_remote = "http://40.114.33.100:8081";//usada en produccion
+        const string api_local = "http://localhost:8081/api/";//solo usada durante pruebas
+        const string api_remote = "http://40.114.33.100:8081/api/";//usada en produccion
         const string token = "YWRtaW46YWRtaW4=";
         HttpClient client = null;
         /// <summary>
@@ -108,6 +108,7 @@ namespace Interfaz
         /// </summary>
         /// <param name="endpoint">recurso de la api</param>
         /// <param name="file">locacion del archivo</param>
+        /// <param name="mime">tipo mime</param>
         /// <param name="name">nombre del parametro</param>
         /// <returns></returns>
         public async Task<T> post(string endpoint, string file, string mime, string name)
@@ -116,6 +117,30 @@ namespace Interfaz
             HttpContent content = new ByteArrayContent(System.IO.File.ReadAllBytes(file));
             content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(mime);
             obj.Add(content, name, new System.IO.FileInfo(file).Name);
+            var response = await client.PostAsync(endpoint, obj);
+            string json = "";
+            if (response.IsSuccessStatusCode)
+            {
+                json = await response.Content.ReadAsStringAsync();
+                var ret = JsonConvert.DeserializeObject<T>(json);
+                return ret;
+            }
+            return default(T);
+        }
+        /// <summary>
+        /// Realizar peticion post asincrona envia archivo
+        /// </summary>
+        /// <param name="endpoint">recurso de la api</param>
+        /// <param name="bytes">bytes del archivo</param>
+        /// <param name="mime">tipo mime</param>
+        /// <param name="name">nombre del parametro</param>
+        /// <returns></returns>
+        public async Task<T> post(string endpoint, byte[] bytes, string mime, string name)
+        {
+            MultipartFormDataContent obj = new MultipartFormDataContent();
+            HttpContent content = new ByteArrayContent(bytes);
+            content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(mime);
+            obj.Add(content, name, "memoryload");
             var response = await client.PostAsync(endpoint, obj);
             string json = "";
             if (response.IsSuccessStatusCode)
