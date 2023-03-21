@@ -66,7 +66,7 @@ app.get("/", (req, res) => {
 
 
 //Permite realizar un filtro a una tabla especifica
-app.post("/query/:table", (req,res) => {
+app.post("/api/query/:table", (req,res) => {
     var query = connection.query(`SELECT ${req.body.fields === undefined ? '*' : req.body.fields} FROM ${req.params.table} WHERE ${req.body.query}`, function(error, result){
         if(error) console.log('[mysql error] : ', error)
         if(DEBUG)console.log(`filtro tabla=${req.params.table}, query=${req.body.query}`)
