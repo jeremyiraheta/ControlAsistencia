@@ -577,7 +577,7 @@
    					</a>
    				</li>   				
    				<li class="windows-store">
-   					<a href="<%=GlobalV.URLBASE + "/app/publish.htm" %>" class="button round large" title="">
+   					<a href="/App.ashx" class="button round large" title="Instalador" target="_blank">
    						<i class="icon ion-social-windows"></i>Windows</a>
    					</li>
    			</ul>

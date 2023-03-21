@@ -39,11 +39,11 @@ public partial class Registros : System.Web.UI.Page
             var emp = empleados.Where(e => e.codemp == item.codemp).First();
             var dpto = departamentos.Where(d => d.coddpto == emp.coddpto).First();                                             
             if (!horas.Keys.Contains(item.codemp))
-                horas.Add(emp.codemp, new Reg() { codemp = emp.codemp, departamento = dpto.nombre, empleado = emp.nombres + " " + emp.apellidos, horas = item.total });
+                horas.Add(emp.codemp, new Reg() { codemp = emp.codemp, departamento = dpto.nombre, empleado = emp.nombres + " " + emp.apellidos, total = item.total });
             else
-                horas[item.codemp].horas += item.total;
+                horas[item.codemp].total += item.total;
         }
-        var sort = from e in horas orderby e.Value.horas ascending select e;
+        var sort = from e in horas orderby e.Value.total ascending select e;
         var head = tblreg.Rows[0];
         tblreg.Rows.Clear();
         tblreg.Rows.Add(head);
@@ -52,7 +52,7 @@ public partial class Registros : System.Web.UI.Page
             TableRow row = new TableRow();
             row.Cells.Add(new TableCell() { Text = i.Value.departamento.ToUpper() });
             row.Cells.Add(new TableCell() { Text = i.Value.empleado.ToUpper() });
-            row.Cells.Add(new TableCell() { Text = i.Value.horas.ToString() });
+            row.Cells.Add(new TableCell() { Text = ConvertirMinutosAHoras(i.Value.total) });
             var btn = new Button();
             btn.Text = "Detalle";
             btn.CommandArgument = i.Value.codemp.ToString();
@@ -85,7 +85,7 @@ public partial class Registros : System.Web.UI.Page
             TableCell tchf = new TableCell();
             tchf.Controls.Add(new TextBox() { TextMode = TextBoxMode.Time, Text = item.horasalida.Substring(0,5), ReadOnly = true, CssClass = "control-hide-gray" });
             row.Cells.Add(tchf);
-            row.Cells.Add(new TableCell() { Text = item.total.ToString() });
+            row.Cells.Add(new TableCell() { Text = ConvertirMinutosAHoras(item.total) });
             tbldet.Rows.Add(row);            
         }        
         ScriptManager.RegisterStartupScript(Page, Page.GetType(), "detReg", "new bootstrap.Modal(document.getElementById('detReg'), { keyboard:false}).show()", true);
@@ -110,12 +110,21 @@ public partial class Registros : System.Web.UI.Page
         }
     }
 
+    private string ConvertirMinutosAHoras(decimal minutos)
+    {
+        int horas = int.Parse(minutos.ToString()) / 60;
+        int minutosRestantes = int.Parse(minutos.ToString()) % 60;
+
+        return String.Format("{0}h:{1:00}m",horas, minutosRestantes);
+    }
+
     private class Reg
     {
         public int codemp { get; set; }
         public string empleado { get; set; }
         public string departamento { get; set; }
-        public decimal horas { get; set; }
+        public decimal total { get; set; }
+        public string horas { get; set; }
     }
 
     protected void txtfilter_TextChanged(object sender, EventArgs e)

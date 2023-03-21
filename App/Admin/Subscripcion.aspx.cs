@@ -81,9 +81,17 @@ public partial class Subscripcion : System.Web.UI.Page
 
     protected void pagar_Click(object sender, EventArgs e)
     {
-        if(urlnomvalid)
+        try
         {
-            alert("ALERTA", "Ingrese un nombre unico de acceso directo");
+            Cliente c = Datos.getCliente(txtcliid.Text);
+            urlnomvalid = c == null;
+        }
+        catch (Exception)
+        {
+        }
+        if(!urlnomvalid)
+        {
+            alert("ALERTA", "Ingrese un nombre unico de acceso directo, ese nombre de url ya existe");
             return;
         }
         if(txtpass.Text != txtpass2.Text)

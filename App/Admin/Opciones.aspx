@@ -2,6 +2,7 @@
 
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
+    <title>Shuseki - Opciones</title>
     <script>
     function previewImage(event) {
         var input = event.target;

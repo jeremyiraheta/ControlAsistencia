@@ -35,7 +35,10 @@ public class Reporte : IHttpHandler, System.Web.SessionState.IReadOnlySessionSta
             return;
         }
         context.Response.ContentType = "application/pdf";
-        context.Response.AddHeader("Content-Disposition", "inline; name=\"ReporteHoras\"; filename=\"ReporteHoras.pdf\"");
+        if(t == 0)
+            context.Response.AddHeader("Content-Disposition", "inline; name=\"ReporteHoras\"; filename=\"ReporteHoras.pdf\"");
+        else
+            context.Response.AddHeader("Content-Disposition", "inline; name=\"ReportePermisos\"; filename=\"ReportePermisos.pdf\"");
         context.Response.BinaryWrite(bytes);
     }
 

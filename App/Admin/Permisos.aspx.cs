@@ -168,8 +168,9 @@ public partial class Permisos : System.Web.UI.Page
         txthi.Text = permisos.horainicial;
         txthf.Text = permisos.horafinal;
         cmbTipo.SelectedValue = permisos.tipo + "";
+        Session["permiso"] = permisos;
         if (permisos.attch)
-            linkdownload.Text = String.Format("<a href='{0}download/{1}' target='_blank' >Adjunto</a>", Datos.APIURL, permisos.codper);
+            linkdownload.Text = "<a href='/Download.ashx' target='_blank' >Adjunto</a>";
         else
             linkdownload.Text = "";
         ScriptManager.RegisterStartupScript(Page, Page.GetType(), "verPerm", "new bootstrap.Modal(document.getElementById('verPerm'), { keyboard:false}).show()", true);
@@ -179,8 +180,16 @@ public partial class Permisos : System.Web.UI.Page
     {
         int codper = Convert.ToInt32(hcodper.Value);
         int state = Convert.ToInt32(curstate.Value);
-        Datos.cambiarEstadoPermiso(codper, usuario.codcli,Datos.ESTADO.APROBADO);
-        switch(state)
+        var r = Datos.cambiarEstadoPermiso(codper, usuario.codcli,Datos.ESTADO.APROBADO);
+        if (r.affectedRows > 0)
+        {
+            ((Layout)Master).toast("INFO", "Se guardo correctamente", 0, ClientScript);
+        }
+        else
+        {
+            ((Layout)Master).toast("ERROR", "No se pudo cambiar", 1, ClientScript);
+        }
+        switch (state)
         {
             case 0:
                 fillTable(Datos.ESTADO.ESPERA);
@@ -197,7 +206,15 @@ public partial class Permisos : System.Web.UI.Page
     {
         int codper = Convert.ToInt32(hcodper.Value);
         int state = Convert.ToInt32(curstate.Value);
-        Datos.cambiarEstadoPermiso(codper, usuario.codcli,Datos.ESTADO.RECHAZADO);
+        var  r = Datos.cambiarEstadoPermiso(codper, usuario.codcli,Datos.ESTADO.RECHAZADO);
+        if(r.affectedRows > 0)
+        {
+            ((Layout)Master).toast("INFO", "Se guardo correctamente", 0, ClientScript);
+        }
+        else
+        {
+            ((Layout)Master).toast("ERROR", "No se pudo cambiar", 1, ClientScript);
+        }
         switch (state)
         {
             case 0:

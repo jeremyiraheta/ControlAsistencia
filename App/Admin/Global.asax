@@ -15,7 +15,7 @@
                  CdnSupportsSecureConnection = true,
                  LoadSuccessExpression = "jQuery"
              });        
-        Datos.apiLocal();
+        Datos.apiRemota();
         GlobalV.URLBASE = Datos.APIURL;        
         RegistrarRutas(RouteTable.Routes);
     }
@@ -57,7 +57,8 @@
         route.MapPageRoute("EmpleadosEx", "Empleados", "~/Empleados.aspx");
         route.MapPageRoute("Permisos", "Permisos", "~/Permisos.aspx");
         route.MapPageRoute("Registros", "Registros", "~/Registros.aspx");
-        route.MapPageRoute("Productividad", "Productividad", "~/Productividad.aspx");
+        route.MapPageRoute("Productividad", "Productividad/{page}", "~/Productividad.aspx");
+        route.MapPageRoute("ProductividadEx", "Productividad", "~/Productividad.aspx");
         route.MapPageRoute("Clientes", "Clientes/{page}", "~/Clientes.aspx");        
         route.MapPageRoute("ClientesEx", "Clientes", "~/Clientes.aspx");
         route.MapPageRoute("Subscripcion", "Subscripcion", "~/Subscripcion.aspx");        

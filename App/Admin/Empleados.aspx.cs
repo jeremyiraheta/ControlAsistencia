@@ -49,8 +49,7 @@ public partial class Empleados : System.Web.UI.Page
         }
         if (!IsPostBack) clearForm();
         if (EDITID > 0)
-            editing = true;
-        title.Text = "Agregar Empleado";
+            editing = true;        
     }
     protected void editCommand(object sender, CommandEventArgs e)
     {                           
@@ -98,7 +97,7 @@ public partial class Empleados : System.Web.UI.Page
     protected void filtrar(object sender, ImageClickEventArgs e)
     {
         if (txtfilter.Text.Trim() == "") return;
-        var emps = Datos.filter<Empleado>("EMPLEADOS", String.Format("concat_ws(' ', NOMBRES, APELLIDOS, CORREO, NACIMIENTO, (SELECT NOMBRE FROM DEPARTAMENTOS d WHERE d.CODDPTO = EMPLEADOS.CODDPTO)) LIKE UPPER('%{0}%') and ACTIVO = 'true' and CODCLI = {1}", txtfilter.Text, usuario.codcli));
+        var emps = Datos.filter<Empleado>("EMPLEADOS", String.Format("concat_ws(' ', NOMBRES, APELLIDOS, CORREO, NACIMIENTO, (SELECT NOMBRE FROM DEPARTAMENTOS d WHERE d.CODDPTO = EMPLEADOS.CODDPTO)) LIKE UPPER('%{0}%') and ACTIVO = 'true' and CODCLI = {1}", txtfilter.Text, usuario.codcli), "*");
         if (emps == null)
             emps = new List<Empleado>();
         filltable(emps);
@@ -109,7 +108,8 @@ public partial class Empleados : System.Web.UI.Page
         try
         {
             List<Datos.Counter> i = Datos.filter<Datos.Counter>("EMPLEADOS", "ACTIVO = 'true' and CODCLI = " + usuario.codcli, "COUNT(*) count");
-            int numero = i[0].count;                
+            int numero = i[0].count;
+            Session["count_emps"] = numero;                
             return (int)Math.Ceiling(numero / 10.0);
         }
         catch (Exception)
@@ -154,14 +154,23 @@ public partial class Empleados : System.Web.UI.Page
         emp.codcli = usuario.codcli;
         if (cod > 0)
         {
-            if( Datos.updateEmpleado(emp))
+            var r = Datos.updateEmpleado(emp);
+            if (r.affectedRows > 0)
                 ((Layout)Master).toast("INFO", "Se actualizo el registro", 0, ClientScript);
             else
                 ((Layout)Master).toast("ERROR", "Ocurrio un error y no se pudo actualizar", 2, ClientScript);
         }
         else
         {
-           if( Datos.insertEmpleado(emp))
+            int max = maximo(((Cliente)Session["cliente"]).plan);
+            int count = int.Parse(Session["count_emps"].ToString());
+            if (max >= count && max > -1)
+            {
+                ((Layout)Master).toast("ERROR", "Ya llego al limite de empleados que puede ingresar con su plan", 2, ClientScript);
+                return;
+            }
+            var r = Datos.insertEmpleado(emp);
+           if ( r.affectedRows > 0 )
                 ((Layout)Master).toast("INFO", "Se agrego el registro", 0, ClientScript);
            else
                 ((Layout)Master).toast("ERROR", "No se pudo agregar el registro", 2, ClientScript);
@@ -214,6 +223,14 @@ public partial class Empleados : System.Web.UI.Page
         txtpass2.Text = "";
         cmbDptos.SelectedIndex = 0;
         codemp.Value = "0";
+    }
+
+    private int maximo(int plan)
+    {
+        if (plan > 0)
+            return int.Parse(GlobalV.PLAN[plan - 1, 3]);
+        else
+            return int.Parse(GlobalV.PLAN[0, 3]);
     }
 
 

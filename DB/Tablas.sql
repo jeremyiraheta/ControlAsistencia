@@ -114,7 +114,7 @@ create table PRODUCTIVIDAD
    CODCLI               int not null,
    PROCESOS             mediumtext,
    HISTNAV              mediumtext,
-   FECHA                date not null,
+   FECHA                datetime not null,
    primary key(CODPROD),
    foreign key(CODEMP, CODCLI) references EMPLEADOS(CODEMP, CODCLI)
 );

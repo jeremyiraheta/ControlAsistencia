@@ -57,8 +57,8 @@ public static class GlobalV
 
     public static string[,] PLAN =
     {
-        {"Plan Startup", "4.99", "1" },
-        {"Plan PYME", "9.99", "2"},
-        {"Plan Premium", "99.9", "3" }
+        {"Plan Startup", "4.99", "1", "50" },
+        {"Plan PYME", "9.99", "2", "200"},
+        {"Plan Premium", "99.9", "3", "-1" }
     };
 }

@@ -38,7 +38,7 @@ public partial class Opciones : System.Web.UI.Page
             }
             txtclinom.Text = cliente.nombre;
             txtcliid.Text = cliente.urlnom;
-            txturl.Text = cliente.url;
+            txturl.Text = cliente.url == null ? "" : cliente.url;
             txtemail.Text = cliente.correo_contacto;
             txtnumcont.Text = cliente.telefono_contacto;           
             txtprob.Text = String.Format("{0:F2}", cliente.porctcapt);
@@ -99,7 +99,7 @@ public partial class Opciones : System.Web.UI.Page
         cliente.capturarhistorialnav = chknav.Checked;
         cliente.capturarpantalla = chkpant.Checked;
         cliente.capturarprocesos = chkpross.Checked;
-        cliente.loginbackground = pickcolor.Text;
+        cliente.loginbackground = pickcolor.Text;        
         if(!urlnomvalid)
         {
             ((Layout)Master).toast("ALERT", "El nombre de acceso no esta disponible", 1, ClientScript);
@@ -107,7 +107,12 @@ public partial class Opciones : System.Web.UI.Page
         }
         try
         {
-            Datos.updateCliente(cliente);
+            var r = Datos.updateCliente(cliente);
+            if(r.affectedRows == 0)
+            {
+                ((Layout)Master).toast("ALERT", "No se pudo actualizar el registro", 1, ClientScript);
+                return;
+            }
             Session["cliente"] = cliente;
             ((Layout)Master).toast("INFO", "Se guardo correctamente", 0,ClientScript);
         }

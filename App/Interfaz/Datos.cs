@@ -258,7 +258,7 @@ namespace Interfaz
         public static List<Registro> listRegistrosMes(int codcli, int mes, int anio)
         {
             API<List<Registro>> api = new API<List<Registro>>(local);
-            var t = Task.Run(() => api.get($"registros/codcli/{codcli}/m/{mes}/y/{anio}"));
+            var t = Task.Run(() => api.get($"registros/codcli/{codcli}/m/{String.Format("{0:00}", mes)}/y/{anio}"));
             t.Wait();
             return t.Result;
         }
@@ -272,7 +272,7 @@ namespace Interfaz
         public static List<Registro> listRegistrosEmpleado(int codemp, int codcli, int mes, int anio)
         {
             API<List<Registro>> api = new API<List<Registro>>(local);
-            var t = Task.Run(() => api.get($"registros/codemp/{codemp}/codcli/{codcli}/m/{mes}/y/{anio}"));
+            var t = Task.Run(() => api.get($"registros/codemp/{codemp}/codcli/{codcli}/m/{String.Format("{0:00}", mes)}/y/{anio}"));
             t.Wait();
             return t.Result;
         }
@@ -296,7 +296,7 @@ namespace Interfaz
         public static List<Permiso> listPermisos(int codcli, int mes, int anio)
         {
             API<List<Permiso>> api = new API<List<Permiso>>(local);
-            var t = Task.Run(() => api.get($"permisos/codcli/{codcli}/m/{mes}/y/{anio}"));
+            var t = Task.Run(() => api.get($"permisos/codcli/{codcli}/m/{String.Format("{0:00}", mes)}/y/{anio}"));
             t.Wait();
             return t.Result;
         }
@@ -401,6 +401,13 @@ namespace Interfaz
         public static List<Productividad> getProductividad(int codemp, int codcli, string fechaini, string fechafin)
         {
             API<List<Productividad>> api = new API<List<Productividad>>(local);
+            if (System.Text.RegularExpressions.Regex.IsMatch(fechaini, "\\d{4}-\\d{2}-\\d{2}"))
+            {
+                String[] fi = fechaini.Split(new String[] { "-" }, StringSplitOptions.RemoveEmptyEntries);
+                String[] fe = fechafin.Split(new String[] { "-" }, StringSplitOptions.RemoveEmptyEntries);
+                fechaini = String.Format("{0:00}-{1:00}-{2}", fi[2], fi[1], fi[0]);
+                fechafin = String.Format("{0:00}-{1:00}-{2}", fe[2], fe[1], fe[0]);
+            }
             var t = Task.Run(() => api.get($"productividad/codemp/{codemp}/codcli/{codcli}/fechaini/{fechaini}/fechafin/{fechafin}"));
             t.Wait();
             return t.Result;
@@ -673,6 +680,21 @@ namespace Interfaz
             try
             {
                 bytes = await Task.Run(() => api.download($"reportePermisos.pdf", rpt));
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+            return bytes;
+        }
+
+        public async static Task<byte[]> downloadInstalador()
+        {
+            API api = new API(local);
+            byte[] bytes;
+            try
+            {
+                bytes = await Task.Run(() => api.download(APIURL + "/app"));
             }
             catch (Exception)
             {
