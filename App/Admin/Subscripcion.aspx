@@ -124,7 +124,7 @@
               </div>
              <label for="txtcliid">Dirección de ingreso</label>
               <div class="input-group mb-3">                  
-                  <span class="input-group-text" id="basic-addon3"><%= "https://" + Request.Url.Authority + "/Login/" %></span>
+                  <span class="input-group-text" id="basic-addon3"><%= "http://" + Request.Url.Authority + "/Login/" %></span>
                   <asp:TextBox ID="txtcliid" ClientIDMode="Static" OnTextChanged="txtcliid_TextChanged" AutoPostBack="true" CssClass="form-control" MaxLength="200" placeholder="mi-negocio" runat="server" required/>
                   <i class="bi bi-check-circle" style="font-size: 2rem; padding-left: 10px; color: #1fdf25;<%=validdisplay %>" title="Dirección disponible"></i>                                 
                   <i class="bi bi bi-x-circle" style="font-size: 2rem; padding-left: 10px; color: red;<%=invaliddisplay %>" title="Dirección no disponible"></i>                           

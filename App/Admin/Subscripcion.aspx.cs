@@ -115,6 +115,7 @@ public partial class Subscripcion : System.Web.UI.Page
             cliente.pais = country.Text;
             cliente.plan = plan;
             cliente.direccion = txtdir.Text;
+            cliente.url = txturl.Text;
             cliente.invervalo = 60;
             Datos.insertCliente(cliente);
             cliente = Datos.getCliente(cliente.urlnom);

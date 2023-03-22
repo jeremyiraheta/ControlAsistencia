@@ -94,7 +94,11 @@ public partial class Opciones : System.Web.UI.Page
         }
         cliente.direccion = txtdir.Text;
         cliente.pais = country.SelectedValue;
-        cliente.plan = int.Parse(plan.SelectedValue);
+        int nplan = int.Parse(plan.SelectedValue);
+        DateTime fechafin = DateTime.ParseExact(cliente.fecha_fin_servicio, "yyyy-MM-ddTHH:mm:ss.fffZ", null);
+        if (cliente.plan == 0 && nplan > 0 && DateTime.Now > fechafin)
+            cliente.fecha_fin_servicio = FormatDateTime(DateTime.Now.ToString("o"));
+        cliente.plan = nplan;
         cliente.zonahoraria = int.Parse(ddlTimeZones.SelectedValue);
         cliente.capturarhistorialnav = chknav.Checked;
         cliente.capturarpantalla = chkpant.Checked;
@@ -149,4 +153,11 @@ public partial class Opciones : System.Web.UI.Page
             Session["urlnomvalid"] = true;
         }
     }
+
+    private string FormatDateTime(string dateTimeString)
+    {
+        DateTime dateTime = DateTime.ParseExact(dateTimeString, "yyyy-MM-ddTHH:mm:ss.fffZ", null);
+        return dateTime.AddDays(31).ToString("o");
+    }    
+
 }

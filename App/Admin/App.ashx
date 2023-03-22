@@ -9,7 +9,7 @@ public class App : IHttpHandler {
     
     public void ProcessRequest (HttpContext context) {
         context.Response.ContentType = "*/*";
-        context.Response.AddHeader("Content-Disposition", "inline; filename=\"setup.exe\"");
+        context.Response.AddHeader("Content-Disposition", "filename=\"setup.exe\"");
         var bytes = Task.Run(() => Datos.downloadInstalador()).Result;
         context.Response.BinaryWrite(bytes);
     }

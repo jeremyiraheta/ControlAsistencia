@@ -14,6 +14,7 @@ public partial class Productividad : System.Web.UI.Page
     public int maxp = 10;
     public int cpage = 1;
     public int id = 0;
+    public string modalsize;    
 
     protected void Page_Load(object sender, EventArgs e)
     {
@@ -38,7 +39,16 @@ public partial class Productividad : System.Web.UI.Page
             }
         }
         var emps = Datos.listEmpleados(usuario.codcli, (cpage - 1) * 10);
-        filltable(emps);
+        if(!IsPostBack || Session["filtrado"] == null)
+        {
+            filltable(emps);
+            Session.Remove("filtrado");
+        }
+        else
+        {
+            List<Empleado> filtrado = (List<Empleado>)Session["filtrado"];
+            filltable(filtrado);
+        }
         if (!IsPostBack) filtdate.Text = String.Format("{2}-{1:00}-{0:00}", DateTime.Today.Day, DateTime.Today.Month, DateTime.Today.Year);
     }
 
@@ -48,7 +58,8 @@ public partial class Productividad : System.Web.UI.Page
         var emps = Datos.filter<Empleado>("EMPLEADOS", String.Format("concat_ws(' ', NOMBRES, APELLIDOS, CORREO, NACIMIENTO, (SELECT NOMBRE FROM DEPARTAMENTOS d WHERE d.CODDPTO = EMPLEADOS.CODDPTO)) LIKE UPPER('%{0}%') and ACTIVO = 'true' and CODCLI = {1}", txtfilter.Text, usuario.codcli), "*");
         if (emps == null)
             emps = new List<Empleado>();
-        filltable(emps);
+       Session["filtrado"] = emps;
+       filltable(emps);
     }
 
     private int maxpages()
@@ -134,6 +145,7 @@ public partial class Productividad : System.Web.UI.Page
             }
             popupContent.Text = body + "</div>" + Environment.NewLine;
         }
+        modalsize = "modal-lg";
         ScriptManager.RegisterStartupScript(Page, Page.GetType(), "vProd", "new bootstrap.Modal(document.getElementById('vProd'), { keyboard:false}).show()", true);
     }
 
@@ -141,7 +153,7 @@ public partial class Productividad : System.Web.UI.Page
     {
         this.id = Convert.ToInt32(e.CommandArgument);
         var o = Datos.getProductividad(this.id, usuario.codcli, filtdate.Text, filtdate.Text);
-        title.Text = "Navegación registrada dia: " + filtdate.Text;
+        title.Text = "Navegación registrada día: " + filtdate.Text;
         if (o.Count == 0)
         {            
             popupContent.Text = "<p>El empleado no tiene registros este día</p>";
@@ -156,6 +168,7 @@ public partial class Productividad : System.Web.UI.Page
             }
             popupContent.Text = body + "</div>" + Environment.NewLine;
         }
+        modalsize = "modal-lg";
         ScriptManager.RegisterStartupScript(Page, Page.GetType(), "vProd", "new bootstrap.Modal(document.getElementById('vProd'), { keyboard:false}).show()", true);
     }
 
@@ -163,7 +176,7 @@ public partial class Productividad : System.Web.UI.Page
     {
         this.id = Convert.ToInt32(e.CommandArgument);
         var o = Datos.getProductividad(this.id, usuario.codcli, filtdate.Text, filtdate.Text);
-        title.Text = "Capturas registradas dia: " + filtdate.Text;
+        title.Text = "Capturas registradas día: " + filtdate.Text;
         if (o.Count == 0)
         {
             popupContent.Text = "<p>El empleado no tiene registros este día</p>";
@@ -172,6 +185,7 @@ public partial class Productividad : System.Web.UI.Page
         {            
             popupContent.Text = carousel(o);
         }
+        modalsize = "modal-xl";
         ScriptManager.RegisterStartupScript(Page, Page.GetType(), "vProd", "new bootstrap.Modal(document.getElementById('vProd'), { keyboard:false}).show()", true);
     }
 
@@ -210,43 +224,61 @@ public partial class Productividad : System.Web.UI.Page
       </div>
     </div>
   </div>";
-        return String.Format(ret, id,btn, table);
+        if (r.Length == 0)
+            return "<p>El empleado no tiene registros este día</p>";
+        else
+            return String.Format(ret, id,FormatDateTime(btn), table);
     }
 
     private String carousel(List<Interfaz.modelos.Productividad> prodlist)
     {
-        int active = prodlist[0].codprod;
+        int active = 0;
         String btns = "";
         String imgs = "";
         int c = 1;
         foreach (var b in prodlist)
         {
-            if (b.codprod == active) continue;
+            if (active == 0 && b.attch)
+            {
+                active = b.codprod;
+                continue;
+            }
+            if (!b.attch) continue;
             btns += String.Format(@"<button type = ""button"" data-bs-target=""#carouselCapturas"" data-bs-slide-to=""{0}"" aria-label=""Slide {1}""></button>" + Environment.NewLine, c, c+1);
             imgs += String.Format(@"<div class=""carousel-item"">
       <img src = ""/Captura.ashx?id={0}"" class=""d-block w-100"" alt=""..."">
     </div>" + Environment.NewLine, b.codprod);
+            c++;
         }
         String ret = @"<div id=""carouselCapturas"" class=""carousel slide"">
-  < div class=""carousel-indicators"">
+  <div class=""carousel-indicators"">
     <button type = ""button"" data-bs-target=""#carouselCapturas"" data-bs-slide-to=""0"" class=""active"" aria-current=""true"" aria-label=""Slide 1""></button>
     {0}
   </div>
   <div class=""carousel-inner"">
     <div class=""carousel-item active"">
-      <img src = ""/Captura.ashx?id={0}"" class=""d-block w-100"" alt=""..."">
+      <img src = ""/Captura.ashx?id={1}"" class=""d-block w-100"" alt=""..."">
     </div>
-    {1}
+    {2}
   </div>
   <button class=""carousel-control-prev"" type=""button"" data-bs-target=""#carouselCapturas"" data-bs-slide=""prev"">
     <span class=""carousel-control-prev-icon"" aria-hidden=""true""></span>
-    <span class=""visually-hidden"">Previous</span>
+    <span class=""visually-hidden"">Previo</span>
   </button>
   <button class=""carousel-control-next"" type=""button"" data-bs-target=""#carouselCapturas"" data-bs-slide=""next"">
     <span class=""carousel-control-next-icon"" aria-hidden=""true""></span>
-    <span class=""visually-hidden"">Next</span>
+    <span class=""visually-hidden"">Siguiente</span>
   </button>
 </div>";
-        return String.Format(ret,btns, imgs);
+        if (active == 0)
+            return "<p>El empleado no tiene registros este día</p>";
+        else
+            return String.Format(ret,btns, active, imgs);
+    }
+
+    private string FormatDateTime(string dateTimeString)
+    {
+        DateTime dateTime = DateTime.ParseExact(dateTimeString, "yyyy-MM-ddTHH:mm:ss.fffZ", null);
+        return dateTime.ToString("HH:mm");
     }
 }

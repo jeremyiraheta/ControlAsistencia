@@ -21,13 +21,13 @@ public class Captura : IHttpHandler, System.Web.SessionState.IReadOnlySessionSta
         }
         catch (Exception)
         {
-            context.Response.BinaryWrite(null);
+            context.Response.BinaryWrite(new byte[] { });
             return;
         }
 
         byte[] img= null;
-        img = Task.Run(() => Datos.imgCaptura(codprod, codcli)).Result;            
-        context.Response.ContentType = "image/webp";        
+        img = Task.Run(() => Datos.imgCaptura(codprod, codcli)).Result;
+        context.Response.ContentType = "image/webp";
         context.Response.OutputStream.Write(img,0,img.Length);
     }
 

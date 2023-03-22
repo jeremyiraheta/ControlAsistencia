@@ -41,7 +41,7 @@
     </div>
     <asp:Panel ID="modalContainer" runat="server">
         <div class="modal fade" id="vProd" tabindex="-1" aria-labelledby="vProd" aria-hidden="true">
-            <div class="modal-dialog">
+            <div class="modal-dialog <%=modalsize %>">
             <div class="modal-content">
                 <div class="modal-header">
                 <h5 class="modal-title" id="titleLabel"><asp:Literal ID="title" runat="server" /></h5>

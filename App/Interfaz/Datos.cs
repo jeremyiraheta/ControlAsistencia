@@ -694,7 +694,8 @@ namespace Interfaz
             byte[] bytes;
             try
             {
-                bytes = await Task.Run(() => api.download(APIURL + "/app"));
+                Uri uri = new Uri(APIURL);
+                bytes = await Task.Run(() => api.download(uri.Scheme + "://" + uri.Authority + "/app/setup.exe"));
             }
             catch (Exception)
             {

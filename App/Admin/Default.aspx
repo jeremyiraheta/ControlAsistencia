@@ -481,49 +481,49 @@
 
    			<div class="bgrid">
 
-   				<h3>What are the security features?</h3>
+   				<h3>El sistema es seguro?</h3>
 
-   				<p>Lorem ipsum Id in magna ad culpa dolor eu aute non amet aute ea in consectetur in quis nostrud anim proident dolore in sed et mollit voluptate culpa irure consequat laborum ea sint in mollit adipisicing cupidatat.</p>
-
-   			</div>
-
-   			<div class="bgrid">
-
-   				<h3>How can I update my user profile?</h3>
-
-   				<p>Lorem ipsum Id in magna ad culpa dolor eu aute non amet aute ea in consectetur in quis nostrud anim proident dolore in sed et mollit voluptate culpa irure consequat laborum ea sint in mollit adipisicing cupidatat.</p>
+   				<p>Si, La aplicación cuenta con una capa de seguridad para asegurar la información recabada</p>
 
    			</div>
 
    			<div class="bgrid">
 
-   				<h3>What features are not included in the free version?</h3>
+   				<h3>En que consiste la medición de productividad?</h3>
 
-   				<p>Lorem ipsum Id in magna ad culpa dolor eu aute non amet aute ea in consectetur in quis nostrud anim proident dolore in sed et mollit voluptate culpa irure consequat laborum ea sint in mollit adipisicing cupidatat.</p>
-
-   			</div>
-
-   			<div class="bgrid">
-
-   				<h3>Can I upgrade my account from Starter to Premium?</h3>
-
-   				<p>Lorem ipsum Id in magna ad culpa dolor eu aute non amet aute ea in consectetur in quis nostrud anim proident dolore in sed et mollit voluptate culpa irure consequat laborum ea sint in mollit adipisicing cupidatat.</p>
+   				<p>La aplicación cliente recabara información de los empleados de forma periodica, si así lo desea, procesos activos, navegación y capturas de pantalla</p>
 
    			</div>
 
    			<div class="bgrid">
 
-   				<h3>Where can I found all my uploads?</h3>
+   				<h3>Puedo cancelar la subcripción?</h3>
 
-   				<p>Lorem ipsum Id in magna ad culpa dolor eu aute non amet aute ea in consectetur in quis nostrud anim proident dolore in sed et mollit voluptate culpa irure consequat laborum ea sint in mollit adipisicing cupidatat.</p>
+   				<p>Si, puede cancelar cancelar su renovación desde su panel de configuración</p>
 
    			</div>
 
    			<div class="bgrid">
 
-   				<h3>How long can I use the free trial version?</h3>
+   				<h3>Puedo actualizar mi plan?</h3>
 
-   				<p>Lorem ipsum Id in magna ad culpa dolor eu aute non amet aute ea in consectetur in quis nostrud anim proident dolore in sed et mollit voluptate culpa irure consequat laborum ea sint in mollit adipisicing cupidatat.</p>
+   				<p>Si, puede cambiar su plan desde su panel de configuración</p>
+
+   			</div>
+
+   			<div class="bgrid">
+
+   				<h3>Dondé puedo descargar las aplicaciones?</h3>
+
+   				<p>Puedes descargar las aplicaciones cliente desde esta misma pagina, solo descargue el instalador y al ejecutarlo se instalara solo</p>
+
+   			</div>
+
+   			<div class="bgrid">
+
+   				<h3>Por qué dice que no estoy autorizado al ingresar?</h3>
+
+   				<p>Solo tienen permiso de ingreso administrativo los usuarios designados al departamento administrativo, el usuario con el que se registro al servicio tiene los permisos para asignar otros usuarios al departamento administrativo</p>
 
    			</div>
 
