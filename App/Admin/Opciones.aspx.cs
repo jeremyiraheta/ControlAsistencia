@@ -11,9 +11,11 @@ public partial class Opciones : System.Web.UI.Page
 {
 
     public string validdisplay = "display:none";
-    public string invaliddisplay = "display:none";           
+    public string invaliddisplay = "display:none";
+    public bool noplan;           
     protected void Page_Load(object sender, EventArgs e)
     {
+        noplan = Session["noplan"] != null;
         Cliente cliente = (Cliente)Session["cliente"];
         if (!IsPostBack)
         {
@@ -94,10 +96,14 @@ public partial class Opciones : System.Web.UI.Page
         }
         cliente.direccion = txtdir.Text;
         cliente.pais = country.SelectedValue;
-        int nplan = int.Parse(plan.SelectedValue);
+        int nplan = int.Parse(plan.SelectedValue);        
         DateTime fechafin = DateTime.ParseExact(cliente.fecha_fin_servicio, "yyyy-MM-ddTHH:mm:ss.fffZ", null);
         if (cliente.plan == 0 && nplan > 0 && DateTime.Now > fechafin)
-            cliente.fecha_fin_servicio = FormatDateTime(DateTime.Now.ToString("o"));
+        {
+            cliente.fecha_fin_servicio = FormatDateTime(DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss.fffZ"));
+            Session.Remove("noplan");
+            noplan = false;
+        }
         cliente.plan = nplan;
         cliente.zonahoraria = int.Parse(ddlTimeZones.SelectedValue);
         cliente.capturarhistorialnav = chknav.Checked;
@@ -157,7 +163,7 @@ public partial class Opciones : System.Web.UI.Page
     private string FormatDateTime(string dateTimeString)
     {
         DateTime dateTime = DateTime.ParseExact(dateTimeString, "yyyy-MM-ddTHH:mm:ss.fffZ", null);
-        return dateTime.AddDays(31).ToString("o");
+        return dateTime.AddDays(31).ToString("yyyy-MM-ddTHH:mm:ss.fffZ");
     }    
 
 }

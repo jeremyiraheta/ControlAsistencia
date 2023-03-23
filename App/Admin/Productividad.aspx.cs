@@ -18,6 +18,8 @@ public partial class Productividad : System.Web.UI.Page
 
     protected void Page_Load(object sender, EventArgs e)
     {
+        bool noplan = Session["noplan"] != null;
+        if (noplan) Response.Redirect("/Opciones");
         usuario = (Usuario)Session["usuario"];
         if (usuario == null)
             Response.Redirect("/Login");

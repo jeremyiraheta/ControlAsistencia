@@ -11,7 +11,9 @@ public partial class Registros : System.Web.UI.Page
 {
     Usuario usuario;
     protected void Page_Load(object sender, EventArgs e)
-    {        
+    {
+        bool noplan = Session["noplan"] != null;
+        if (noplan) Response.Redirect("/Opciones");
         if (!IsPostBack)
         {
             txtfilter.Text = String.Format("{0}-{1:00}", DateTime.Today.Year, DateTime.Today.Month);

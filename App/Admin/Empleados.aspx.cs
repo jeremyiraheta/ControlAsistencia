@@ -17,6 +17,8 @@ public partial class Empleados : System.Web.UI.Page
     public int cpage = 1;
     protected void Page_Load(object sender, EventArgs e)
     {
+        bool noplan = Session["noplan"] != null;
+        if (noplan) Response.Redirect("/Opciones");
         usuario = (Usuario)Session["usuario"];
         if (usuario == null)
             Response.Redirect("/Login");

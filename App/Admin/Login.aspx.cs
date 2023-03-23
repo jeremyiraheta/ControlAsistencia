@@ -43,13 +43,9 @@ public partial class Forms_Login : System.Web.UI.Page
             {
                 Session["usuario"] = emp;
                 Session["cliente"] = Datos.getCliente(emp.codcli); 
-                if(subscrito((Cliente)Session["cliente"]))                
-                    Response.Redirect("/Admin");
-                else
-                {
-                    Session["usuario"] = null;
-                    msg.Text = "Usted ya no esta subscripto! <a href=\"/Opciones\">Click aqui si desea renovar</a>";
-                }
+                if(!subscrito((Cliente)Session["cliente"]))
+                    Session["noplan"] = true;
+                Response.Redirect("/Admin");
             }
             else if (emp != null)
             {
@@ -71,11 +67,14 @@ public partial class Forms_Login : System.Web.UI.Page
     {
         DateTime fechafin = DateTime.ParseExact(cli.fecha_fin_servicio, "yyyy-MM-ddTHH:mm:ss.fffZ", CultureInfo.InvariantCulture);
         fechafin = fechafin.AddDays(1);
-        if(fechafin.CompareTo(DateTime.Now) == 1)
+        if(DateTime.Now > fechafin && cli.codcli > 1)
         {
             bool resub = cli.plan > 0;
-            cli.fecha_fin_servicio = fechafin.AddDays(31).ToString("o");
-            Datos.updateCliente(cli);
+            if(resub)
+            {
+                cli.fecha_fin_servicio = DateTime.Now.AddDays(31).ToString("yyyy-MM-ddTHH:mm:ss.fffZ");
+                Datos.updateCliente(cli);
+            }            
             return resub;
         }
         else

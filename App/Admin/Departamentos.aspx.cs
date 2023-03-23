@@ -11,7 +11,9 @@ public partial class Departamentos : System.Web.UI.Page
 {
     Usuario usuario; 
     protected void Page_Load(object sender, EventArgs e)
-    {       
+    {
+        bool noplan = Session["noplan"] != null;
+        if (noplan) Response.Redirect("/Opciones");
         string tabdp = @"<li class='nav-item'>
                               <span style='display:flex;'><a class='nav-link {1}' href=# onclick='selectDpto({2},this)'>{0}</a><a href=/Ajax/ajaxDepartamentos.ashx?action=delete&coddpto={2} class='btn-close btn-close-white' style='{3}' aria-label='Close'></a></span>
                           </li>";

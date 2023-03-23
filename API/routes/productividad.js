@@ -8,7 +8,7 @@ const DEBUG = process.env.DEBUG || true;
 
 //Crea un registro de productividad nuevo
 router.post("/PRODUCTIVIDAD", (req, res) => {
-    var query = connection.query(`INSERT INTO PRODUCTIVIDAD(codemp,codcli,procesos,histnav,fecha) values(${req.body.codemp},${req.body.codcli},'${req.body.procesos}','${req.body.histnav}',NOW())`, function(error, result){
+    var query = connection.query(`INSERT INTO PRODUCTIVIDAD(codemp,codcli,procesos,histnav,fecha) values(${req.body.codemp},${req.body.codcli},'${req.body.procesos}','${req.body.histnav}', DATE_ADD(NOW(),INTERVAL (SELECT ZONAHORARIA FROM clientes WHERE CODCLI = ${req.body.codcli})  HOUR))`, function(error, result){
         if(error) console.log('[mysql error] : ', error)
         if(DEBUG)console.log(`post a PRODUCTIVIDAD`)        
         res.send(result)

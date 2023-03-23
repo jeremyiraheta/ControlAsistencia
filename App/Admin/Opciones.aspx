@@ -17,7 +17,18 @@
     }
 </script>
 </asp:Content>
-<asp:Content ID="Content2" ContentPlaceHolderID="Content" Runat="Server">    
+<asp:Content ID="Content2" ContentPlaceHolderID="Content" Runat="Server"> 
+    <%
+        if (noplan)
+        {
+
+         %> 
+    <div class="alert alert-danger" role="alert">
+      No tiene plan activo actualmente!
+    </div>  
+
+    <%
+        } %>
     <div class="content" style="text-align:left;">
         <h3 style="text-align:center">Opciones</h3> 
         <div class="row">

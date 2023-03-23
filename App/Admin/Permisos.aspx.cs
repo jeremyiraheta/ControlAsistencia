@@ -12,6 +12,8 @@ public partial class Permisos : System.Web.UI.Page
     Usuario usuario;
     protected void Page_Load(object sender, EventArgs e)
     {
+        bool noplan = Session["noplan"] != null;
+        if (noplan) Response.Redirect("/Opciones");
         usuario = (Usuario)Session["usuario"];
         if (!IsPostBack)
         {
