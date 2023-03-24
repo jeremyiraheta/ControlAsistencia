@@ -106,8 +106,9 @@ namespace WSControl
                             {
                                 if (cliente.capturarhistorialnav) nav = historyNav();
                             }
-                            catch (Exception)
+                            catch (Exception e)
                             {
+                                //MessageBox.Show(e.Message + Environment.NewLine + e.StackTrace);
                             }
                             var prod = Datos.insertProductividad(new Productividad() { codcli = Login.usuario.codcli, codemp = Login.usuario.codemp, procesos = proc, histnav = nav });
                             if(cliente.capturarpantalla) Datos.uploadCaptura(prod.insertId, Login.usuario.codcli, capturarPantalla());
@@ -152,27 +153,20 @@ namespace WSControl
             StringBuilder build = new StringBuilder();
             String hisdir = Environment.GetEnvironmentVariable("appdata") + "\\..\\Local\\Google\\Chrome\\User Data\\Default\\History";
             String temp = Environment.GetEnvironmentVariable("temp") + "\\Historytemp";
-            File.Copy(hisdir, temp);
+            File.Copy(hisdir, temp, true);
             SQLiteConnection con = new SQLiteConnection($"Data Source={temp};Compress=True;");
             con.Open();
-            int dn = DateTime.Now.Date.Day;
-            int mn = DateTime.Now.Date.Month;
-            int yn = DateTime.Now.Date.Year;
-            SQLiteCommand cmd = new SQLiteCommand("select * from urls where last_visit_time > 0 order by last_visit_time asc", con);
+            int d = DateTime.Now.Date.Day;
+            int m = DateTime.Now.Date.Month;
+            int y = DateTime.Now.Date.Year;
+            SQLiteCommand cmd = new SQLiteCommand(String.Format("SELECT url, title, datetime(last_visit_time/1000000-11644473600, 'unixepoch', 'localtime') as fecha FROM urls where fecha > date('{0}-{1:00}-{2:00}') order by last_visit_time desc",y,m,d), con);
             SQLiteDataReader reader = cmd.ExecuteReader();
             while(reader.Read())
             {
-                long utcMicroSeconds = reader.GetInt64(5);                
-                DateTime gmtTime = DateTime.FromFileTimeUtc(10 * utcMicroSeconds);
-                DateTime localTime = TimeZoneInfo.ConvertTimeFromUtc(gmtTime, TimeZoneInfo.Local);
-                int d = localTime.Day;
-                int m = localTime.Month;
-                int y = localTime.Year;                
-                if(d == dn && m == mn && y == yn)
-                    build.AppendLine($"URL: {reader.GetString(1)}, Titulo: {reader.GetString(2)}, Fecha: {localTime}");
-            }
+                build.AppendLine($"* URL: {reader.GetString(0)}, Titulo: {reader.GetString(1)}, Fecha: {reader.GetDateTime(2)}");
 
-            File.Delete(temp);
+            }
+            con.Close();                        
             return Uri.EscapeUriString(build.ToString()) ;
         }
     }

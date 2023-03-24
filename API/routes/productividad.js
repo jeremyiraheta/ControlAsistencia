@@ -37,7 +37,7 @@ router.delete("/PRODUCTIVIDAD/codprod/:codprod/codcli/:codcli", (req, res) => {
 
 //Consulta un registro de productividad
 router.get("/PRODUCTIVIDAD/codemp/:codemp/codcli/:codcli/fechaini/:fechaini/fechafin/:fechafin", (req, res) => {
-    var query = connection.query(`SELECT * FROM PRODUCTIVIDAD WHERE codemp = ${req.params.codemp} and codcli = ${req.params.codcli} and fecha between  STR_TO_DATE('${req.params.fechaini}', '%d-%m-%Y') and STR_TO_DATE('${req.params.fechafin}', '%d-%m-%Y')`, function(error, result){
+    var query = connection.query(`SELECT * FROM PRODUCTIVIDAD WHERE codemp = ${req.params.codemp} and codcli = ${req.params.codcli} and date(fecha) between  STR_TO_DATE('${req.params.fechaini}', '%d-%m-%Y') and STR_TO_DATE('${req.params.fechafin}', '%d-%m-%Y')`, function(error, result){
         if(error) console.log('[mysql error] : ', error)
         if(DEBUG)console.log(`get a PRODUCTIVIDAD id = ${req.params.codemp}`) 
         try {
