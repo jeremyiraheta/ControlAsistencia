@@ -33,7 +33,7 @@ router.get("/REGISTROS/codemp/:codemp/codcli/:codcli/m/:m/y/:y", (req, res) => {
 
 //crea un registro de un empleado
 router.post("/REGISTROS/codemp/:codemp/codcli/:codcli", (req, res) => {
-    var query = connection.query(`INSERT INTO REGISTROS(fecha, horaentrada, horasalida, codemp, codcli, total) values(DATE_ADD(NOW(),INTERVAL (SELECT ZONAHORARIA FROM clientes WHERE CODCLI = ${req.params.codcli})  HOUR), TIME(NOW()), TIME(NOW()), ${req.params.codemp}, ${req.params.codcli}, 0)`, function(error, result){
+    var query = connection.query(`INSERT INTO REGISTROS(fecha, horaentrada, horasalida, codemp, codcli, total) values(DATE_ADD(NOW(),INTERVAL (SELECT ZONAHORARIA FROM CLIENTES WHERE CODCLI = ${req.params.codcli})  HOUR), TIME(NOW()), TIME(NOW()), ${req.params.codemp}, ${req.params.codcli}, 0)`, function(error, result){
         if(error && error.errno != 1062) console.log('[mysql error] : ', error)
         if(DEBUG)console.log(`post tick a REGISTROS`)
         res.send(result)
