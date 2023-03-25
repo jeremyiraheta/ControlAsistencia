@@ -6,6 +6,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using Interfaz;
 using Interfaz.modelos;
+using System.Text.RegularExpressions;
 
 public partial class Productividad : System.Web.UI.Page
 {
@@ -143,7 +144,7 @@ public partial class Productividad : System.Web.UI.Page
             foreach (var p in o)
             {
                 if(p.procesos != null && p.procesos.Trim().Length > 0)
-                    body += toggleBtn(p.codprod, p.fecha, Uri.UnescapeDataString(p.procesos), "Proceso", "Nombre", "Actividad") + Environment.NewLine;
+                    body += toggleBtn(p.codprod, p.fecha, Uri.UnescapeDataString(p.procesos), @"\w*:(.*?), \w*: (.*?), .*: (.*)", "Proceso", "Nombre", "Actividad") + Environment.NewLine;
             }
             popupContent.Text = body + "</div>" + Environment.NewLine;
         }
@@ -166,7 +167,7 @@ public partial class Productividad : System.Web.UI.Page
             foreach (var p in o)
             {
                 if(p.histnav != null && p.histnav.Trim().Length > 0)
-                    body += toggleBtn(p.codprod, p.fecha, Uri.UnescapeDataString(p.histnav)) + Environment.NewLine;
+                    body += toggleBtn(p.codprod, p.fecha, Uri.UnescapeDataString(p.histnav), @"\w*:(.*?), \w*: (.*?), .*: .*?(\d{2}:\d{2}:\d{2})", "URL", "Titulo", "Hora") + Environment.NewLine;
             }
             popupContent.Text = body + "</div>" + Environment.NewLine;
         }
@@ -193,25 +194,26 @@ public partial class Productividad : System.Web.UI.Page
 
 
 
-    private String toggleBtn(int id, String btn, String text, params String[] columns )
+    private String toggleBtn(int id, String btn, String text, String pattern,params String[] columns )
     {
-        String[] r = text.Split(new String[] { "*" }, StringSplitOptions.RemoveEmptyEntries);        
+        Regex reg = new Regex(pattern);
+        String[] r = text.Split(new String[] { "*" }, StringSplitOptions.RemoveEmptyEntries);
         String rows = "";
         String cols = "";
         foreach (var cl in columns)
         {
             cols += "<th>" + cl + "</th>";
         }
-        foreach (var t in r)
+        foreach (var ln in r)
         {
-            String[] c = t.Split(new String[] { "," }, StringSplitOptions.RemoveEmptyEntries);
+            var match = reg.Match(ln);
             rows += "<tr>";
-            foreach (var d in c)
+            for (int i = 1; i < match.Groups.Count; i++)
             {
-                rows += "<td>" + d.Split(new String[] { ":" }, StringSplitOptions.RemoveEmptyEntries)[1].Trim() + "</td>";
-            }
+                rows += "<td>" + match.Groups[i] + "</td>";
+            }            
             rows += "</tr>";
-        }
+        }                                              
         String table = String.Format("<table class=\"table\"><thead><tr>{0}</tr></thead><tbody>{1}</tbody></table>", cols, rows);
         String ret = @"
   <div class=""accordion-item"">
@@ -221,7 +223,7 @@ public partial class Productividad : System.Web.UI.Page
       </button>
     </h2>
     <div id = ""collapse{0}"" class=""accordion-collapse collapse"" aria-labelledby=""heading{0}"" data-bs-parent=""#accordionView"">
-      <div class=""accordion-body"">
+      <div class=""accordion-body"" style=""overflow: auto;"">
         {2}
       </div>
     </div>

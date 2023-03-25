@@ -97,10 +97,10 @@ public partial class Opciones : System.Web.UI.Page
         cliente.direccion = txtdir.Text;
         cliente.pais = country.SelectedValue;
         int nplan = int.Parse(plan.SelectedValue);        
-        DateTime fechafin = DateTime.ParseExact(cliente.fecha_fin_servicio, "yyyy-MM-ddTHH:mm:ss.fffZ", null);
+        DateTime fechafin = DateTime.ParseExact(cliente.fecha_fin_servicio, "yyyy-MM-ddTHH:mm:ss.000Z", null);
         if (cliente.plan == 0 && nplan > 0 && DateTime.Now > fechafin)
         {
-            cliente.fecha_fin_servicio = FormatDateTime(DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss.fffZ"));
+            cliente.fecha_fin_servicio = FormatDateTime(DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss.000Z"));
             Session.Remove("noplan");
             noplan = false;
         }
@@ -162,8 +162,8 @@ public partial class Opciones : System.Web.UI.Page
 
     private string FormatDateTime(string dateTimeString)
     {
-        DateTime dateTime = DateTime.ParseExact(dateTimeString, "yyyy-MM-ddTHH:mm:ss.fffZ", null);
-        return dateTime.AddDays(31).ToString("yyyy-MM-ddTHH:mm:ss.fffZ");
+        DateTime dateTime = DateTime.ParseExact(dateTimeString, "yyyy-MM-ddTHH:mm:ss.000Z", null);
+        return dateTime.AddDays(31).ToString("yyyy-MM-ddTHH:mm:ss.000Z");
     }    
 
 }

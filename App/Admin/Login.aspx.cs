@@ -65,14 +65,14 @@ public partial class Forms_Login : System.Web.UI.Page
     }
     private bool subscrito(Cliente cli)
     {
-        DateTime fechafin = DateTime.ParseExact(cli.fecha_fin_servicio, "yyyy-MM-ddTHH:mm:ss.fffZ", CultureInfo.InvariantCulture);
+        DateTime fechafin = DateTime.ParseExact(cli.fecha_fin_servicio, "yyyy-MM-ddTHH:mm:ss.000Z", CultureInfo.InvariantCulture);
         fechafin = fechafin.AddDays(1);
         if(DateTime.Now > fechafin && cli.codcli > 1)
         {
             bool resub = cli.plan > 0;
             if(resub)
             {
-                cli.fecha_fin_servicio = DateTime.Now.AddDays(31).ToString("yyyy-MM-ddTHH:mm:ss.fffZ");
+                cli.fecha_fin_servicio = DateTime.Now.AddDays(31).ToString("yyyy-MM-ddTHH:mm:ss.000Z");
                 Datos.updateCliente(cli);
             }            
             return resub;
