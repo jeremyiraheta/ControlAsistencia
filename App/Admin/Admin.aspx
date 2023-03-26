@@ -7,7 +7,7 @@
     <title>Shuseki - Dashboard</title>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="Content" Runat="Server">
-    <div class="helper">
+    <div class="helper" style="top: 80%">
         
         <h3>Dashboard</h3>
         <div class="container" style="min-width: 1400px;">
@@ -19,20 +19,28 @@
                         <canvas id="horasXmes" style="width:100%;height:100%"></canvas>
                 </div>
             </div>
+            <div class="row" style="padding-top:20px;">
+                <div class="col" style="min-width:600px;min-height:600px;">
+                        <canvas id="permisoXmes" style="width:100%;height:100%"></canvas>
+                </div>
+                <div class="col" style="min-width:600px;min-height:600px;">
+                        <canvas id="horasxemp" style="width:100%;height:100%"></canvas>
+                </div>
+            </div>
         </div>
     </div> 
     <script>
-    var xValues = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"];
-    var yValues = [<%=mediaSemana %>];
-    var barColors = [<%=mediaSColors %>];
+    var xValues1 = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"];
+    var yValues1 = [<%=mediaSemana %>];
+    var barColors1 = [<%=mediaSColors %>];
 
     new Chart("horasXdia", {
       type: "pie",
       data: {
-        labels: xValues,
+        labels: xValues1,
         datasets: [{
-          backgroundColor: barColors,
-          data: yValues
+          backgroundColor: barColors1,
+          data: yValues1
         }]
       },
       options: {
@@ -44,17 +52,17 @@
     });
 </script>
     <script>
-    var xValues = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
-    var yValues = [<%=mediaMes %>];
-    var barColors = [<%=mediaMColors %>];
+    var xValues2 = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+    var yValues2 = [<%=mediaMes %>];
+    var barColors2 = [<%=mediaMColors %>];
 
     new Chart("horasXmes", {
       type: "pie",
       data: {
-        labels: xValues,
+        labels: xValues2,
         datasets: [{
-          backgroundColor: barColors,
-          data: yValues
+          backgroundColor: barColors2,
+          data: yValues2
         }]
       },
       options: {
@@ -65,6 +73,55 @@
       }
     });
 </script>
+
+    <script>
+var xValues3 = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+var yValues3 = [<%=mediaPermisos %>];
+var barColors3 = [<%=mediaPColors %>];
+
+        new Chart("permisoXmes", {
+  type: "bar",
+  data: {
+    labels: xValues3,
+    datasets: [{
+      backgroundColor: barColors3,
+      data: yValues3
+    }]
+  },
+  options: {
+    legend: {display: false},
+    title: {
+      display: true,
+      text: "Permisos por mes"
+    }
+  }
+});
+</script>
+
+    <script>
+var xValues3 = [<%=nombres %>];
+var yValues3 = [<%=valores %>];
+var barColors3 = [<%=mediaPColors %>];
+
+new Chart("horasxemp", {
+  type: "bar",
+  data: {
+    labels: xValues3,
+    datasets: [{
+      backgroundColor: barColors3,
+      data: yValues3
+    }]
+  },
+  options: {
+    legend: {display: false},
+    title: {
+      display: true,
+      text: "5 Empleados con menos horas registradas"
+    }
+  }
+});
+</script>
+
        
 </asp:Content>
 

@@ -15,6 +15,11 @@ public partial class Admin : System.Web.UI.Page
     public String mediaSColors;
     public String mediaMes;
     public String mediaMColors;
+    public String mediaPermisos;
+    public String mediaPColors;
+    public String nombres="";
+    public String valores="";
+    public String colors = "";
     protected void Page_Load(object sender, EventArgs e)
     {
         bool noplan = Session["noplan"] != null;
@@ -27,6 +32,20 @@ public partial class Admin : System.Web.UI.Page
         mediaSColors = arregloColores(7);
         mediaMes = calcularMediaMes();
         mediaMColors = arregloColores(12);
+        mediaPermisos = calcularPermisosMes();
+        mediaPColors = arregloColores(12);
+        String[,] memps = empleadosMenosHoras();
+        if(memps != null)
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                nombres += "\"" + memps[i, 0] + "\",";
+                valores += memps[i, 1] + ",";
+            }
+            nombres = nombres.Substring(0, nombres.Length - 1);
+            valores = valores.Substring(0, valores.Length - 1);
+        }
+        colors = arregloColores(5);
     }
 
     private string calcularMediaSemana()
@@ -39,6 +58,7 @@ public partial class Admin : System.Web.UI.Page
         DateTime sabado = viernes.AddDays(1);
         DateTime domingo = sabado.AddDays(1);
         var registros = Datos.listRegistrosMes(usuario.codcli, lunes.Month, lunes.Year);
+        if (registros == null || registros.Count == 0) return "";
         var avgLunes = registros.Where(x => FormatDateTime(x.fecha).Date == lunes).ToList().Average(a => a.total);
         var avgMartes = registros.Where(x => FormatDateTime(x.fecha).Date == martes).ToList().Average(a => a.total);
         var avgMiercoles = registros.Where(x => FormatDateTime(x.fecha).Date == miercoles).ToList().Average(a => a.total);
@@ -55,9 +75,45 @@ public partial class Admin : System.Web.UI.Page
         for (int i = 1; i < 13; i++)
         {
             var rmes = Datos.listRegistrosMes(usuario.codcli, i, DateTime.Now.Year);
+            if (rmes == null || rmes.Count == 0) continue;
             mes[i - 1] = ConvertMinutesToHours(rmes.Average(a => a.total));
         }                
         return String.Format("{0:0.00},{1:0.00},{2:0.00},{3:0.00},{4:0.00},{5:0.00},{6:0.00},{7:0.00},{8:0.00},{9:0.00},{10:0.00},{11:0.00}", mes[0], mes[1], mes[2], mes[3], mes[4], mes[5], mes[6], mes[7], mes[8], mes[9], mes[10], mes[11]);
+    }
+
+    private String calcularPermisosMes()
+    {
+        decimal[] mes = new decimal[12];
+        for (int i = 1; i < 13; i++)
+        {
+            var rmes = Datos.listPermisos(usuario.codcli, i, DateTime.Now.Year);
+            if (rmes == null || rmes.Count == 0) continue;
+            mes[i - 1] = rmes.Count();
+        }
+        return String.Format("{0:0.00},{1:0.00},{2:0.00},{3:0.00},{4:0.00},{5:0.00},{6:0.00},{7:0.00},{8:0.00},{9:0.00},{10:0.00},{11:0.00}", mes[0], mes[1], mes[2], mes[3], mes[4], mes[5], mes[6], mes[7], mes[8], mes[9], mes[10], mes[11]);
+    }
+
+    private string[,] empleadosMenosHoras()
+    {
+        string[,] ret = new string[5,2];
+        var reg = Datos.listRegistrosMes(usuario.codcli, DateTime.Now.Month, DateTime.Now.Year);
+        if (reg == null || reg.Count == 0) return null;
+        var grp = reg.GroupBy(y => y.codemp);
+        Dictionary<int, decimal> empxtotal = new Dictionary<int, decimal>();
+        foreach (var m in grp)
+        {
+            empxtotal.Add(m.Key, 0);
+            foreach (var n in m)
+                empxtotal[m.Key] += n.total;
+        }
+        var ord = empxtotal.OrderBy(t => t.Value);
+        for (int j = 0; j < 5; j++)
+        {
+            var e = Datos.getEmpleado(ord.ElementAt(j).Key, reg[j].codcli);
+            ret[j, 0] = e.nombres + " " + e.apellidos;
+            ret[j, 1] = String.Format("{0:0.00}", ConvertMinutesToHours( ord.ElementAt(j).Value ));
+        }
+        return ret;
     }
 
     private string GetRandomHexColor()
