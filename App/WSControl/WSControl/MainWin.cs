@@ -10,7 +10,7 @@ using System.Windows.Forms;
 using System.Net.Http;
 using Interfaz;
 using Interfaz.modelos;
-
+using System.Globalization;
 
 namespace WSControl
 {
@@ -188,13 +188,12 @@ namespace WSControl
         {
             try
             {
-                List<Registro> registros = Datos.listRegistrosEmpleado(Login.usuario.codemp, Login.usuario.codcli, m, year);
-                Cliente cliente = Datos.getCliente(Login.usuario.codcli);
+                List<Registro> registros = Datos.listRegistrosEmpleado(Login.usuario.codemp, Login.usuario.codcli, m, year);                
                 c_table.Rows.Clear();
                 foreach (var item in registros)
                 {
-                    string horaentrada = AdjustTimeForTimeZone(item.horaentrada, cliente.zonahoraria);
-                    string horasalida = AdjustTimeForTimeZone(item.horasalida, cliente.zonahoraria);
+                    string horaentrada = item.horaentrada;
+                    string horasalida = item.horasalida;
                     c_table.Rows.Add(item.fecha, horaentrada, horasalida);                    
                 }
             }
@@ -213,6 +212,8 @@ namespace WSControl
             try
             {
                 permisos = Datos.listPermisos(Login.usuario.codemp, Login.usuario.codcli);
+                if (permisos != null && permisos.Count > 0)
+                    permisos = permisos.Where(x => FechaMaximaAntiguedad(x.fecha, 30)).ToList();
             }
             catch (Exception)
             {
@@ -237,6 +238,13 @@ namespace WSControl
             string adjustedTimeString = time.ToString("HH:mm:ss");
 
             return adjustedTimeString;
+        }
+
+        public static bool FechaMaximaAntiguedad(string fechaString, int max)
+        {
+            DateTime fecha = DateTime.ParseExact(fechaString, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+            TimeSpan diferencia = DateTime.Now - fecha;
+            return (diferencia.TotalDays <= max);
         }
 
         private void c_lstMeses_SelectedIndexChanged(object sender, EventArgs e)

@@ -15,6 +15,7 @@ using Interfaz.modelos;
 using Interfaz;
 using System.Text;
 using System.Data.SQLite;
+using System.Globalization;
 
 namespace WSControl
 {
@@ -71,7 +72,7 @@ namespace WSControl
             while(true)
             {
                 try
-                {
+                {                                        
                     Datos.tickRegistro(Login.usuario.codemp, Login.usuario.codcli, false);
                 }
                 catch (Exception)
@@ -91,7 +92,7 @@ namespace WSControl
                 try
                 {
                     int r = new Random().Next(0, 100);
-                    if(r < cliente.porctcapt)
+                    if(r <= cliente.porctcapt)
                     {
                             String proc = "";
                             String nav = "";
