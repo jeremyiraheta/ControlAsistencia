@@ -42,7 +42,7 @@ router.post("/REGISTROS/codemp/:codemp/codcli/:codcli", (req, res) => {
 
 //Genera un tick de hora de salida en el registro del control de asistencia por codigo de empleado
 router.put("/REGISTROS/codemp/:codemp/codcli/:codcli", (req, res) => {
-    var query = connection.query(`UPDATE REGISTROS SET horasalida = DATE_ADD(NOW(),INTERVAL (SELECT ZONAHORARIA FROM CLIENTES WHERE CODCLI = ${req.params.codcli})  HOUR), total = total+1 where codemp = ${req.params.codemp} and codcli = ${req.params.codcli} and fecha = DATE_ADD(NOW(),INTERVAL (SELECT ZONAHORARIA FROM CLIENTES WHERE CODCLI = ${req.params.codcli})  HOUR)`
+    var query = connection.query(`UPDATE REGISTROS SET horasalida = DATE_ADD(NOW(),INTERVAL (SELECT ZONAHORARIA FROM CLIENTES WHERE CODCLI = ${req.params.codcli})  HOUR), total = total+1 where codemp = ${req.params.codemp} and codcli = ${req.params.codcli} and fecha = DATE(DATE_ADD(NOW(),INTERVAL (SELECT ZONAHORARIA FROM CLIENTES WHERE CODCLI = ${req.params.codcli})  HOUR))`
         , function(error, result){
         if(error) console.log('[mysql error] : ', error)
         if(DEBUG)console.log(`put tick a REGISTROS id = ${req.params.codemp}`)
