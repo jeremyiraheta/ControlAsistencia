@@ -12,6 +12,17 @@
         <h3>Dashboard</h3>
         <div class="container" style="min-width: 1400px;">
             <div class="row">
+                <% if (isclientes)
+                    { %>
+                <div class="col" style="min-width:600px;min-height:600px;">
+                        <canvas id="planes" style="width:100%;height:100%"></canvas>
+                </div>
+                <div class="col" style="min-width:600px;min-height:600px;">
+                        <canvas id="ganacias" style="width:100%;height:100%"></canvas>
+                </div>
+                <%}
+    else
+    { %>
                 <div class="col" style="min-width:600px;min-height:600px;">
                         <canvas id="horasXdia" style="width:100%;height:100%"></canvas>
                 </div>
@@ -26,9 +37,56 @@
                 <div class="col" style="min-width:600px;min-height:600px;">
                         <canvas id="horasxemp" style="width:100%;height:100%"></canvas>
                 </div>
+                <%} %>
             </div>
         </div>
     </div> 
+
+    <script>
+        var xValues0 = ["Sin Plan", "Startup", "PYME", "Premium"];
+    var yValues0 = [<%=planes %>];
+    var barColors0 = [<%=planesColors %>];
+
+    new Chart("planes", {
+      type: "pie",
+      data: {
+        labels: xValues0,
+        datasets: [{
+          backgroundColor: barColors0,
+          data: yValues0
+        }]
+      },
+      options: {
+        title: {
+          display: true,
+          text: "Planes"
+        }
+      }
+    });
+</script>
+    <script>
+var xValues = ["Startup", "PYME", "Premium"];
+var yValues = [<%=ganacias %>];
+var barColors = [<%=ganaciasColors %>];
+
+        new Chart("ganacias", {
+  type: "bar",
+  data: {
+    labels: xValues,
+    datasets: [{
+      backgroundColor: barColors,
+      data: yValues
+    }]
+  },
+  options: {
+    legend: {display: false},
+    title: {
+      display: true,
+      text: "Ganancias"
+    }
+  }
+});
+</script>
     <script>
     var xValues1 = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"];
     var yValues1 = [<%=mediaSemana %>];
@@ -50,7 +108,7 @@
         }
       }
     });
-</script>
+</script>    
     <script>
     var xValues2 = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
     var yValues2 = [<%=mediaMes %>];

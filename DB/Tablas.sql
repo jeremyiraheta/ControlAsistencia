@@ -343,6 +343,8 @@ INSERT INTO REGISTROS VALUES(7,@codcli,'2023-06-08','07:39','15:17',10);
 INSERT INTO REGISTROS VALUES(4,@codcli,'2023-07-07','07:39','15:01',10);
 INSERT INTO REGISTROS VALUES(6,@codcli,'2023-08-02','07:53','15:08',10);
 
+UPDATE registros SET total = 400 + RAND() * 100;
+
 --Procedimientos
 delimiter //
 

@@ -15,7 +15,7 @@
         <h3>Empleados</h3>
          <div style="float:right; top:-30px" class="form-floating"><asp:TextBox CssClass="form-control" ClientIDMode="Static" placeholder="Filtro"  ID="txtfilter" runat="server" /><label for="txtfilter">Filtrar</label><asp:ImageButton ImageUrl="~/images/icons/search.svg" ID="btnfilt" CssClass="search-btn" runat="server" OnClick="filtrar" /> </div>
          <div class="row" style="padding-bottom:20px;">
-             <asp:Button runat="server" CssClass="btn btn-primary col-auto" Text="Agregar" data-bs-toggle="modal" data-bs-target="#addEmp" id="btnAdd" OnClick="btnAdd_Click"/>             
+             <asp:Button runat="server" CssClass="btn btn-primary col-auto" Text="Agregar" id="btnAdd" OnClick="btnAdd_Click"/>             
          </div>
 
         <div class="row">

@@ -193,7 +193,14 @@ namespace Interfaz
             API<List<Empleado>> api = new API<List<Empleado>>(local);
             var t = Task.Run(() => api.get($"empleados/usuario/{usuario}/codcli/{codcli}"));
             t.Wait();
-            return t.Result[0];
+            try
+            {
+                return t.Result[0];
+            }
+            catch (Exception)
+            {
+                return null;
+            }            
         }
         /// <summary>
         /// Actualiza un empleado especifico
@@ -686,8 +693,7 @@ namespace Interfaz
                 return null;
             }
             return bytes;
-        }
-
+        }        
         public async static Task<byte[]> downloadInstalador()
         {
             API api = new API(local);

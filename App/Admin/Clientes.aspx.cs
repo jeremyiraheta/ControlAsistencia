@@ -123,7 +123,7 @@ public partial class Clientes : System.Web.UI.Page
             case 0:
                 return "Ninguno";
             default:
-                return GlobalV.PLAN[p, 0];                
+                return GlobalV.PLAN[p+1, 0];                
         }
     }
 

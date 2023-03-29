@@ -33,7 +33,7 @@ router.get("/REGISTROS/codemp/:codemp/codcli/:codcli/m/:m/y/:y", (req, res) => {
 
 //crea un registro de un empleado
 router.post("/REGISTROS/codemp/:codemp/codcli/:codcli", (req, res) => {
-    var query = connection.query(`INSERT INTO REGISTROS(fecha, horaentrada, horasalida, codemp, codcli, total) values(DATE_ADD(NOW(),INTERVAL (SELECT ZONAHORARIA FROM CLIENTES WHERE CODCLI = ${req.params.codcli})  HOUR), TIME(NOW()), TIME(NOW()), ${req.params.codemp}, ${req.params.codcli}, 0)`, function(error, result){
+    var query = connection.query(`INSERT INTO REGISTROS(fecha, horaentrada, horasalida, codemp, codcli, total) values(DATE_ADD(NOW(),INTERVAL (SELECT ZONAHORARIA FROM CLIENTES WHERE CODCLI = ${req.params.codcli})  HOUR), DATE_ADD(NOW(),INTERVAL (SELECT ZONAHORARIA FROM CLIENTES WHERE CODCLI = ${req.params.codcli})  HOUR), DATE_ADD(NOW(),INTERVAL (SELECT ZONAHORARIA FROM CLIENTES WHERE CODCLI = ${req.params.codcli})  HOUR), ${req.params.codemp}, ${req.params.codcli}, 0)`, function(error, result){
         if(error && error.errno != 1062) console.log('[mysql error] : ', error)
         if(DEBUG)console.log(`post tick a REGISTROS`)
         res.send(result)
@@ -42,7 +42,7 @@ router.post("/REGISTROS/codemp/:codemp/codcli/:codcli", (req, res) => {
 
 //Genera un tick de hora de salida en el registro del control de asistencia por codigo de empleado
 router.put("/REGISTROS/codemp/:codemp/codcli/:codcli", (req, res) => {
-    var query = connection.query(`UPDATE REGISTROS SET horasalida = TIME(NOW()), total = total+1 where codemp = ${req.params.codemp} and codcli = ${req.params.codcli} and fecha = DATE_ADD(NOW(),INTERVAL (SELECT ZONAHORARIA FROM CLIENTES WHERE CODCLI = ${req.params.codcli})  HOUR)`
+    var query = connection.query(`UPDATE REGISTROS SET horasalida = DATE_ADD(NOW(),INTERVAL (SELECT ZONAHORARIA FROM CLIENTES WHERE CODCLI = ${req.params.codcli})  HOUR), total = total+1 where codemp = ${req.params.codemp} and codcli = ${req.params.codcli} and fecha = DATE_ADD(NOW(),INTERVAL (SELECT ZONAHORARIA FROM CLIENTES WHERE CODCLI = ${req.params.codcli})  HOUR)`
         , function(error, result){
         if(error) console.log('[mysql error] : ', error)
         if(DEBUG)console.log(`put tick a REGISTROS id = ${req.params.codemp}`)

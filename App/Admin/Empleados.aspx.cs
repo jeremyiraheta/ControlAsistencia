@@ -38,9 +38,16 @@ public partial class Empleados : System.Web.UI.Page
                 if (maxp > tmax)
                     maxp = tmax;
             }
-        }        
-        var emps = Datos.listEmpleados(usuario.codcli, (cpage-1)*10);
-        filltable(emps);
+        }  
+        if(Request.Params["f"] == null)
+        {
+            var emps = Datos.listEmpleados(usuario.codcli, (cpage - 1) * 10);
+            filltable(emps);
+        }
+        else
+        {
+            filtrar(Request.Params["f"]);
+        }
         var dptos = Datos.listDepartamentos(usuario.codcli);
         if (!IsPostBack || cmbDptos.Items.Count == 0)
         {
@@ -98,12 +105,20 @@ public partial class Empleados : System.Web.UI.Page
 
     protected void filtrar(object sender, ImageClickEventArgs e)
     {
-        if (txtfilter.Text.Trim() == "") return;
-        var emps = Datos.filter<Empleado>("EMPLEADOS", String.Format("concat_ws(' ', NOMBRES, APELLIDOS, CORREO, NACIMIENTO, (SELECT NOMBRE FROM DEPARTAMENTOS d WHERE d.CODDPTO = EMPLEADOS.CODDPTO)) LIKE UPPER('%{0}%') and ACTIVO = 'true' and CODCLI = {1}", txtfilter.Text, usuario.codcli), "*");
+        if(txtfilter.Text.Trim().Length > 0)
+            Response.Redirect("/Empleados?f=" + txtfilter.Text.Trim());
+        else
+            Response.Redirect("/Empleados");
+    }   
+    
+    private void filtrar(string query)
+    {
+        if(!IsPostBack)txtfilter.Text = query;
+        var emps = Datos.filter<Empleado>("EMPLEADOS", String.Format("concat_ws(' ', NOMBRES, APELLIDOS, CORREO, NACIMIENTO, (SELECT NOMBRE FROM DEPARTAMENTOS d WHERE d.CODDPTO = EMPLEADOS.CODDPTO)) LIKE UPPER('%{0}%') and ACTIVO = 'true' and CODCLI = {1}", query, usuario.codcli), "*");
         if (emps == null)
             emps = new List<Empleado>();
         filltable(emps);
-    }    
+    } 
 
     private int maxpages()
     {
@@ -166,15 +181,20 @@ public partial class Empleados : System.Web.UI.Page
         {
             int max = maximo(((Cliente)Session["cliente"]).plan);
             int count = int.Parse(Session["count_emps"].ToString());
-            if (max >= count && max > -1)
+            if (count >= max && max > -1)
             {
                 ((Layout)Master).toast("ERROR", "Ya llego al limite de empleados que puede ingresar con su plan", 2, ClientScript);
                 return;
             }
+            if(Datos.getEmpleado(emp.usuario, emp.codcli) != null)
+            {
+                ((Layout)Master).toast("ERROR", "Ya existe ese usuario", 2, ClientScript);
+                return;
+            }
             var r = Datos.insertEmpleado(emp);
-           if ( r.affectedRows > 0 )
+            if (r != null && r.affectedRows > 0 )
                 ((Layout)Master).toast("INFO", "Se agrego el registro", 0, ClientScript);
-           else
+            else
                 ((Layout)Master).toast("ERROR", "No se pudo agregar el registro", 2, ClientScript);
         }
         filltable(Datos.listEmpleados(usuario.codcli, (cpage - 1) * 10));      
