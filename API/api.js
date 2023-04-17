@@ -23,6 +23,7 @@ function authentication(req, res, next) {
     }        
     
     if (!authheader) {
+        console.log("->Path:" + req.path + ", IP: " + req.ip + ", Fecha" + new Date())
         var err = new Error('Usted no esta autorizado!');
         res.setHeader('WWW-Authenticate', 'Basic');
         err.stack="";
