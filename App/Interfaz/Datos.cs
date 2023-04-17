@@ -12,12 +12,13 @@ namespace Interfaz
     /// </summary>
     public class Datos
     {
-        private static Boolean local = true;      
+        private static Boolean local = true;
+        private static string token;     
         public static string APIURL
         {
             get
             {
-                return new API(local).URLBASE;
+                return new API(local, token).URLBASE;
             }
         }
         private Datos()
@@ -28,16 +29,18 @@ namespace Interfaz
         /// <summary>
         /// La api apunta a direccion remota
         /// </summary>
-        public static void apiRemota()
+        public static void apiRemota(string tkn = "YWRtaW46YWRtaW4=")
         {
             local = false;
+            token = tkn;
         }
         /// <summary>
         /// La api apunta a direccion local default
         /// </summary>
-        public static void apiLocal()
+        public static void apiLocal(string tkn = "YWRtaW46YWRtaW4=")
         {
             local = true;
+            token = tkn;
         }
 
         /// <summary>
@@ -46,7 +49,7 @@ namespace Interfaz
         /// <param name="nombre">nombre departamento</param>
         public static Result insertDepartamento(int codcli, string nombre)
         {
-            API<Result> api = new API<Result>(local);
+            API<Result> api = new API<Result>(local, token);
             Departamento dep = new Departamento();
             dep.nombre = nombre;
             dep.codcli = codcli;
@@ -60,7 +63,7 @@ namespace Interfaz
         /// <returns>Listado de departamentos</returns>
         public static List<Departamento> listDepartamentos(int codcli)
         {
-            API<List<Departamento>> api = new API<List<Departamento>>(local);
+            API<List<Departamento>> api = new API<List<Departamento>>(local, token);
             var t = Task.Run(() => api.get($"departamentos/codcli/{codcli}"));
             return t.Result;
         }
@@ -71,7 +74,7 @@ namespace Interfaz
         /// <param name="nombre">nombre departamento</param>
         public static Result updateDepartamento(int coddpto, int codcli,string nombre)
         {
-            API<Result> api = new API<Result>(local);
+            API<Result> api = new API<Result>(local, token);
             Departamento dep = new Departamento();
             dep.nombre = nombre;
             var t = Task.Run(() => api.put($"departamentos/coddpto/{coddpto}/codcli/{codcli}", dep));
@@ -84,7 +87,7 @@ namespace Interfaz
         /// <param name="coddpto">codigo departamento</param>
         public static Result deleteDepartamento(int coddpto, int codcli)
         {
-            API<Result> api = new API<Result>(local);
+            API<Result> api = new API<Result>(local, token);
             var t = Task.Run(() => api.delete($"departamentos/coddpto/{coddpto}/codcli/{codcli}"));
             t.Wait();
             return t.Result;
@@ -96,7 +99,7 @@ namespace Interfaz
         /// <returns></returns>
         public static List<Empleado> getEmpleadosDpto(int coddpto, int codcli)
         {
-            API<List<Empleado>> api = new API<List<Empleado>>(local);
+            API<List<Empleado>> api = new API<List<Empleado>>(local,token);
             var t = Task.Run(() => api.get($"departamentos/coddpto/{coddpto}/codcli/{codcli}"));
             t.Wait();
             return t.Result;
@@ -109,7 +112,7 @@ namespace Interfaz
         /// <returns></returns>
         public static List<T> filter<T>(string table, string cond, string fields = null)
         {
-            API<List<T>> api = new API<List<T>>(local);
+            API<List<T>> api = new API<List<T>>(local, token);
             Filter f = new Filter();
             f.query = cond;
             f.fields = fields;
@@ -123,7 +126,7 @@ namespace Interfaz
         /// <param name="empleado">nuevo empleado</param>
         public static Result insertEmpleado(Empleado empleado)
         {
-            API<Result> api = new API<Result>(local);
+            API<Result> api = new API<Result>(local, token);
             var t = Task.Run(() => api.post("empleados", empleado));
             try
             {
@@ -145,7 +148,7 @@ namespace Interfaz
         /// <returns>Listado de empleados</returns>
         public static List<Empleado> listEmpleados(int codcli, int pagina = -1, bool activo = true)
         {
-            API<List<Empleado>> api = new API<List<Empleado>>(local);
+            API<List<Empleado>> api = new API<List<Empleado>>(local,token);
             if (pagina == -1)
             {
                 var t = Task.Run(() => api.get($"empleados/codcli/{codcli}?activo={activo}"));
@@ -165,7 +168,7 @@ namespace Interfaz
         /// <returns>Listado de empleados</returns>
         public static List<Empleado> listEmpleadosDpto(int codcli, int coddpto,bool activo = true)
         {
-            API<List<Empleado>> api = new API<List<Empleado>>(local);
+            API<List<Empleado>> api = new API<List<Empleado>>(local,token);
             var t = Task.Run(() => api.get($"empleados/codcli/{codcli}/coddpto/{coddpto}?activo={activo}"));
             t.Wait();
             return t.Result;
@@ -177,7 +180,7 @@ namespace Interfaz
         /// <returns></returns>
         public static Empleado getEmpleado(int codemp, int codcli)
         {
-            API<List<Empleado>> api = new API<List<Empleado>>(local);
+            API<List<Empleado>> api = new API<List<Empleado>>(local,token);
             var t = Task.Run(() => api.get($"empleados/codemp/{codemp}/codcli/{codcli}"));
             t.Wait();
             return t.Result[0];
@@ -190,7 +193,7 @@ namespace Interfaz
         /// <returns></returns>
         public static Empleado getEmpleado(string usuario, int codcli)
         {
-            API<List<Empleado>> api = new API<List<Empleado>>(local);
+            API<List<Empleado>> api = new API<List<Empleado>>(local,token);
             var t = Task.Run(() => api.get($"empleados/usuario/{usuario}/codcli/{codcli}"));
             t.Wait();
             try
@@ -209,7 +212,7 @@ namespace Interfaz
         /// <param name="empleado">objeto editado del empleado</param>
         public static Result updateEmpleado(Empleado empleado)
         {
-            API<Result> api = new API<Result>(local);
+            API<Result> api = new API<Result>(local,token);
             var t = Task.Run(() => api.put("empleados", empleado));
             try
             {
@@ -231,7 +234,7 @@ namespace Interfaz
         /// <param name="codemp">codigo empleado</param>
         public static Result disableEmpleado(int codemp, int codcli)
         {
-            API<Result> api = new API<Result>(local);
+            API<Result> api = new API<Result>(local,token);
             var t = Task.Run(() => api.delete($"empleados/codemp/{codemp}/codcli/{codcli}"));
             t.Wait();
             return t.Result;
@@ -242,7 +245,7 @@ namespace Interfaz
         /// <param name="codemp">codigo empleado</param>
         public static Result enableEmpleado(int codemp, int codcli)
         {
-            API<Result> api = new API<Result>(local);
+            API<Result> api = new API<Result>(local,token);
             var t = Task.Run(() => api.put($"empleados/codemp/{codemp}/codcli/{codcli}/enable"));
             t.Wait();
             return t.Result;
@@ -256,7 +259,7 @@ namespace Interfaz
         /// <returns></returns>
         public static List<Registro> listRegistros(int codemp, int codcli)
         {
-            API<List<Registro>> api = new API<List<Registro>>(local);
+            API<List<Registro>> api = new API<List<Registro>>(local,token);
             var t = Task.Run(() => api.get($"registros/codemp/{codemp}/codcli/{codcli}"));
             t.Wait();
             return t.Result;
@@ -264,7 +267,7 @@ namespace Interfaz
 
         public static List<Registro> listRegistrosMes(int codcli, int mes, int anio)
         {
-            API<List<Registro>> api = new API<List<Registro>>(local);
+            API<List<Registro>> api = new API<List<Registro>>(local,token);
             var t = Task.Run(() => api.get($"registros/codcli/{codcli}/m/{String.Format("{0:00}", mes)}/y/{anio}"));
             t.Wait();
             return t.Result;
@@ -278,7 +281,7 @@ namespace Interfaz
         /// <returns></returns>
         public static List<Registro> listRegistrosEmpleado(int codemp, int codcli, int mes, int anio)
         {
-            API<List<Registro>> api = new API<List<Registro>>(local);
+            API<List<Registro>> api = new API<List<Registro>>(local,token);
             var t = Task.Run(() => api.get($"registros/codemp/{codemp}/codcli/{codcli}/m/{String.Format("{0:00}", mes)}/y/{anio}"));
             t.Wait();
             return t.Result;
@@ -286,7 +289,7 @@ namespace Interfaz
 
         public static Result tickRegistro(int codemp, int codcli, bool crear)
         {
-            API<Result> api = new API<Result>(local);
+            API<Result> api = new API<Result>(local,token);
             Task<Result> r;
             if(crear)
                 r = Task.Run(() => api.post($"registros/codemp/{codemp}/codcli/{codcli}"));
@@ -302,7 +305,7 @@ namespace Interfaz
         /// <returns>Listado de permisos</returns>
         public static List<Permiso> listPermisos(int codcli, int mes, int anio)
         {
-            API<List<Permiso>> api = new API<List<Permiso>>(local);
+            API<List<Permiso>> api = new API<List<Permiso>>(local,token);
             var t = Task.Run(() => api.get($"permisos/codcli/{codcli}/m/{String.Format("{0:00}", mes)}/y/{anio}"));
             t.Wait();
             return t.Result;
@@ -315,7 +318,7 @@ namespace Interfaz
         /// <returns></returns>
         public static List<Permiso> listPermisos(int codemp, int codcli)
         {
-            API<List<Permiso>> api = new API<List<Permiso>>(local);
+            API<List<Permiso>> api = new API<List<Permiso>>(local, token);
             var t = Task.Run(() => api.get($"permisos/codemp/{codemp}/codcli/{codcli}"));
             t.Wait();
             return t.Result;
@@ -328,7 +331,7 @@ namespace Interfaz
         /// <returns></returns>
         public static Permiso getPermiso(int codper, int codcli)
         {
-            API<List<Permiso>> api = new API<List<Permiso>>(local);
+            API<List<Permiso>> api = new API<List<Permiso>>(local, token);
             var t = Task.Run(() => api.get($"permisos/codper/{codper}/codcli/{codcli}"));
             t.Wait();
             return t.Result[0];
@@ -340,7 +343,7 @@ namespace Interfaz
         /// <param name="permiso">nuevo permiso</param>
         public static Result insertPermiso(Permiso permiso)
         {
-            API<Result> api = new API<Result>(local);
+            API<Result> api = new API<Result>(local, token);
             var t = Task.Run(() => api.post("permisos", permiso));
             t.Wait();
             return t.Result;
@@ -352,7 +355,7 @@ namespace Interfaz
         /// <param name="permiso">permiso editado</param>
         public static Result updatePermiso(int codper, Permiso permiso)
         {
-            API<Result> api = new API<Result>(local);
+            API<Result> api = new API<Result>(local, token);
             permiso.codper = codper;
             var t = Task.Run(() => api.put("permisos", permiso));
             t.Wait();
@@ -365,7 +368,7 @@ namespace Interfaz
         /// <param name="estado">estado</param>
         public static Result cambiarEstadoPermiso(int codper, int codcli,ESTADO estado)
         {
-            API<Result> api = new API<Result>(local);
+            API<Result> api = new API<Result>(local, token);
             string c = "E";
             switch (estado)
             {
@@ -391,7 +394,7 @@ namespace Interfaz
         /// <param name="codper">codigo del permiso</param>
         public static Result deletePermiso(int codper, int codcli)
         {
-            API<Result> api = new API<Result>(local);
+            API<Result> api = new API<Result>(local, token);
             var t = Task.Run(() => api.delete($"permisos/codper/{codper}/codcli/{codcli}"));
             t.Wait();
             return t.Result;
@@ -407,7 +410,7 @@ namespace Interfaz
         /// <returns></returns>
         public static List<Productividad> getProductividad(int codemp, int codcli, string fechaini, string fechafin)
         {
-            API<List<Productividad>> api = new API<List<Productividad>>(local);
+            API<List<Productividad>> api = new API<List<Productividad>>(local, token);
             if (System.Text.RegularExpressions.Regex.IsMatch(fechaini, "\\d{4}-\\d{2}-\\d{2}"))
             {
                 String[] fi = fechaini.Split(new String[] { "-" }, StringSplitOptions.RemoveEmptyEntries);
@@ -425,7 +428,7 @@ namespace Interfaz
         /// <param name="productividad">Entidad de productividad</param>
         public static Result insertProductividad(Productividad productividad)
         {
-            API<Result> api = new API<Result>(local);
+            API<Result> api = new API<Result>(local, token);
             var t = Task.Run(() => api.post("productividad",productividad));
             t.Wait();
             return t.Result;
@@ -436,7 +439,7 @@ namespace Interfaz
         /// <param name="productividad">Entidad que debe actualizarse</param>
         public static Result updateProductividad(Productividad productividad)
         {
-            API<Result> api = new API<Result>(local);
+            API<Result> api = new API<Result>(local, token);
             var t = Task.Run(() => api.put("productividad", productividad));
             t.Wait();
             return t.Result;
@@ -448,7 +451,7 @@ namespace Interfaz
         /// <param name="codcli">codigo de cliente</param>
         public static Result deleteProductividad(int codprod, int codcli)
         {
-            API<Result> api = new API<Result>(local);
+            API<Result> api = new API<Result>(local, token);
             var t = Task.Run(() => api.delete($"productividad/codprod/{codprod}/codcli/{codcli}"));
             t.Wait();
             return t.Result;
@@ -460,7 +463,7 @@ namespace Interfaz
         /// <returns></returns>
         public static Cliente getCliente(int codcli)
         {
-            API<List<Cliente>> api = new API<List<Cliente>>(local);
+            API<List<Cliente>> api = new API<List<Cliente>>(local, token);
             var t = Task.Run(() => api.get($"clientes/codcli/{codcli}"));
             t.Wait();
             return t.Result[0];
@@ -468,7 +471,7 @@ namespace Interfaz
 
         public static Cliente getCliente(string urlnom)
         {
-            API<List<Cliente>> api = new API<List<Cliente>>(local);
+            API<List<Cliente>> api = new API<List<Cliente>>(local, token);
             var t = Task.Run(() => api.get($"clientes/urlnom/{urlnom}"));
             t.Wait();
             if (t.Result != null && t.Result.Count > 0)
@@ -484,7 +487,7 @@ namespace Interfaz
         /// <returns></returns>
         public static List<Cliente> listClientes(bool activo, int pagina=0)
         {
-            API<List<Cliente>> api = new API<List<Cliente>>(local);
+            API<List<Cliente>> api = new API<List<Cliente>>(local, token);
             var t = Task.Run(() => api.get($"clientes/p/{pagina}?activo={activo.ToString()}"));
             t.Wait();
             return t.Result;
@@ -496,7 +499,7 @@ namespace Interfaz
         /// <param name="cliente">Entidad del cliente</param>
         public static Result insertCliente(Cliente cliente)
         {
-            API<Result> api = new API<Result>(local);
+            API<Result> api = new API<Result>(local, token);
             var t = Task.Run(() => api.post("clientes", cliente));
             t.Wait();
             return t.Result;
@@ -507,7 +510,7 @@ namespace Interfaz
         /// <param name="cliente">Entidad que se actualizara</param>
         public static Result updateCliente(Cliente cliente)
         {
-            API<Result> api = new API<Result>(local);
+            API<Result> api = new API<Result>(local, token);
             var t = Task.Run(() => api.put("clientes", cliente));
             t.Wait();
             return t.Result;
@@ -518,7 +521,7 @@ namespace Interfaz
         /// <param name="codcli">codigo de cliente</param>
         public static Result enableCliente(int codcli)
         {
-            API<Result> api = new API<Result>(local);
+            API<Result> api = new API<Result>(local, token);
             var t = Task.Run(() => api.put($"clientes/codcli/{codcli}/enable"));
             t.Wait();
             return t.Result;
@@ -529,7 +532,7 @@ namespace Interfaz
         /// <param name="codcli">codigo de cliente</param>
         public static Result deleteCliente(int codcli)
         {
-            API<Result> api = new API<Result>(local);
+            API<Result> api = new API<Result>(local, token);
             var t = Task.Run(() => api.delete($"clientes/codcli/{codcli}"));
             t.Wait();
             return t.Result;
@@ -540,7 +543,7 @@ namespace Interfaz
         /// <param name="codcli">codigo de cliente</param>
         public static void purgeCliente(int codcli)
         {
-            API api = new API(local);
+            API api = new API(local, token);
             var t = Task.Run(() => api.delete($"clientes/codcli/{codcli}/purge"));
             t.Wait();
         }
@@ -553,14 +556,14 @@ namespace Interfaz
         /// <returns></returns>
         public static UploadState uploadPermisoAdjunto(int codper, int codcli,string archivo)
         {
-            API<UploadState> api = new API<UploadState>(local);
+            API<UploadState> api = new API<UploadState>(local, token);
             var task2 = Task.Run(() => api.post($"upload/permiso/codper/{codper}/codcli/{codcli}", archivo, "application/zip", "attch"));
             task2.Wait();
             return task2.Result;
         }
         public static UploadState uploadCaptura(int codprod, int codcli, byte[] archivo)
         {
-            API<UploadState> api = new API<UploadState>(local);                        
+            API<UploadState> api = new API<UploadState>(local, token);                        
             var task2 = Task.Run(() => api.post($"upload/captura/codprod/{codprod}/codcli/{codcli}", archivo,"*/*", "attch"));
             task2.Wait();
             return task2.Result;
@@ -574,7 +577,7 @@ namespace Interfaz
         /// <returns></returns>
         public static UploadState uploadLogo(int codcli, byte[] archivo)
         {
-            API<UploadState> api = new API<UploadState>(local);                       
+            API<UploadState> api = new API<UploadState>(local, token);                       
             var task2 = Task.Run(() => api.post($"upload/logo/codcli/{codcli}", archivo, "*/*", "attch"));
             task2.Wait();
             return task2.Result;
@@ -587,7 +590,7 @@ namespace Interfaz
         /// <returns></returns>
         public async static Task<byte[]> downloadPermisoAdjunto(int codper, int codcli)
         {
-            API api = new API(local);
+            API api = new API(local, token);
             byte[] bytes;
             try
             {
@@ -607,7 +610,7 @@ namespace Interfaz
         /// <returns></returns>
         public async static Task<byte[]> imgCaptura(int codprod, int codcli)
         {
-            API api = new API(local);
+            API api = new API(local, token);
             byte[] bytes;
             try
             {
@@ -627,7 +630,7 @@ namespace Interfaz
         /// <returns></returns>
         public async static Task<byte[]> imgLogo(int codcli)
         {
-            API api = new API(local);
+            API api = new API(local, token);
             byte[] bytes;
             try
             {
@@ -648,7 +651,7 @@ namespace Interfaz
         /// <returns></returns>
         public async static Task<byte[]> reporteHoras(int codcli, int m, int y)
         {
-            API api = new API(local);
+            API api = new API(local, token);
             Reporte rpt = new Reporte()
             {
                 codcli = codcli,
@@ -676,7 +679,7 @@ namespace Interfaz
         /// <returns></returns>
         public async static Task<byte[]> reportePermisos(int codcli, int m, int y)
         {
-            API api = new API(local);
+            API api = new API(local, token);
             Reporte rpt = new Reporte()
             {
                 codcli = codcli,
@@ -696,7 +699,7 @@ namespace Interfaz
         }        
         public async static Task<byte[]> downloadInstalador()
         {
-            API api = new API(local);
+            API api = new API(local, token);
             byte[] bytes;
             try
             {
@@ -720,7 +723,7 @@ namespace Interfaz
         public static Usuario Login(string user, string pass, int codcli)
         {
             Credenciales cred = new Credenciales(user, pass, codcli);
-            API<List<Usuario>> api = new API<List<Usuario>>(local);
+            API<List<Usuario>> api = new API<List<Usuario>>(local, token);
             var t = Task.Run(() => api.post("login", cred));
             try
             {
@@ -742,7 +745,7 @@ namespace Interfaz
         public static Usuario Login(string user, string pass)
         {
             Credenciales cred = new Credenciales(user, pass);
-            API<List<Usuario>> api = new API<List<Usuario>>(local);
+            API<List<Usuario>> api = new API<List<Usuario>>(local, token);
             var t = Task.Run(() => api.post("login", cred));
             try
             {

@@ -19,7 +19,18 @@ namespace WSControl
         static void Main(string[] args)
         {
             Microsoft.Win32.Registry.CurrentUser.OpenSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Run", true).SetValue("WSControl", System.Reflection.Assembly.GetExecutingAssembly().Location);
-            Datos.apiRemota();
+            string token = null;
+            try
+            {
+                token = Encoding.UTF8.GetString((byte[])Microsoft.Win32.Registry.CurrentUser.OpenSubKey("Software\\Shuseki").GetValue("token"));
+            }
+            catch (Exception)
+            {                
+            }
+            if (token == null)
+                Datos.apiRemota();
+            else
+                Datos.apiRemota(token);
             if (Environment.UserInteractive)
             {
                 ControlService test = new ControlService();                

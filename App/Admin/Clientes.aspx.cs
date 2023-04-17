@@ -97,7 +97,7 @@ public partial class Clientes : System.Web.UI.Page
     protected void filtrar(object sender, ImageClickEventArgs e)
     {
         if (txtfilter.Text.Trim() == "") return;
-        var clis = Datos.filter<Cliente>("CLIENTES", String.Format("UPPER(concat_ws(' ', NOMBRE, URLNOM, CORREO_CONTACTO, TELEFONO_CONTACTO, FECHA_FIN_SERVICIO, PAIS)) LIKE UPPER('%{0}%') and ACTIVO = '{1}'", txtfilter.Text, enabled.ToString().ToLower()));
+        var clis = Datos.filter<Cliente>("CLIENTES", String.Format("UPPER(concat_ws(' ', NOMBRE, URLNOM, CORREO_CONTACTO, TELEFONO_CONTACTO, FECHA_FIN_SERVICIO, PAIS)) LIKE UPPER('%{0}%') and ACTIVO = '{1}'", txtfilter.Text, enabled.ToString().ToLower()), "*");
         if (clis == null)
             clis = new List<Cliente>();
         filltable(clis);

@@ -141,6 +141,10 @@ public partial class Subscripcion : System.Web.UI.Page
             empleado.telefonos = txtnumcont.Text;
             empleado.usuario = txtusername.Text;
             empleado.password = txtpass.Text;
+            empleado.nit = "";
+            empleado.dui = "";
+            empleado.afp = "";
+            empleado.direccion = "";
             empleado.genero = "M";            
             empleado.nacimiento = nacimiento.ToString("dd-MM-yyyy");
             Datos.insertEmpleado(empleado);

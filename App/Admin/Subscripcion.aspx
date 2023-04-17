@@ -81,9 +81,9 @@
                 <div class="input-group-prepend">
                   <span class="input-group-text">@</span>
                 </div>
-                  <asp:TextBox ID="txtusername" ClientIDMode="Static" MaxLength="50" CssClass="form-control" placeholder="Usuario de ingreso administrativo" pattern="^(?=[a-zA-Z0-9._]{8,20}$)(?!.*[_.]{2})[^_.].*[^_.]$" required runat="server" />                
+                  <asp:TextBox ID="txtusername" ClientIDMode="Static" MaxLength="20" CssClass="form-control" placeholder="Usuario de ingreso administrativo" pattern="^(?=[a-zA-Z0-9._]{5,20}$)(?!.*[_.]{2})[^_.].*[^_.]$" required runat="server" />                
                 <div class="invalid-feedback" style="width: 100%;">
-                  Requerido, no caracteres especiales ni espacios.
+                  Requerido, no caracteres especiales ni espacios, 5 caracteres minimo.
                 </div>
               </div>
             </div>

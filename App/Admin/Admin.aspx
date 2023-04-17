@@ -174,7 +174,7 @@ new Chart("horasxemp", {
     legend: {display: false},
     title: {
       display: true,
-      text: "5 Empleados con menos horas registradas"
+      text: "5 Empleados con menos horas registradas este mes"
     }
   }
 });

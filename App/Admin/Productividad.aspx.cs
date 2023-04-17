@@ -51,8 +51,13 @@ public partial class Productividad : System.Web.UI.Page
         {
             List<Empleado> filtrado = (List<Empleado>)Session["filtrado"];
             filltable(filtrado);
+        }       
+        if (!IsPostBack)
+        {
+            Cliente cli = Datos.getCliente(usuario.codcli);
+            DateTime RNow = DateTime.Now.AddHours(cli.zonahoraria);
+            filtdate.Text = String.Format("{2}-{1:00}-{0:00}", RNow.Day, RNow.Month, RNow.Year);
         }
-        if (!IsPostBack) filtdate.Text = String.Format("{2}-{1:00}-{0:00}", DateTime.Today.Day, DateTime.Today.Month, DateTime.Today.Year);
     }
 
     protected void filtrar(object sender, ImageClickEventArgs e)

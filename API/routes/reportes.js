@@ -36,8 +36,8 @@ router.post("/reporteHoras.pdf", (req, res) => {
         };
         var query = connection.query(`SELECT distinct e.NOMBRES nombres, e.APELLIDOS apellidos, d.NOMBRE departamento,
         (select COUNT(*) from PERMISOS p where p.CODCLI = r.CODCLI and p.CODEMP = r.CODEMP and YEAR(p.FECHA) = YEAR(r.FECHA) AND MONTH(p.FECHA) = MONTH(r.FECHA)) permisos, 
-        (select SUM(t.TOTAL) from REGISTROS t where t.CODCLI = r.CODCLI and t.CODEMP = r.CODEMP and YEAR(t.FECHA) = YEAR(r.FECHA) AND MONTH(t.FECHA) = MONTH(r.FECHA)) horas, 
-        c.NOMBRE cliente, YEAR(r.FECHA) anio, MONTH(r.FECHA) mes FROM REGISTROS r LEFT JOIN EMPLEADOS e ON r.CODEMP = e.CODEMP 
+        (select CONCAT(ROUND(SUM(t.TOTAL) / 60, 0), 'h',ROUND(SUM(t.TOTAL) % 60, 0), 'm') from REGISTROS t where t.CODCLI = r.CODCLI and t.CODEMP = r.CODEMP and YEAR(t.FECHA) = YEAR(r.FECHA) AND MONTH(t.FECHA) = MONTH(r.FECHA)) horas, 
+        c.NOMBRE cliente, YEAR(r.FECHA) anio, LPAD(MONTH(r.FECHA),2,0) mes FROM REGISTROS r LEFT JOIN EMPLEADOS e ON r.CODEMP = e.CODEMP 
         LEFT JOIN CLIENTES c on r.CODCLI = c.CODCLI
         LEFT JOIN DEPARTAMENTOS d on r.CODCLI = d.CODCLI AND e.CODDPTO = d.CODDPTO        
         WHERE e.activo = 'true' and e.CODCLI = ${req.body.codcli} AND YEAR(r.FECHA) = '${req.body.y}' AND MONTH(r.FECHA) = '${req.body.m}' ORDER BY horas asc`, function(error, result){
@@ -99,7 +99,7 @@ router.post("/reportePermisos.pdf", (req, res) => {
         };
         var query = connection.query(`SELECT distinct e.NOMBRES nombres, e.APELLIDOS apellidos, d.NOMBRE departamento,
         DATE_FORMAT(r.FECHA,'%d-%m-%Y') fecha, r.TIPO tipo, if(r.ESTADO='E', 'Espera', if(r.ESTADO='A', 'Aprobado', 'Rechazado')) estado, r.HORAFINAL ini, r.HORAFINAL fin,
-        c.NOMBRE cliente, YEAR(r.FECHA) anio, MONTH(r.FECHA) mes FROM PERMISOS r LEFT JOIN EMPLEADOS e ON r.CODEMP = e.CODEMP 
+        c.NOMBRE cliente, YEAR(r.FECHA) anio, LPAD(MONTH(r.FECHA),2,0) mes FROM PERMISOS r LEFT JOIN EMPLEADOS e ON r.CODEMP = e.CODEMP 
         LEFT JOIN CLIENTES c on r.CODCLI = c.CODCLI
         LEFT JOIN DEPARTAMENTOS d on r.CODCLI = d.CODCLI AND e.CODDPTO = d.CODDPTO        
         WHERE e.activo = 'true' and e.CODCLI = ${req.body.codcli} AND YEAR(r.FECHA) = '${req.body.y}' AND MONTH(r.FECHA) = '${req.body.m}' order by fecha`, function(error, result){

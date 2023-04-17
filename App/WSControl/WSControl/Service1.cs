@@ -168,7 +168,7 @@ namespace WSControl
 
             }
             con.Close();                        
-            return Uri.EscapeUriString(build.ToString()) ;
+            return Uri.EscapeUriString(build.ToString()).Replace("'", "&apos;") ;
         }
     }
 }

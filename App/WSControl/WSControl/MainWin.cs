@@ -39,15 +39,7 @@ namespace WSControl
             InitializeComponent();
             this.Text = "Shuseki - Control de Asistencia Remota - " + Login.usuario.nombres + " " + Login.usuario.apellidos + " - " + Login.usuario.departamento;
         }  
-        /// <summary>
-        /// Evento vinculado al boton salir, permite cerrar la ventana
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void c_btnSalir_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
+        
         /// <summary>
         /// Evento vinculado al boton crear, permite crear un permiso nuevo
         /// </summary>
@@ -255,6 +247,12 @@ namespace WSControl
         private void c_btnsalirm_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void c_btnAbout_Click(object sender, EventArgs e)
+        {
+            Cliente cli = Datos.getCliente(Login.usuario.codcli);
+            MessageBox.Show(this,"Aplicación desarrollada por Shuseki, servicio ofrecido a " + cli.nombre + ", version: " + Application.ProductVersion, "INFO", MessageBoxButtons.OK,MessageBoxIcon.Information);
         }
     }
 }
