@@ -40,7 +40,7 @@ router.post("/reporteHoras.pdf", (req, res) => {
         c.NOMBRE cliente, YEAR(r.FECHA) anio, LPAD(MONTH(r.FECHA),2,0) mes FROM REGISTROS r LEFT JOIN EMPLEADOS e ON r.CODEMP = e.CODEMP 
         LEFT JOIN CLIENTES c on r.CODCLI = c.CODCLI
         LEFT JOIN DEPARTAMENTOS d on r.CODCLI = d.CODCLI AND e.CODDPTO = d.CODDPTO        
-        WHERE e.activo = 'true' and e.CODCLI = ${req.body.codcli} AND YEAR(r.FECHA) = '${req.body.y}' AND MONTH(r.FECHA) = '${req.body.m}' ORDER BY total asc`, function(error, result){
+        WHERE e.activo = 'true' and e.CODCLI = ${req.body.codcli} AND YEAR(r.FECHA) = '${req.body.y}' AND MONTH(r.FECHA) = '${req.body.m}' ORDER BY horas asc`, function(error, result){
             if(error)
             {
                 console.log('[mysql error] : ', error)
