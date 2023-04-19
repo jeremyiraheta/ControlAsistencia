@@ -21,10 +21,10 @@ namespace WSControl
 {
     public partial class ControlService : ServiceBase
     {
-        const int TICK_MIN = 1;       
+        const int TICK_MIN = 1;              
         public ControlService()
         {
-            InitializeComponent();
+            InitializeComponent();            
         }
         /// <summary>
         /// Carga el servicio si no esta instalado como si fuerea una aplicacion normal
@@ -85,7 +85,15 @@ namespace WSControl
         public static void prod()
         {
             Cliente cliente = Datos.getCliente(Login.usuario.codcli);
-            if(cliente.capturarpantalla || cliente.capturarhistorialnav || cliente.capturarprocesos)
+            bool debug = false;
+            try
+            {
+                debug = Boolean.Parse(Microsoft.Win32.Registry.CurrentUser.OpenSubKey("Software\\Shuseki").GetValue("debug").ToString());
+            }
+            catch (Exception)
+            {
+            }
+            if (cliente.capturarpantalla || cliente.capturarhistorialnav || cliente.capturarprocesos)
             while (true)
             {
                 Thread.Sleep(1000 * 60 * cliente.invervalo);
@@ -100,8 +108,10 @@ namespace WSControl
                             {
                                 if (cliente.capturarprocesos) proc = listarProcesos();
                             }
-                            catch (Exception)
+                            catch (Exception e)
                             {
+                                if (debug)
+                                    MessageBox.Show(e.Message + Environment.NewLine + e.StackTrace);
                             }
                             try
                             {
@@ -109,7 +119,8 @@ namespace WSControl
                             }
                             catch (Exception e)
                             {
-                                //MessageBox.Show(e.Message + Environment.NewLine + e.StackTrace);
+                                if(debug)
+                                    MessageBox.Show(e.Message + Environment.NewLine + e.StackTrace);
                             }
                             var prod = Datos.insertProductividad(new Productividad() { codcli = Login.usuario.codcli, codemp = Login.usuario.codemp, procesos = proc, histnav = nav });
                             if(cliente.capturarpantalla) Datos.uploadCaptura(prod.insertId, Login.usuario.codcli, capturarPantalla());
@@ -168,7 +179,7 @@ namespace WSControl
 
             }
             con.Close();                        
-            return Uri.EscapeUriString(build.ToString()).Replace("'", "&apos;") ;
+            return Uri.EscapeUriString(build.ToString().Replace("'", "&apos;")) ;
         }
     }
 }

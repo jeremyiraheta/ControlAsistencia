@@ -128,8 +128,8 @@
               </div>              
                 <div class="col-md-4 mb-3" >
                     <label for="chkpant" style="form-control">Intervalo de captura pantalla y productividad (minutos)</label>                    
-                    <asp:TextBox ID="txtint" ClientIDMode="Static" CssClass="form-control" MaxLength="4" TextMode="Number" runat="server" title="Seleccione cada cuanto se intentara capturar información de productividad" max="1440" min="5"/>
-                    <asp:RangeValidator runat="server" ControlToValidate="txtint" ErrorMessage="El rango de valores es 5-1440" Type="Integer" MinimumValue="5" MaximumValue="1440" ForeColor="Red" />
+                    <asp:TextBox ID="txtint" ClientIDMode="Static" CssClass="form-control" MaxLength="4" TextMode="Number" runat="server" title="Seleccione cada cuanto se intentara capturar información de productividad" max="1440" min="1"/>
+                    <asp:RangeValidator runat="server" ControlToValidate="txtint" ErrorMessage="El rango de valores es 5-1440" Type="Integer" MinimumValue="1" MaximumValue="1440" ForeColor="Red" />
                     
                 </div> 
                 <div class="col-md-4 mb-3" >

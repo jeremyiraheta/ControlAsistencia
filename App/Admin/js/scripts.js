@@ -32,7 +32,7 @@ function validateEmp()
         msg.innerText = "Los password no coinciden!!!"
         return false;
     }
-    let mtel = /[2876]\d{3}[\s-]*\d{4}/g
+    let mtel = /\+*\d+\d{5,}/g
     if (!mtel.test(document.getElementById("txttel").value))
     {
         msg.innerText = "El telefono no tiene el formato correcto"
