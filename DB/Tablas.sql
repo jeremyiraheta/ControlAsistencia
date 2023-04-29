@@ -118,7 +118,35 @@ create table PRODUCTIVIDAD
    primary key(CODPROD),
    foreign key(CODEMP, CODCLI) references EMPLEADOS(CODEMP, CODCLI)
 );
+/*==============================================================*/
+/* Table: UBICACIONES                                             */
+/*==============================================================*/
+create table UBICACIONES
+(
+   CODEMP               int not null,
+   CODCLI               int not null,
+   FECHA                date not null,
+   HORAENTRADA          time not null,
+   HORASALIDA           time,
+   LATINICIAL			double,
+   LONGINICIAL			double,
+   DIRECCIONINICIAL		VARCHAR(500),
+   LATFINAL				double,   
+   LONGFINAL				double,
+   DIRECCIONFINAL		VARCHAR(500),
+   TOTAL                decimal,
+   primary key (CODEMP, CODCLI,FECHA),
+   foreign key(CODEMP, CODCLI) references EMPLEADOS(CODEMP, CODCLI)
+);
 
+/*Ubicaciones dummy data*/
+INSERT INTO UBICACIONES VALUES(2,2,'2023-01-26','07:42','07:42',13.694254,-89.261200,"Direccion inicial SS",0.0,0.0,"Direccion final US",10);
+INSERT INTO UBICACIONES VALUES(2,2,'2023-01-25','07:42','07:42',13.694254,-89.261200,"Direccion inicial SS",0.0,0.0,"Direccion final US",10);
+INSERT INTO UBICACIONES VALUES(1,1,'2023-01-26','07:42','07:42',13.694254,-89.261200,"2Direccion inicial SS",0.0,0.0,"Direccion final US",10);
+INSERT INTO UBICACIONES VALUES(1,2,'2023-01-26','07:42','07:42',13.694254,-89.261200,"3Direccion inicial SS",0.0,0.0,"Direccion final US",10);
+INSERT INTO UBICACIONES VALUES(3,2,'2023-01-27','07:42','07:42',13.701300,-89.224480,"Salvador del mundo, SS",0.0,0.0,"Direccion final US",10);
+INSERT INTO UBICACIONES VALUES(4,2,'2023-01-27','07:42','07:42',13.701300,-89.224480,"Rotonda Salvador del mundo SS",0.0,0.0,"Direccion final San Salvador El Salvador",10);
+UPDATE UBICACIONES SET HORASALIDA ='03:22', LATFINAL = 13.694254, LONGFINAL = -89.261200, DIRECCIONFINAL = "URBANIZACION FINAL, SS", TOTAL = 11 WHERE CODEMP = 3 AND CODCLI = 2 AND FECHA ='2023-01-27';
 /*CLIENTES dummy data*/
 INSERT INTO CLIENTES (`NOMBRE`, `URL`, `URLNOM`,`CORREO_CONTACTO`, `TELEFONO_CONTACTO`, `FECHA_REGISTRO`, `FECHA_FIN_SERVICIO`, `PLAN`, `CAPTURARPANTALLA`, `CAPTURARPROCESOS`, `CAPTURARHISTORIALNAV`, `ZONAHORARIA`, `PAIS`, `INVERVALO`, `PORCTCAPT`, `ACTIVO`) VALUES ('SHUSEKI', 'shuseki.azurewebsites.net', 'shuseki', 'jeremy.iraheta@hotmail.com','+50325249228', NOW(), DATE_ADD(NOW(), INTERVAL 31 day), 1, 'true', 'true', 'true', -6, 'El Salvador', 60, 50, 'true');
 INSERT INTO CLIENTES (`NOMBRE`, `URL`, `URLNOM`,`CORREO_CONTACTO`, `TELEFONO_CONTACTO`, `FECHA_REGISTRO`, `FECHA_FIN_SERVICIO`, `PLAN`, `CAPTURARPANTALLA`, `CAPTURARPROCESOS`, `CAPTURARHISTORIALNAV`, `ZONAHORARIA`, `PAIS`, `INVERVALO`, `PORCTCAPT`, `ACTIVO`) VALUES ('DIGESTYC', 'digestyc.gob.sv', 'digestyc','info@digestyc.gob.sv','+50325255555', NOW(), DATE_ADD(NOW(), INTERVAL 31 day), 1, 'true', 'true', 'true', -6, 'El Salvador', 60, 50, 'true');

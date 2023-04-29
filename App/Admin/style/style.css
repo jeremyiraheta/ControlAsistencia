@@ -102,6 +102,9 @@ main .helper span {
 .menu ul li.icon-clientes {
   background-image: url("../images/icons/network.svg");
 }
+.menu ul li.icon-ubicacion {
+        background-image: url("../images/icons/location.svg");
+}
 .menu ul li.icon-salir {
   background-image: url("../images/icons/logout.svg");
 }
@@ -306,4 +309,10 @@ main .helper span {
 }
 .modal-3 a.active, .modal-3 a:active {
   background-color: #37B247;
+}
+#maps {
+    background-color: #1c3855;
+    font-family: "Open Sans", Helvetica Neue, Helvetica, Arial, sans-serif;
+    padding: 100px;
+    color: white;
 }

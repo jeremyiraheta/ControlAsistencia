@@ -37,6 +37,7 @@
     <a href="/Permisos" title="Permisos" id="mnperm" class="menulink"><li tabindex="0" class="icon-permisos"><span>Permisos</span></li></a>
     <a href="/Registros" title="Registros" id="mnreg" class="menulink"><li tabindex="0" class="icon-registros"><span>Registros</span></li></a>
     <a href="/Productividad" title="Productividad" id="mnprod" class="menulink"><li tabindex="0" class="icon-productividad"><span>Productividad</span></li></a>
+        <a href="/Ubicaciones" title="Ubicaciones" id="mnubi" class="menulink"><li tabindex="0" class="icon-ubicacion"><span>Ubicaciones</span></li></a>
     <a href="/Opciones" title="Opciones" id="mnopc" class="menulink menu-botton"><li tabindex="0" class="icon-opciones"><span>Opciones</span></li></a>
         <%}
     else

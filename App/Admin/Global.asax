@@ -14,7 +14,8 @@
                  CdnPath = "https://code.jquery.com/jquery-3.6.0.min.js",
                  CdnSupportsSecureConnection = true,
                  LoadSuccessExpression = "jQuery"
-             });        
+             });    
+        
         Datos.apiRemota();
         GlobalV.URLBASE = Datos.APIURL;        
         RegistrarRutas(RouteTable.Routes);
@@ -64,6 +65,10 @@
         route.MapPageRoute("Subscripcion", "Subscripcion", "~/Subscripcion.aspx");        
         route.MapPageRoute("Confirmacion", "Confirmacion", "~/Confirm.aspx");  
         route.MapPageRoute("Opciones", "Opciones", "~/Opciones.aspx"); 
+        route.MapPageRoute("Ubicaciones", "Ubicaciones/{page}", "~/Ubicaciones.aspx"); 
+        route.MapPageRoute("UbicacionesEx", "Ubicaciones", "~/Ubicaciones.aspx");
+        
+
     }
 
 </script>

@@ -11,7 +11,9 @@ const empleados = require('./routes/empleados.js');
 const productividad = require('./routes/productividad.js');
 const registros = require('./routes/registros.js');
 const reportes = require('./routes/reportes.js');
+const ubicaciones = require('./routes/ubicaciones.js');
 const upload = require('./routes/upload.js');
+
 const DEBUG = process.env.DEBUG || true;
 var app = express();
 //Middleware Seguridad
@@ -58,7 +60,7 @@ app.use(fileUpload({
     }
 }), upload);
 app.use('/app', express.static(path.join(__dirname,  'Instalador')));
-app.use('/api', departamentos, clientes, download, empleados, permisos, productividad, registros, reportes, upload);
+app.use('/api', departamentos, clientes, download, empleados, permisos, productividad, registros, reportes,ubicaciones, upload);
 
 //Acceso al instalador de la aplicacion de escritorio
 app.get("/", (req, res) => {

@@ -1,13 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33530.505
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WSControl", "WSControl\WSControl.csproj", "{7A3EB7C0-EED5-4FE3-82CC-F8805F85EC5C}"
 EndProject
 Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Admin", "..\Admin\", "{560AA028-67D8-42CF-963B-B016CA9D683A}"
 	ProjectSection(WebsiteProperties) = preProject
-		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.5"
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.8"
 		ProjectReferences = "{7224b4bb-fd9f-467c-bdf6-c7be00649e37}|Interfaz.dll;"
 		Debug.AspNetCompiler.VirtualPath = "/localhost_50556"
 		Debug.AspNetCompiler.PhysicalPath = "..\Admin\"
@@ -37,7 +37,6 @@ Global
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{7A3EB7C0-EED5-4FE3-82CC-F8805F85EC5C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7A3EB7C0-EED5-4FE3-82CC-F8805F85EC5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7A3EB7C0-EED5-4FE3-82CC-F8805F85EC5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7A3EB7C0-EED5-4FE3-82CC-F8805F85EC5C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{560AA028-67D8-42CF-963B-B016CA9D683A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -45,7 +44,6 @@ Global
 		{560AA028-67D8-42CF-963B-B016CA9D683A}.Release|Any CPU.ActiveCfg = Debug|Any CPU
 		{560AA028-67D8-42CF-963B-B016CA9D683A}.Release|Any CPU.Build.0 = Debug|Any CPU
 		{7224B4BB-FD9F-467C-BDF6-C7BE00649E37}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7224B4BB-FD9F-467C-BDF6-C7BE00649E37}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7224B4BB-FD9F-467C-BDF6-C7BE00649E37}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7224B4BB-FD9F-467C-BDF6-C7BE00649E37}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection

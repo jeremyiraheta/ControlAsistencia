@@ -272,6 +272,37 @@ namespace Interfaz
             t.Wait();
             return t.Result;
         }
+
+
+        /// <summary>
+        /// Obtiene todos los empleados
+        /// </summary>
+        /// <returns>Listado de empleados</returns>
+        public static List<Ubicacion> listUbicaciones(int codcli, int pagina = -1)
+        {
+            API<List<Ubicacion>> api = new API<List<Ubicacion>>(local, token);
+            if (pagina == -1)
+            {
+                var t = Task.Run(() => api.get($"ubicaciones/codcli/{codcli}"));
+                t.Wait();
+                return t.Result;
+            }
+            else
+            {
+                var t = Task.Run(() => api.get($"ubicaciones/codcli/{codcli}/p/{pagina}"));
+                t.Wait();
+                return t.Result;
+            }
+        }
+
+        //UBICACIONES POR MES
+        public static List<Ubicacion> listUbicacionMes(int codcli, int mes, int anio)
+        {
+            API<List<Ubicacion>> api = new API<List<Ubicacion>>(local, token);
+            var t = Task.Run(() => api.get($"ubicaciones/codcli/{codcli}/m/{String.Format("{0:00}", mes)}/y/{anio}"));
+            t.Wait();
+            return t.Result;
+        }
         /// <summary>
         /// Ontiene un listado de registros de un empleado un mes especifico
         /// </summary>
